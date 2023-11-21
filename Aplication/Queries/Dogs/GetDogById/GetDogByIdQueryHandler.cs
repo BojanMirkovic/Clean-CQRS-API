@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.Models;
 using Infrastructure.Database;
+using Domain.Models.Animal;
 
 namespace Application.Queries.Dogs.GetDogById
 {
@@ -19,7 +19,7 @@ namespace Application.Queries.Dogs.GetDogById
         }
         public Task<Dog> Handle(GetDogByIdQuery request, CancellationToken cancellationToken)
         {
-            Dog wantedDog= _mockDatabase.allDogs.Where(Dog => Dog.animalId == request.Id).FirstOrDefault()!;
+            Dog wantedDog= _mockDatabase.Dogs.Where(Dog => Dog.Id == request.Id).FirstOrDefault()!;
 
             return Task.FromResult(wantedDog);
         }
