@@ -39,25 +39,6 @@ namespace API.Controllers
             return Ok(await _mediatR.Send(new GetDogByIdQuery(dogId)));
         }
 
-        // POST api/<DogsController>
-        [HttpPost]
-        [Route("createNewDog")]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<DogsController>/5
-        [HttpPut]
-        [Route("updateDogById/{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<DogsController>/5
-        [HttpDelete]
-        [Route("deleteDogById/{id}")]
-        public void Delete(int id)
-        {
-        }
+       
     }
 }
