@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace Domain.Models.Animal
 {
-  public class Dog: Animal 
+    public class Dog : Animal
     {
         public string Bark()
         {

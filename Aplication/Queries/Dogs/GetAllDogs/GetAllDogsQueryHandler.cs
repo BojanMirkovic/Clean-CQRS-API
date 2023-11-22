@@ -4,23 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.Models;
 using Infrastructure.Database;
+using Domain.Models.Animal;
 
-namespace Application.Queries.Dogs
+namespace Application.Queries.Dogs.GetAllDogs
 {
     internal class GetAllDogsQueryHandler : IRequestHandler<GetAllDogsQuery, List<Dog>>
     {
         private readonly MockDatabase _mockDatabase;
 
-        public GetAllDogsQueryHandler(MockDatabase mockDatabase) 
+        public GetAllDogsQueryHandler(MockDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }
         public Task<List<Dog>> Handle(GetAllDogsQuery request, CancellationToken cancellationToken)
         {
             //
-            List<Dog> allDogsFromMockDB = _mockDatabase.allDogs;
+            List<Dog> allDogsFromMockDB = _mockDatabase.Dogs;
             return Task.FromResult(allDogsFromMockDB);
         }
     }
