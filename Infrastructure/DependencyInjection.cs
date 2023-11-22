@@ -8,9 +8,9 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-          services.AddSingleton<MockDatabase>();
+            services.AddSingleton<MockDatabase>();
 
-          return services;
+            return services;
         }
     }
 }

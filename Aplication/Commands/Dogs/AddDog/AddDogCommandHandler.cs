@@ -13,9 +13,9 @@ namespace Application.Commands.Dogs.AddDog
     {
         private readonly MockDatabase _mockDatabase;
 
-        public AddDogCommandHandler(MockDatabase mockDatabase) 
+        public AddDogCommandHandler(MockDatabase mockDatabase)
         {
-          _mockDatabase = mockDatabase;
+            _mockDatabase = mockDatabase;
         }
         public Task<Dog> Handle(AddDogCommand request, CancellationToken cancellationToken)
         {
