@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.Dogs.DeleteDog
 {
-    internal class DeleteDogByIdCommandHandler : IRequestHandler<DeleteDogByIdCommand, Dog>
+    public class DeleteDogByIdCommandHandler : IRequestHandler<DeleteDogByIdCommand, Dog>
     {
         MockDatabase _mockDatabase;
         public DeleteDogByIdCommandHandler(MockDatabase mockDatabase)
