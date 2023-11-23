@@ -11,12 +11,11 @@ namespace Application.Commands.Dogs.DeleteDog
 {
     public class DeleteDogByIdCommand : IRequest<Dog>
     {
-        public DeleteDogByIdCommand(DogDto dogToDelete, Guid id)
+        public DeleteDogByIdCommand(Guid id)
         {
-           DogToDelete = dogToDelete;
-           Id = id;
+            Id = id;
         }
-            public DogDto DogToDelete { get; }
-            public Guid Id { get; }      
+
+        public Guid Id { get; }
     }
 }

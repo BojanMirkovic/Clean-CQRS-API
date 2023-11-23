@@ -20,9 +20,11 @@ namespace Application.Commands.Dogs.DeleteDog
         {
             Dog dogToDelete = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == request.Id)!;
 
-            dogToDelete.Name = request.DogToDelete.Name;
-
-            return Task.FromResult(dogToDelete);
+            if (dogToDelete != null)
+            {
+                _mockDatabase.Dogs.Remove(dogToDelete);
+            }
+            return Task.FromResult(dogToDelete)!;
         }
     }
 }
