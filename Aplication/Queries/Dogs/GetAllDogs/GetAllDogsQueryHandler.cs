@@ -9,7 +9,7 @@ using Domain.Models.Animal;
 
 namespace Application.Queries.Dogs.GetAllDogs
 {
-    internal class GetAllDogsQueryHandler : IRequestHandler<GetAllDogsQuery, List<Dog>>
+    public class GetAllDogsQueryHandler : IRequestHandler<GetAllDogsQuery, List<Dog>>
     {
         private readonly MockDatabase _mockDatabase;
 
