@@ -29,14 +29,22 @@ namespace Test.DogTests.CommandTest
             // Arrange
             List<Dog> allDogsFromMockDB = _mockDatabase.Dogs;
             int newListCount = allDogsFromMockDB.Count + 1;
-            DogDto newDog = new DogDto();
+            DogDto newDog = new() 
+            {
+                Name="testDog"
+            };
+
             var query = new AddDogCommand(newDog);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
+            // Check if the dog with the specified name exists in the mock database
+            bool dogExistsInDatabase = allDogsFromMockDB.Any(dog => dog.Name == "testDog");
+
 
             // Assert
             Assert.That(allDogsFromMockDB.Count, Is.EqualTo(newListCount));
+            Assert.That(dogExistsInDatabase, Is.True);
         }
     }
 }

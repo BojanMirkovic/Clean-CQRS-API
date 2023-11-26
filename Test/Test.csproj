@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Aplication\Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CatTests\CommandTest\" />
-  </ItemGroup>
-
 </Project>
