@@ -11,6 +11,7 @@ using Application.Dtos;
 
 namespace Test.DogTests.CommandTest
 {
+    [TestFixture]
     public class AddDogTest
     {
         private AddDogCommandHandler _handler;

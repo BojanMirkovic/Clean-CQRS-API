@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Test.DogTests.CommandTest
 {
+    [TestFixture]
     public class DeleteDogByIdTest
     {
         private DeleteDogByIdCommandHandler _handler;

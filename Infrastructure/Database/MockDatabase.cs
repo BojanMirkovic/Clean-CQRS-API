@@ -30,7 +30,7 @@ namespace Infrastructure.Database
             new Cat { Id=Guid.NewGuid(), Name="Kity", LikesToPlay=true},
             new Cat { Id=Guid.NewGuid(), Name="Micko", LikesToPlay = true},
             new Cat { Id=Guid.NewGuid(), Name="Azrael", LikesToPlay=false },
-            new Cat { Id = new Guid("12345678-1234-5678-1234-567812345680"), Name = "TestCatForUnitTests"}
+            new Cat { Id = new Guid("12345678-1234-5678-1234-567812345680"), Name = "TestCatForUnitTests", LikesToPlay=false}
         };
     };
 }
