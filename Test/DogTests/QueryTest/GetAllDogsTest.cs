@@ -36,5 +36,21 @@ namespace Test.DogTests.QueryTest
             // Assert
             Assert.That(result, Is.EqualTo(allDogsFromMockDB));
         }
+
+        [Test]
+        public async Task Handle_EmptyDB_ReturnsNull()
+        {
+            // Arrange
+            _mockDatabase.Dogs = null;
+
+
+            var query = new GetAllDogsQuery();
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            Assert.IsNull(result);
+        }
     }
 }

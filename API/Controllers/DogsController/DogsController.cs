@@ -16,24 +16,19 @@ namespace API.Controllers.DogsController
     [ApiController]
     public class DogsController : ControllerBase
     {
-        internal readonly IMediator _mediator; //koristimo mediator da bi komunicirali sa DB
+        internal readonly IMediator _mediator; //we are using mediator to comunicate with DB
         public DogsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        // Deat är API endpiont där vi hämtar alla hunder från MockDatabase
-        [HttpGet] //HttpGet je API method za dobijanje podataka iz DB
+        //API endpiont where we retrieve all dogs from MockDatabase
+        [HttpGet]
         //url api/v1/Dogs/getAllDogs
         [Route("getAllDogs")]
-        public async Task<IActionResult> GetAllDogs()//GetAllDogs-ime methoda
+        public async Task<IActionResult> GetAllDogs()//GetAllDogs-method name
         {
-            //Använda MediatR
-            //MediatR ska ta emot REQUEST och deta då på Comands efter Queries
-            // Detta är en GET då blir det en Query
-
             return Ok(await _mediator.Send(new GetAllDogsQuery()));
-
         }
 
         [HttpGet]
@@ -61,7 +56,7 @@ namespace API.Controllers.DogsController
 
         // Delete a specific dog
         [HttpDelete]
-        [Route("updateDog/{dogToDeleteId}")]
+        [Route("deleteDog/{dogToDeleteId}")]
         public async Task<IActionResult> DeleteDog(Guid dogToDeleteId)
         {
             return Ok(await _mediator.Send(new DeleteDogByIdCommand(dogToDeleteId)));

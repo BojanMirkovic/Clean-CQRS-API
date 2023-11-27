@@ -1,11 +1,5 @@
 ﻿using Infrastructure.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Application.Commands.Dogs.AddDog;
-using Application.Queries.Dogs.GetAllDogs;
 using Domain.Models.Animal;
 using Application.Dtos;
 
@@ -41,7 +35,6 @@ namespace Test.DogTests.CommandTest
             var result = await _handler.Handle(query, CancellationToken.None);
             // Check if the dog with the specified name exists in the mock database
             bool dogExistsInDatabase = allDogsFromMockDB.Any(dog => dog.Name == "testDog");
-
 
             // Assert
             Assert.That(allDogsFromMockDB.Count, Is.EqualTo(newListCount));
