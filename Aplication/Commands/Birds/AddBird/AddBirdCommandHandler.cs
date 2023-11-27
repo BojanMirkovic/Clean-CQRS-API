@@ -20,7 +20,7 @@ namespace Application.Commands.Birds.AddBird
                 Name = request.NewBird.Name,
                 CanFly = request.NewBird.CanFly,
             };
-            
+
             _mockDatabase.Birds.Add(birdToCreate);
             return Task.FromResult(birdToCreate);
         }

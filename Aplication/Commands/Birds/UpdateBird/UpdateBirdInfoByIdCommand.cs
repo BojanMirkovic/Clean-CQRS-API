@@ -11,8 +11,8 @@ namespace Application.Commands.Birds.UpdateBird
             UpdatedBird = updatedBird;
             Id = id;
         }
-        public BirdDto UpdatedBird { get;}
-        public Guid Id { get;}
+        public BirdDto UpdatedBird { get; }
+        public Guid Id { get; }
 
     }
 }
