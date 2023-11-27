@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Application.Queries.Dogs;
 using Application.Commands.Dogs.AddDog;
 using Application.Dtos;
 using Application.Queries.Dogs.GetAllDogs;
@@ -33,11 +32,10 @@ namespace API.Controllers.DogsController
             //MediatR ska ta emot REQUEST och deta då på Comands efter Queries
             // Detta är en GET då blir det en Query
 
-            return Ok(await _mediator.Send(new GetAllDogsQuery()));//
+            return Ok(await _mediator.Send(new GetAllDogsQuery()));
 
         }
 
-        // GET api/<DogsController>/5
         [HttpGet]
         [Route("getDogById/{dogId}")]
         public async Task<IActionResult> GetDogById(Guid dogId)

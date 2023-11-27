@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Test.DogTests.CommandTest
 {
+    [TestFixture]
     public class UpdateDogByIdTest
     {
         private UpdateDogByIdCommandHandler _handler;
