@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Application.Queries.Dogs;
 using Application.Commands.Dogs.AddDog;
 using Application.Dtos;
 using Application.Queries.Dogs.GetAllDogs;
