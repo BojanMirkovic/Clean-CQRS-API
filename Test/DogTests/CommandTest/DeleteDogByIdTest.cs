@@ -32,11 +32,11 @@ namespace Test.DogTests.CommandTest
 
             Dog dogToDelete = allDogsFromMockDB.FirstOrDefault(dog => dog.Id == dogId)!;
             // with Contains() method help check if element exist in the list
-            bool DeletedDogisPresent = allDogsFromMockDB.Contains(dogToDelete);
+            bool DeletedDogIsPresent = allDogsFromMockDB.Contains(dogToDelete);
 
             // Assert
             Assert.That(allDogsFromMockDB.Count, Is.EqualTo(newListCount));
-            Assert.That(DeletedDogisPresent, Is.False);
+            Assert.That(DeletedDogIsPresent, Is.False);
         }
     }
 }

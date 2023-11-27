@@ -17,7 +17,7 @@ namespace Test.BirdTests.QueryTest
             _handler = new GetAllBirdsQueryHandler(_mockDatabase);
         }
         [Test]
-        public async Task Handle_GetAllBirdsFromDB_ReturnsResultIsEqualToCatsDB()
+        public async Task Handle_GetAllBirdsFromDB_ReturnsResultIsEqualToBirdsDB()
         {
             // Arrange
             var allBirdsFromMockDB = _mockDatabase.Birds;

@@ -31,12 +31,12 @@ namespace Test.CatTests.CommandTest
             var result = await _handler.Handle(query, CancellationToken.None);
 
             Cat catToDelete = allCatsFromMockDB.FirstOrDefault(cat => cat.Id == catId)!;
-            // with Contains() method help check if element exist in the list
-            bool DeletedDogisPresent = allCatsFromMockDB.Contains(catToDelete);
+            // with help of Contains() method check if element exist in the list
+            bool DeletedCatIsPresent = allCatsFromMockDB.Contains(catToDelete);
 
             // Assert
             Assert.That(allCatsFromMockDB.Count, Is.EqualTo(newListCount));
-            Assert.That(DeletedDogisPresent, Is.False);
+            Assert.That(DeletedCatIsPresent, Is.False);
         }
     }
 

@@ -5,6 +5,7 @@ using Infrastructure.Database;
 
 namespace Test.CatTests.CommandTest
 {
+    [TestFixture]
     public class AddCatTest
     {
         private AddCatCommandHandler _handler;

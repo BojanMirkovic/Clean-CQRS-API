@@ -1,12 +1,5 @@
 ﻿using Application.Queries.Dogs.GetAllDogs;
-using Application.Queries.Dogs.GetDogById;
-using Domain.Models.Animal;
 using Infrastructure.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test.DogTests.QueryTest
 {
