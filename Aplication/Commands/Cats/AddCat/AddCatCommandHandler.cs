@@ -8,7 +8,7 @@ namespace Application.Commands.Cats.AddCat
     {
         private readonly MockDatabase _mockDatabase;
 
-        public AddCatCommandHandler(MockDatabase mockDatabase) 
+        public AddCatCommandHandler(MockDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }
@@ -18,7 +18,7 @@ namespace Application.Commands.Cats.AddCat
             {
                 Id = new Guid(),
                 Name = request.NewCat.Name,
-                LikesToPlay=request.NewCat.LikesToPlay,
+                LikesToPlay = request.NewCat.LikesToPlay,
             };
             _mockDatabase.Cats.Add(catToCreate);
             return Task.FromResult(catToCreate);

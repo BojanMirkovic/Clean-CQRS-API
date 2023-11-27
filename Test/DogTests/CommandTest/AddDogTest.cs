@@ -30,9 +30,9 @@ namespace Test.DogTests.CommandTest
             // Arrange
             List<Dog> allDogsFromMockDB = _mockDatabase.Dogs;
             int newListCount = allDogsFromMockDB.Count + 1;
-            DogDto newDog = new() 
+            DogDto newDog = new()
             {
-                Name="testDog"
+                Name = "testDog"
             };
 
             var query = new AddDogCommand(newDog);

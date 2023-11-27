@@ -1,43 +1,66 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Commands.Cats.AddCat;
+using Application.Commands.Cats.DeleteCat;
+using Application.Commands.Cats.UpdateCat;
+using Application.Dtos;
+using Application.Queries.Cats.GetAllCats;
+using Application.Queries.Cats.GetCatById;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API.Controllers.CatsController
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class CatsController : ControllerBase
     {
-        // GET: api/<CatsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        //Create mediator for comunication with DB
+        private readonly IMediator _mediator;
+
+        public CatsController(IMediator mediator)
         {
-            return new string[] { "value1", "value2" };
+            _mediator = mediator;
+        }
+
+        [HttpGet]
+        [Route("getAllCats")]
+        public async Task<IActionResult> GetAllCats()
+        {
+            return Ok(await _mediator.Send(new GetAllCatsQuery()));
         }
 
         // GET api/<CatsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("getCatById/{catId}")]
+        public async Task<IActionResult> GetDogById(Guid catId)
         {
-            return "value";
+            return Ok(await _mediator.Send(new GetCatByIdQuery(catId)));
         }
 
-        // POST api/<CatsController>
+        // Create a new cat 
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("addNewCat")]
+        public async Task<IActionResult> AddCat([FromBody] CatDto newCat)
         {
+            return Ok(await _mediator.Send(new AddCatCommand(newCat)));
         }
 
-        // PUT api/<CatsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // Update info of a specific cat
+        [HttpPut]
+        [Route("updateCat'sInfo/{updatedCatId}")]
+        public async Task<IActionResult> UpdateCat([FromBody] CatDto updatedCat, Guid updatedCatId)
         {
+            return Ok(await _mediator.Send(new UpdateCatInfoByIdCommand(updatedCat, updatedCatId)));
         }
 
-        // DELETE api/<CatsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+        // Delete a specific cat
+        [HttpDelete]
+        [Route("deleteCat/{catToDeleteId}")]
+        public async Task<IActionResult> DeleteCat(Guid catToDeleteId)
         {
+            return Ok(await _mediator.Send(new DeleteCatByIdCommand(catToDeleteId)));
         }
     }
 }

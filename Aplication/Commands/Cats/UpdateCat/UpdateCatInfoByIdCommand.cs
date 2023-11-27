@@ -2,11 +2,11 @@
 using Domain.Models.Animal;
 using MediatR;
 
-namespace Application.Commands.Cats.UpdateCat.UpdateName
+namespace Application.Commands.Cats.UpdateCat
 {
-    public class UpdateCatNameByIdCommand : IRequest<Cat>
+    public class UpdateCatInfoByIdCommand : IRequest<Cat>
     {
-        public UpdateCatNameByIdCommand(CatDto updatedCat, Guid id)
+        public UpdateCatInfoByIdCommand(CatDto updatedCat, Guid id)
         {
             UpdatedCat = updatedCat;
             Id = id;

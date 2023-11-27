@@ -12,7 +12,7 @@ namespace Application.Queries.Cats.GetAllCats
     public class GetAllCatsQueryHandler : IRequestHandler<GetAllCatsQuery, List<Cat>>
     {
         private readonly MockDatabase _mockDatabase;
-        public GetAllCatsQueryHandler(MockDatabase mockDatabase) 
+        public GetAllCatsQueryHandler(MockDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

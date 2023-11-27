@@ -8,6 +8,6 @@ namespace Domain.Models.Animal
 {
     public class Cat : Animal
     {
-        public bool LikesToPlay {  get; set; }
+        public bool LikesToPlay { get; set; }
     }
 }

@@ -5,11 +5,11 @@ namespace Application.Commands.Cats.DeleteCat
 {
     public class DeleteCatByIdCommand : IRequest<Cat>
     {
-        public DeleteCatByIdCommand(Guid id) 
+        public DeleteCatByIdCommand(Guid id)
         {
-          Id=id;
+            Id = id;
         }
 
-        public Guid Id { get;}
+        public Guid Id { get; }
     }
 }

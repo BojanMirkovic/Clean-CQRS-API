@@ -8,7 +8,7 @@ namespace Application.Queries.Cats.GetCatById
     {
         private readonly MockDatabase _mockDatabase;
 
-        public GetCatByIdQueryHandler(MockDatabase mockDatabase) 
+        public GetCatByIdQueryHandler(MockDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }
