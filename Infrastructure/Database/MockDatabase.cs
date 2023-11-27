@@ -15,6 +15,12 @@ namespace Infrastructure.Database
             set { allCatsFromMockDatabase = value; }
         }
 
+        public List<Bird> Birds
+        {
+            get { return allBirdsFromMockDatabase; }
+            set { allBirdsFromMockDatabase = value; }
+        }
+
         public List<Dog> allDogsFromMockDatabase = new()
         {
             new Dog { Id=Guid.NewGuid(), Name="Astor"},
@@ -31,6 +37,15 @@ namespace Infrastructure.Database
             new Cat { Id=Guid.NewGuid(), Name="Micko", LikesToPlay = true},
             new Cat { Id=Guid.NewGuid(), Name="Azrael", LikesToPlay=false },
             new Cat { Id = new Guid("12345678-1234-5678-1234-567812345680"), Name = "TestCatForUnitTests", LikesToPlay=false}
+        };
+
+        public List<Bird> allBirdsFromMockDatabase = new()
+        {
+            new Bird { Id=Guid.NewGuid(), Name="Ara", CanFly=false},
+            new Bird { Id=Guid.NewGuid(), Name="Vrana", CanFly=true},
+            new Bird { Id=Guid.NewGuid(), Name="Sova", CanFly=true},
+            new Bird { Id = new Guid("12345678-1234-5678-1234-567812345682"), Name = "TestBirdForUnitTests", CanFly=false}
+
         };
     };
 }

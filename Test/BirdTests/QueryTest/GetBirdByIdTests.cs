@@ -1,12 +1,13 @@
-﻿using Application.Queries.Dogs.GetAllDogs;
+﻿using Application.Queries.Birds.GetBirdById;
 using Infrastructure.Database;
 
-namespace Test.DogTests.QueryTest
+
+namespace Test.BirdTests.QueryTest
 {
     [TestFixture]
-    public class GetAllDogsTest
+    public class GetBirdByIdTests
     {
-        private GetAllDogsQueryHandler _handler;
+        private GetBirdByIdQueryHandler _handler;
         private MockDatabase _mockDatabase;
 
         [SetUp]
@@ -14,30 +15,32 @@ namespace Test.DogTests.QueryTest
         {
             // Initialize the handler and mock database before each test
             _mockDatabase = new MockDatabase();
-            _handler = new GetAllDogsQueryHandler(_mockDatabase);
+            _handler = new GetBirdByIdQueryHandler(_mockDatabase);
         }
+
         [Test]
-        public async Task Handle_GetAllDogsFromDB_ReturnsResultIsEqualToDB()
+        public async Task Handle_ValidId_ReturnsCorrectCat()
         {
             // Arrange
-            var allDogsFromMockDB = _mockDatabase.Dogs;
-            var query = new GetAllDogsQuery();
+            var birdId = new Guid("12345678-1234-5678-1234-567812345682");
+
+            var query = new GetBirdByIdQuery(birdId);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.EqualTo(allDogsFromMockDB));
+            Assert.NotNull(result);
+            Assert.That(result.Id, Is.EqualTo(birdId));
         }
 
         [Test]
-        public async Task Handle_EmptyDB_ReturnsNull()
+        public async Task Handle_InvalidId_ReturnsNull()
         {
             // Arrange
-            _mockDatabase.Dogs = null;
+            var invalidBirdId = Guid.NewGuid();
 
-
-            var query = new GetAllDogsQuery();
+            var query = new GetBirdByIdQuery(invalidBirdId);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
@@ -45,5 +48,7 @@ namespace Test.DogTests.QueryTest
             // Assert
             Assert.IsNull(result);
         }
+
     }
 }
+

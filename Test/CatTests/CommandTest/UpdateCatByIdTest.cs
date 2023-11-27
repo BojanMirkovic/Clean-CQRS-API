@@ -35,7 +35,7 @@ namespace Test.CatTests.CommandTest
             // Assert
             Assert.NotNull(result);
             Assert.That(result.Id, Is.EqualTo(catId));
-            Assert.NotNull(catInDatabase); // Ensure the dog with the given ID exists in the database
+            Assert.NotNull(catInDatabase); // Ensure the cat with the given ID exists in the database
             Assert.That(result.LikesToPlay, Is.True); // check if behavior is updated
             Assert.That(catInDatabase.Name, Is.EqualTo(updatedCat.Name)); // Check if the name has been updated in the database
             Assert.That(catInDatabase.LikesToPlay, Is.EqualTo(updatedCat.LikesToPlay)); // Check if the behavior has been updated in the database

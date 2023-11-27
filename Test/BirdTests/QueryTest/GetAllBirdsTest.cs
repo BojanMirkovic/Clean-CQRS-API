@@ -1,12 +1,12 @@
-﻿using Application.Queries.Dogs.GetAllDogs;
+﻿using Application.Queries.Birds.GetAllBirds;
 using Infrastructure.Database;
 
-namespace Test.DogTests.QueryTest
+namespace Test.BirdTests.QueryTest
 {
     [TestFixture]
-    public class GetAllDogsTest
+    public class GetAllBirdsTest
     {
-        private GetAllDogsQueryHandler _handler;
+        private GetAllBirdsQueryHandler _handler;
         private MockDatabase _mockDatabase;
 
         [SetUp]
@@ -14,30 +14,28 @@ namespace Test.DogTests.QueryTest
         {
             // Initialize the handler and mock database before each test
             _mockDatabase = new MockDatabase();
-            _handler = new GetAllDogsQueryHandler(_mockDatabase);
+            _handler = new GetAllBirdsQueryHandler(_mockDatabase);
         }
         [Test]
-        public async Task Handle_GetAllDogsFromDB_ReturnsResultIsEqualToDB()
+        public async Task Handle_GetAllBirdsFromDB_ReturnsResultIsEqualToBirdsDB()
         {
             // Arrange
-            var allDogsFromMockDB = _mockDatabase.Dogs;
-            var query = new GetAllDogsQuery();
+            var allBirdsFromMockDB = _mockDatabase.Birds;
+            var query = new GetAllBirdsQuery();
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.EqualTo(allDogsFromMockDB));
+            Assert.That(result, Is.EqualTo(allBirdsFromMockDB));
         }
-
         [Test]
         public async Task Handle_EmptyDB_ReturnsNull()
         {
             // Arrange
-            _mockDatabase.Dogs = null;
+            _mockDatabase.Birds = null;
 
-
-            var query = new GetAllDogsQuery();
+            var query = new GetAllBirdsQuery();
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
@@ -47,3 +45,5 @@ namespace Test.DogTests.QueryTest
         }
     }
 }
+
+
