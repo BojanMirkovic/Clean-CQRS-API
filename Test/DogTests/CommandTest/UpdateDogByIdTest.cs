@@ -1,13 +1,6 @@
 ﻿using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
-using Application.Queries.Dogs.GetDogById;
-using Domain.Models.Animal;
 using Infrastructure.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test.DogTests.CommandTest
 {

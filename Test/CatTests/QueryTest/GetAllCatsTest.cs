@@ -1,11 +1,5 @@
 ﻿using Application.Queries.Cats.GetAllCats;
-using Application.Queries.Dogs.GetAllDogs;
 using Infrastructure.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test.CatTests.QueryTest
 {
@@ -34,6 +28,20 @@ namespace Test.CatTests.QueryTest
 
             // Assert
             Assert.That(result, Is.EqualTo(allCatsFromMockDB));
+        }
+        [Test]
+        public async Task Handle_EmptyDB_ReturnsNull()
+        {
+            // Arrange
+            _mockDatabase.Cats = null;
+
+            var query = new GetAllCatsQuery();
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            Assert.IsNull(result);
         }
     }
 }

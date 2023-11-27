@@ -30,7 +30,7 @@ namespace API.Controllers.CatsController
             return Ok(await _mediator.Send(new GetAllCatsQuery()));
         }
 
-        // GET api/<CatsController>/5
+        // GET api
         [HttpGet]
         [Route("getCatById/{catId}")]
         public async Task<IActionResult> GetDogById(Guid catId)
