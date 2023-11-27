@@ -33,7 +33,7 @@ namespace API.Controllers.CatsController
         // GET api
         [HttpGet]
         [Route("getCatById/{catId}")]
-        public async Task<IActionResult> GetDogById(Guid catId)
+        public async Task<IActionResult> GetCatById(Guid catId)
         {
             return Ok(await _mediator.Send(new GetCatByIdQuery(catId)));
         }
@@ -48,7 +48,7 @@ namespace API.Controllers.CatsController
 
         // Update info of a specific cat
         [HttpPut]
-        [Route("updateCat'sInfo/{updatedCatId}")]
+        [Route("updateCatInfo/{updatedCatId}")]
         public async Task<IActionResult> UpdateCat([FromBody] CatDto updatedCat, Guid updatedCatId)
         {
             return Ok(await _mediator.Send(new UpdateCatInfoByIdCommand(updatedCat, updatedCatId)));
