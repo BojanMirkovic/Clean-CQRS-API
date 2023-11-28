@@ -18,9 +18,9 @@ namespace API.Controllers.AuthUserController
         private readonly IConfiguration _configuration;
 
         //In order go gain access to Appsetings and inject configuration we have to create constructor
-        public AuthUserController(IConfiguration configuration) 
+        public AuthUserController(IConfiguration configuration)
         {
-          _configuration = configuration;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -54,7 +54,7 @@ namespace API.Controllers.AuthUserController
         }
 
         //Ptivate method that create JW token
-        private string CreateToken(User user) 
+        private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>
             {

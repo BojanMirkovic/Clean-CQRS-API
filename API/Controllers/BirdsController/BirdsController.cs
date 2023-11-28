@@ -5,6 +5,7 @@ using Application.Dtos;
 using Application.Queries.Birds.GetAllBirds;
 using Application.Queries.Birds.GetBirdById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,7 +41,7 @@ namespace API.Controllers.BirdsController
 
         // Create a new bird 
         [HttpPost]
-        [Route("addNewBird")]
+        [Route("addNewBird"), Authorize]
         public async Task<IActionResult> AddBird([FromBody] BirdDto newBird)
         {
             return Ok(await _mediator.Send(new AddBirdCommand(newBird)));
