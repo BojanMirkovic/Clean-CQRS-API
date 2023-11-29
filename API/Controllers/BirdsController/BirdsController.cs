@@ -14,6 +14,7 @@ namespace API.Controllers.BirdsController
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class BirdsController : ControllerBase
     {
         //Create mediator for comunication with DB
@@ -25,7 +26,7 @@ namespace API.Controllers.BirdsController
         }
 
         [HttpGet]
-        [Route("getAllBirds")]
+        [Route("getAllBirds"), AllowAnonymous]
         public async Task<IActionResult> GetAllBirds()
         {
             return Ok(await _mediator.Send(new GetAllBirdsQuery()));
@@ -33,7 +34,7 @@ namespace API.Controllers.BirdsController
 
         // GET api
         [HttpGet]
-        [Route("getBirdById/{birdId}")]
+        [Route("getBirdById/{birdId}"), AllowAnonymous]
         public async Task<IActionResult> GetBirdById(Guid birdId)
         {
             return Ok(await _mediator.Send(new GetBirdByIdQuery(birdId)));
@@ -41,7 +42,7 @@ namespace API.Controllers.BirdsController
 
         // Create a new bird 
         [HttpPost]
-        [Route("addNewBird"), Authorize]
+        [Route("addNewBird"), Authorize(Roles = "admin")]
         public async Task<IActionResult> AddBird([FromBody] BirdDto newBird)
         {
             return Ok(await _mediator.Send(new AddBirdCommand(newBird)));
@@ -58,7 +59,7 @@ namespace API.Controllers.BirdsController
 
         // Delete a specific bird
         [HttpDelete]
-        [Route("deleteBird/{birdToDeleteId}")]
+        [Route("deleteBird/{birdToDeleteId}"), Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteBird(Guid birdToDeleteId)
         {
             return Ok(await _mediator.Send(new DeleteBirdByIdCommand(birdToDeleteId)));

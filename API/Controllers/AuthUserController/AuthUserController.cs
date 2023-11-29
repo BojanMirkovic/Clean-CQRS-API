@@ -59,6 +59,7 @@ namespace API.Controllers.AuthUserController
             List<Claim> claims = new List<Claim>
             {
              new(ClaimTypes.Name, user.Username),
+             new(ClaimTypes.Role, "admin")
             };
             //this key is used to create and verify JWToken and to make sure that this token came from this application
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
