@@ -5,6 +5,7 @@ using Application.Dtos;
 using Application.Queries.Cats.GetAllCats;
 using Application.Queries.Cats.GetCatById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,6 +14,7 @@ namespace API.Controllers.CatsController
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class CatsController : ControllerBase
     {
         //Create mediator for comunication with DB
@@ -24,7 +26,7 @@ namespace API.Controllers.CatsController
         }
 
         [HttpGet]
-        [Route("getAllCats")]
+        [Route("getAllCats"), AllowAnonymous]
         public async Task<IActionResult> GetAllCats()
         {
             return Ok(await _mediator.Send(new GetAllCatsQuery()));
@@ -32,7 +34,7 @@ namespace API.Controllers.CatsController
 
         // GET api
         [HttpGet]
-        [Route("getCatById/{catId}")]
+        [Route("getCatById/{catId}"), AllowAnonymous]
         public async Task<IActionResult> GetCatById(Guid catId)
         {
             return Ok(await _mediator.Send(new GetCatByIdQuery(catId)));
@@ -40,7 +42,7 @@ namespace API.Controllers.CatsController
 
         // Create a new cat 
         [HttpPost]
-        [Route("addNewCat")]
+        [Route("addNewCat"), Authorize(Roles = "admin")]
         public async Task<IActionResult> AddCat([FromBody] CatDto newCat)
         {
             return Ok(await _mediator.Send(new AddCatCommand(newCat)));
@@ -48,7 +50,7 @@ namespace API.Controllers.CatsController
 
         // Update info of a specific cat
         [HttpPut]
-        [Route("updateCatInfo/{updatedCatId}")]
+        [Route("updateCatInfo/{updatedCatId}"), Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateCat([FromBody] CatDto updatedCat, Guid updatedCatId)
         {
             return Ok(await _mediator.Send(new UpdateCatInfoByIdCommand(updatedCat, updatedCatId)));
@@ -57,7 +59,7 @@ namespace API.Controllers.CatsController
 
         // Delete a specific cat
         [HttpDelete]
-        [Route("deleteCat/{catToDeleteId}")]
+        [Route("deleteCat/{catToDeleteId}"), Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteCat(Guid catToDeleteId)
         {
             return Ok(await _mediator.Send(new DeleteCatByIdCommand(catToDeleteId)));

@@ -6,6 +6,7 @@ using Application.Queries.Dogs.GetAllDogs;
 using Application.Commands.Dogs.UpdateDog;
 using Application.Commands.Dogs.DeleteDog;
 using Application.Queries.Dogs.GetDogById;
+using Microsoft.AspNetCore.Authorization;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,6 +15,7 @@ namespace API.Controllers.DogsController
 {
     [Route("api/v1/[controller]")]//v1 predstavlja verziju br.1
     [ApiController]
+    [Authorize]
     public class DogsController : ControllerBase
     {
         internal readonly IMediator _mediator; //we are using mediator to comunicate with DB
@@ -25,14 +27,14 @@ namespace API.Controllers.DogsController
         //API endpiont where we retrieve all dogs from MockDatabase
         [HttpGet]
         //url api/v1/Dogs/getAllDogs
-        [Route("getAllDogs")]
+        [Route("getAllDogs"), AllowAnonymous]
         public async Task<IActionResult> GetAllDogs()//GetAllDogs-method name
         {
             return Ok(await _mediator.Send(new GetAllDogsQuery()));
         }
 
         [HttpGet]
-        [Route("getDogById/{dogId}")]
+        [Route("getDogById/{dogId}"), AllowAnonymous]
         public async Task<IActionResult> GetDogById(Guid dogId)
         {
             return Ok(await _mediator.Send(new GetDogByIdQuery(dogId)));
