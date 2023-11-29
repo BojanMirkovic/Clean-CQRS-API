@@ -1,11 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Application.Queries.Dogs;
-using Application.Queries.Dogs.GetDogById;
 using Application.Commands.Dogs.AddDog;
 using Application.Dtos;
 using Application.Queries.Dogs.GetAllDogs;
 using Application.Commands.Dogs.UpdateDog;
+using Application.Commands.Dogs.DeleteDog;
+using Application.Queries.Dogs.GetDogById;
+using Microsoft.AspNetCore.Authorization;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,31 +15,26 @@ namespace API.Controllers.DogsController
 {
     [Route("api/v1/[controller]")]//v1 predstavlja verziju br.1
     [ApiController]
+    [Authorize]
     public class DogsController : ControllerBase
     {
-        internal readonly IMediator _mediator; //koristimo mediator da bi komunicirali sa DB
+        internal readonly IMediator _mediator; //we are using mediator to comunicate with DB
         public DogsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        // Deat är API endpiont där vi hämtar alla hunder från MockDatabase
-        [HttpGet] //HttpGet je API method za dobijanje podataka iz DB
+        //API endpiont where we retrieve all dogs from MockDatabase
+        [HttpGet]
         //url api/v1/Dogs/getAllDogs
-        [Route("getAllDogs")]
-        public async Task<IActionResult> GetAllDogs()//GetAllDogs-ime methoda
+        [Route("getAllDogs"), AllowAnonymous]
+        public async Task<IActionResult> GetAllDogs()//GetAllDogs-method name
         {
-            //Använda MediatR
-            //MediatR ska ta emot REQUEST och deta då på Comands efter Queries
-            // Detta är en GET då blir det en Query
-
-            return Ok(await _mediator.Send(new GetAllDogsQuery()));//
-
+            return Ok(await _mediator.Send(new GetAllDogsQuery()));
         }
 
-        // GET api/<DogsController>/5
         [HttpGet]
-        [Route("getDogById/{dogId}")]
+        [Route("getDogById/{dogId}"), AllowAnonymous]
         public async Task<IActionResult> GetDogById(Guid dogId)
         {
             return Ok(await _mediator.Send(new GetDogByIdQuery(dogId)));
@@ -59,6 +56,13 @@ namespace API.Controllers.DogsController
             return Ok(await _mediator.Send(new UpdateDogByIdCommand(updatedDog, updatedDogId)));
         }
 
-        // IMPLEMENT DELETE !!!
+        // Delete a specific dog
+        [HttpDelete]
+        [Route("deleteDog/{dogToDeleteId}")]
+        public async Task<IActionResult> DeleteDog(Guid dogToDeleteId)
+        {
+            return Ok(await _mediator.Send(new DeleteDogByIdCommand(dogToDeleteId)));
+        }
+
     }
 }
