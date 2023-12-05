@@ -10,20 +10,17 @@ using Microsoft.AspNetCore.Authorization;
 using Application.Validators.Dog;
 using Application.Validators.GuidValidator;
 
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace API.Controllers.DogsController
 {
     [Route("api/v1/[controller]")]//v1 predstavlja verziju br.1
     [ApiController]
-  //  [Authorize]
+    //  [Authorize]
     public class DogsController : ControllerBase
     {
         internal readonly IMediator _mediator; //we are using mediator to comunicate with DB
         internal readonly DogValidator _dogValidator;
         internal readonly GuidValidator _guidValidator;
-        public DogsController(IMediator mediator, DogValidator dogValidator, GuidValidator guidValidator )
+        public DogsController(IMediator mediator, DogValidator dogValidator, GuidValidator guidValidator)
         {
             _mediator = mediator;
             _dogValidator = dogValidator;
@@ -44,8 +41,6 @@ namespace API.Controllers.DogsController
             {
                 throw new Exception(ex.Message);
             }
-
-           
         }
 
         [HttpGet]
@@ -80,18 +75,17 @@ namespace API.Controllers.DogsController
             //Error Handling
             if (!validatedDog.IsValid)
             {
-              return BadRequest(validatedDog.Errors.ConvertAll(errors=>errors.ErrorMessage));
+                return BadRequest(validatedDog.Errors.ConvertAll(errors => errors.ErrorMessage));
             }
             //Try Catch
-            try 
-            { 
+            try
+            {
                 return Ok(await _mediator.Send(new AddDogCommand(newDog)));
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-          
         }
 
         // Update a specific dog
@@ -120,8 +114,6 @@ namespace API.Controllers.DogsController
             {
                 throw new Exception(ex.Message);
             }
-
-           
         }
 
         // Delete a specific dog
@@ -145,8 +137,6 @@ namespace API.Controllers.DogsController
             {
                 throw new Exception(ex.Message);
             }
-            
         }
-
     }
 }

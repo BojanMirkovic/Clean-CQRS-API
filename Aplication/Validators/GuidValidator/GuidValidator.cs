@@ -11,12 +11,11 @@ namespace Application.Validators.GuidValidator
 {
     public class GuidValidator : AbstractValidator<Guid>
     {
-       public GuidValidator() 
+        public GuidValidator()
         {
             RuleFor(guid => guid)
                .NotEmpty().WithMessage("Guid should not be empty")
-               .NotNull().WithMessage("Guid should not be the empty Guid");
-               
+               .NotEqual(Guid.Empty).WithMessage("Guid should not be the empty Guid");
         }
     }
 }
