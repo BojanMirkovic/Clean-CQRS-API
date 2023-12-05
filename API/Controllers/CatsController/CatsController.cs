@@ -56,7 +56,6 @@ namespace API.Controllers.CatsController
             return Ok(await _mediator.Send(new UpdateCatInfoByIdCommand(updatedCat, updatedCatId)));
         }
 
-
         // Delete a specific cat
         [HttpDelete]
         [Route("deleteCat/{catToDeleteId}"), Authorize(Roles = "admin")]
