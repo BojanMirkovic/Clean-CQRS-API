@@ -33,7 +33,7 @@ namespace Test.BirdTests.QueryTest
         public async Task Handle_EmptyDB_ReturnsNull()
         {
             // Arrange
-            _mockDatabase.Birds = null;
+            _mockDatabase.Birds = null!;
 
             var query = new GetAllBirdsQuery();
 

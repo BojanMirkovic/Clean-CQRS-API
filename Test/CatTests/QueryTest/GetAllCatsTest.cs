@@ -33,7 +33,7 @@ namespace Test.CatTests.QueryTest
         public async Task Handle_EmptyDB_ReturnsNull()
         {
             // Arrange
-            _mockDatabase.Cats = null;
+            _mockDatabase.Cats = null!;
 
             var query = new GetAllCatsQuery();
 

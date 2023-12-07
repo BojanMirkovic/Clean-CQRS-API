@@ -34,7 +34,7 @@ namespace Test.DogTests.QueryTest
         public async Task Handle_EmptyDB_ReturnsNull()
         {
             // Arrange
-            _mockDatabase.Dogs = null;
+            _mockDatabase.Dogs = null!;
 
 
             var query = new GetAllDogsQuery();
