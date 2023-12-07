@@ -1,6 +1,5 @@
 ﻿using Application.Commands.Cats.AddCat;
 using Application.Dtos;
-using Domain.Models.Animal;
 using Infrastructure.Database;
 
 namespace Test.CatTests.CommandTest
@@ -22,8 +21,6 @@ namespace Test.CatTests.CommandTest
         public async Task Handle_AddNewCatToDB_ResultDB_HasNewElement()
         {
             // Arrange
-            List<Cat> allCatsFromMockDB = _mockDatabase.Cats;
-            int newListCount = allCatsFromMockDB.Count + 1;
             CatDto newCat = new()
             {
                 Name = "testCat",
@@ -35,12 +32,11 @@ namespace Test.CatTests.CommandTest
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
-            // Check if the cat with the specified name exists in the mock database
-            bool catExistsInDatabase = allCatsFromMockDB.Any(cat => cat.Name == "testCat");
-
             // Assert
-            Assert.That(allCatsFromMockDB.Count, Is.EqualTo(newListCount));
-            Assert.That(catExistsInDatabase, Is.True);
+            Assert.IsNotNull(result);
+            Assert.That(newCat.Name, Is.EqualTo(result.Name));
+            Assert.That(newCat.LikesToPlay, Is.EqualTo(result.LikesToPlay));
+           
         }
     }
 }

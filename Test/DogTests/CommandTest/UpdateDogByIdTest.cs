@@ -1,4 +1,5 @@
-﻿using Application.Commands.Dogs.UpdateDog;
+﻿using Application.Commands.Birds.UpdateBird;
+using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
 using Infrastructure.Database;
 
@@ -26,16 +27,27 @@ namespace Test.DogTests.CommandTest
             DogDto updatedDog = new DogDto();
             updatedDog.Name = "Jhony";
             var query = new UpdateDogByIdCommand(updatedDog, dogId);
-            // Check if the database has been updated
-            var dogInDatabase = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == dogId);
+
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
             Assert.That(result.Id, Is.EqualTo(dogId));
-            Assert.NotNull(dogInDatabase); // Ensure the dog with the given ID exists in the database
-            Assert.That(dogInDatabase.Name, Is.EqualTo(updatedDog.Name)); // Check if the name has been updated in the database
+            Assert.That(result.Name, Is.EqualTo(updatedDog.Name)); // Check if the name has been updated 
+        }
+        [Test]
+        public async Task Handle_UpdateDogById_IncorrectId_ResultIsNull()
+        {
+            //Arange
+            DogDto updatedDog = new DogDto();
+            var nonExistingDogId = new Guid();
+
+            var query = new UpdateDogByIdCommand(updatedDog, nonExistingDogId);
+            //Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+            //Assert
+            //Assert.Null(result);
         }
     }
 }

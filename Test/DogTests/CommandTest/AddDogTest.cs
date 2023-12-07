@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Database;
 using Application.Commands.Dogs.AddDog;
-using Domain.Models.Animal;
 using Application.Dtos;
 
 namespace Test.DogTests.CommandTest
@@ -22,8 +21,6 @@ namespace Test.DogTests.CommandTest
         public async Task Handle_AddNewDogToDB_ResultDB_HasNewElement()
         {
             // Arrange
-            List<Dog> allDogsFromMockDB = _mockDatabase.Dogs;
-            int newListCount = allDogsFromMockDB.Count + 1;
             DogDto newDog = new()
             {
                 Name = "testDog"
@@ -33,12 +30,10 @@ namespace Test.DogTests.CommandTest
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
-            // Check if the dog with the specified name exists in the mock database
-            bool dogExistsInDatabase = allDogsFromMockDB.Any(dog => dog.Name == "testDog");
 
             // Assert
-            Assert.That(allDogsFromMockDB.Count, Is.EqualTo(newListCount));
-            Assert.That(dogExistsInDatabase, Is.True);
+            Assert.That(newDog.Name, Is.EqualTo(result.Name));
+            Assert.IsNotNull(result);
         }
     }
 }

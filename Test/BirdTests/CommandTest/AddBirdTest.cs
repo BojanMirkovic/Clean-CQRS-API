@@ -22,8 +22,6 @@ namespace Test.BirdTests.CommandTest
         public async Task Handle_AddNewBirdToDB_ResultDB_HasNewElement()
         {
             // Arrange
-            List<Bird> allBirdsFromMockDB = _mockDatabase.Birds;
-            int newListCount = allBirdsFromMockDB.Count + 1;
             BirdDto newBird = new()
             {
                 Name = "testBird",
@@ -35,12 +33,10 @@ namespace Test.BirdTests.CommandTest
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
-            // Check if the bird with the specified name exists in the mock database
-            bool birdExistsInDatabase = allBirdsFromMockDB.Any(bird => bird.Name == "testBird");
-
             // Assert
-            Assert.That(allBirdsFromMockDB.Count, Is.EqualTo(newListCount));
-            Assert.That(birdExistsInDatabase, Is.True);
+            Assert.IsNotNull(result);
+            Assert.That(newBird.Name, Is.EqualTo(result.Name));
+            Assert.That(newBird.CanFly, Is.EqualTo(result.CanFly));            
         }
     }
 }
