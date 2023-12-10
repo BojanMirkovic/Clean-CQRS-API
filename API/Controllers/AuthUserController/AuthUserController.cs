@@ -53,7 +53,7 @@ namespace API.Controllers.AuthUserController
             return Ok(token);
         }
 
-        //Ptivate method that create JW token
+        //Private method that create JW token
         private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>

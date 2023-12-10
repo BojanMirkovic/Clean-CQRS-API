@@ -13,8 +13,16 @@ namespace Application.Queries.Cats.GetAllCats
         }
         public Task<List<Cat>> Handle(GetAllCatsQuery request, CancellationToken cancellationToken)
         {
-            List<Cat> allCatsFromMockDB = _mockDatabase.Cats;
-            return Task.FromResult(allCatsFromMockDB);
+            try
+            {
+                List<Cat>? allCatsFromMockDB = _mockDatabase.Cats;
+                return Task.FromResult(allCatsFromMockDB);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

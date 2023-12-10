@@ -14,15 +14,22 @@ namespace Application.Commands.Birds.AddBird
         }
         public Task<Bird> Handle(AddBirdCommand request, CancellationToken cancellationToken)
         {
-            Bird birdToCreate = new()
+            try
             {
-                Id = new Guid(),
-                Name = request.NewBird.Name,
-                CanFly = request.NewBird.CanFly,
-            };
+                Bird birdToCreate = new()
+                {
+                    Id = new Guid(),
+                    Name = request.NewBird.Name,
+                    CanFly = request.NewBird.CanFly,
+                };
 
-            _mockDatabase.Birds.Add(birdToCreate);
-            return Task.FromResult(birdToCreate);
+                _mockDatabase.Birds.Add(birdToCreate);
+                return Task.FromResult(birdToCreate);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -15,9 +15,21 @@ namespace Application.Queries.Birds.GetBirdById
 
         public Task<Bird> Handle(GetBirdByIdQuery request, CancellationToken cancellationToken)
         {
-            Bird wantedBird = _mockDatabase.Birds.Where(bird => bird.Id == request.Id).FirstOrDefault()!;
+            try
+            {
+                Bird wantedBird = _mockDatabase.Birds.Where(bird => bird.Id == request.Id).FirstOrDefault()!;
+                if (wantedBird != null)
+                {
+                    return Task.FromResult(wantedBird);
+                }
 
-            return Task.FromResult(wantedBird);
+                return Task.FromResult<Bird>(null!);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

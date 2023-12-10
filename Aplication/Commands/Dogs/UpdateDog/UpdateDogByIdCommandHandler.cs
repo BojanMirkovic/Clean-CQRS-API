@@ -1,6 +1,8 @@
-﻿using Domain.Models.Animal;
+﻿using Application.Dtos;
+using Domain.Models.Animal;
 using Infrastructure.Database;
 using MediatR;
+using System.Linq.Expressions;
 
 namespace Application.Commands.Dogs.UpdateDog
 {
@@ -14,11 +16,22 @@ namespace Application.Commands.Dogs.UpdateDog
 
         public Task<Dog> Handle(UpdateDogByIdCommand request, CancellationToken cancellationToken)
         {
-            Dog dogToUpdate = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == request.Id)!;
+            try
+            {
+                // Find the dog to update
+                Dog? dogToUpdate = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == request.Id);
+                if (dogToUpdate != null)
+                {
+                    dogToUpdate.Name = request.UpdatedDog.Name;
+                    return Task.FromResult(dogToUpdate);
+                }
 
-            dogToUpdate.Name = request.UpdatedDog.Name;
-
-            return Task.FromResult(dogToUpdate);
+                return Task.FromResult<Dog>(null!);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

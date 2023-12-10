@@ -11,13 +11,21 @@ namespace Application.Commands.Cats.DeleteCat
         { _mockDatabase = mockDatabase; }
         public Task<Cat> Handle(DeleteCatByIdCommand request, CancellationToken cancellationToken)
         {
-            Cat catToDelete = _mockDatabase.Cats.FirstOrDefault(cat => cat.Id == request.Id)!;
-
-            if (catToDelete != null)
+            try
             {
-                _mockDatabase.Cats.Remove(catToDelete);
+                Cat? catToDelete = _mockDatabase.Cats.FirstOrDefault(cat => cat.Id == request.Id)!;
+                if (catToDelete != null)
+                {
+                    _mockDatabase.Cats.Remove(catToDelete);
+                    return Task.FromResult(catToDelete)!;
+                }
+
+                return Task.FromResult<Cat>(null!);
             }
-            return Task.FromResult(catToDelete)!;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

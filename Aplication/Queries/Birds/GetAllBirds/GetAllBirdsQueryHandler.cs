@@ -14,8 +14,16 @@ namespace Application.Queries.Birds.GetAllBirds
         }
         public Task<List<Bird>> Handle(GetAllBirdsQuery request, CancellationToken cancellationToken)
         {
-            List<Bird> allBirdsFromMockDB = _mockDatabase.Birds;
-            return Task.FromResult(allBirdsFromMockDB);
+            try
+            {
+                List<Bird> allBirdsFromMockDB = _mockDatabase.Birds;
+                return Task.FromResult(allBirdsFromMockDB);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -14,14 +14,22 @@ namespace Application.Commands.Dogs.AddDog
         }
         public Task<Dog> Handle(AddDogCommand request, CancellationToken cancellationToken)
         {
-            Dog dogToCreate = new()
+            try
             {
-                Id = Guid.NewGuid(),
-                Name = request.NewDog.Name
-            };
+                Dog dogToCreate = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = request.NewDog.Name
+                };
 
-            _mockDatabase.Dogs.Add(dogToCreate);
-            return Task.FromResult(dogToCreate);
+                _mockDatabase.Dogs.Add(dogToCreate);
+                return Task.FromResult(dogToCreate);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -11,13 +11,21 @@ namespace Application.Commands.Birds.DeleteBird
         { _mockDatabase = mockDatabase; }
         public Task<Bird> Handle(DeleteBirdByIdCommand request, CancellationToken cancellationToken)
         {
-            Bird birdToDelete = _mockDatabase.Birds.FirstOrDefault(bird => bird.Id == request.Id)!;
-
-            if (birdToDelete != null)
+            try
             {
-                _mockDatabase.Birds.Remove(birdToDelete);
+                Bird? birdToDelete = _mockDatabase.Birds.FirstOrDefault(bird => bird.Id == request.Id)!;
+                if (birdToDelete != null)
+                {
+                    _mockDatabase.Birds.Remove(birdToDelete);
+                    return Task.FromResult(birdToDelete)!;
+                }
+
+                return Task.FromResult<Bird>(null!);
             }
-            return Task.FromResult(birdToDelete)!;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

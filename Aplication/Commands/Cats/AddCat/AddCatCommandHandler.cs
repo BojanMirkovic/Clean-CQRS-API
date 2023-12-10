@@ -14,14 +14,22 @@ namespace Application.Commands.Cats.AddCat
         }
         public Task<Cat> Handle(AddCatCommand request, CancellationToken cancellationToken)
         {
-            Cat catToCreate = new()
+            try
             {
-                Id = new Guid(),
-                Name = request.NewCat.Name,
-                LikesToPlay = request.NewCat.LikesToPlay,
-            };
-            _mockDatabase.Cats.Add(catToCreate);
-            return Task.FromResult(catToCreate);
+                Cat catToCreate = new()
+                {
+                    Id = new Guid(),
+                    Name = request.NewCat.Name,
+                    LikesToPlay = request.NewCat.LikesToPlay,
+                };
+                _mockDatabase.Cats.Add(catToCreate);
+                return Task.FromResult(catToCreate);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

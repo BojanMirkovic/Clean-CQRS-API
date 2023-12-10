@@ -14,9 +14,21 @@ namespace Application.Queries.Cats.GetCatById
         }
         public Task<Cat> Handle(GetCatByIdQuery request, CancellationToken cancellationToken)
         {
-            Cat wantedCat = _mockDatabase.Cats.Where(cat => cat.Id == request.Id).FirstOrDefault()!;
+            try
+            {
+                Cat? wantedCat = _mockDatabase.Cats.Where(cat => cat.Id == request.Id).FirstOrDefault()!;
+                if (wantedCat != null)
+                {
+                    return Task.FromResult(wantedCat);
+                }
 
-            return Task.FromResult(wantedCat);
+                return Task.FromResult<Cat>(null!);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

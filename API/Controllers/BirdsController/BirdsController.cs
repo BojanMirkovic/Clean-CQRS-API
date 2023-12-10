@@ -4,11 +4,11 @@ using Application.Commands.Birds.UpdateBird;
 using Application.Dtos;
 using Application.Queries.Birds.GetAllBirds;
 using Application.Queries.Birds.GetBirdById;
+using Application.Validators.Bird;
+using Application.Validators.GuidValidator;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API.Controllers.BirdsController
 {
@@ -19,17 +19,29 @@ namespace API.Controllers.BirdsController
     {
         //Create mediator for comunication with DB
         private readonly IMediator _mediator;
+        private readonly BirdValidator _birdValidator;
+        private readonly GuidValidator _guidValidator;
 
-        public BirdsController(IMediator mediator)
+        public BirdsController(IMediator mediator, BirdValidator birdValidator, GuidValidator guidValidator)
         {
             _mediator = mediator;
+            _birdValidator = birdValidator;
+            _guidValidator = guidValidator;
         }
 
         [HttpGet]
         [Route("getAllBirds"), AllowAnonymous]
         public async Task<IActionResult> GetAllBirds()
         {
-            return Ok(await _mediator.Send(new GetAllBirdsQuery()));
+            try
+            {
+                return Ok(await _mediator.Send(new GetAllBirdsQuery()));
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         // GET api
@@ -37,7 +49,22 @@ namespace API.Controllers.BirdsController
         [Route("getBirdById/{birdId}"), AllowAnonymous]
         public async Task<IActionResult> GetBirdById(Guid birdId)
         {
-            return Ok(await _mediator.Send(new GetBirdByIdQuery(birdId)));
+            // Validate Guid id
+            var validatedGuidId = _guidValidator.Validate(birdId);
+            //Error Handling
+            if (!validatedGuidId.IsValid)
+            {
+                return BadRequest(validatedGuidId.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            //Try Catch
+            try
+            {
+                return Ok(await _mediator.Send(new GetBirdByIdQuery(birdId)));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         // Create a new bird 
@@ -45,7 +72,22 @@ namespace API.Controllers.BirdsController
         [Route("addNewBird"), Authorize(Roles = "admin")]
         public async Task<IActionResult> AddBird([FromBody] BirdDto newBird)
         {
-            return Ok(await _mediator.Send(new AddBirdCommand(newBird)));
+            // Validate Bird
+            var validatedBird = _birdValidator.Validate(newBird);
+            //Error Handling
+            if (!validatedBird.IsValid)
+            {
+                return BadRequest(validatedBird.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            //Try Catch
+            try
+            {
+                return Ok(await _mediator.Send(new AddBirdCommand(newBird)));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         // Update info of a specific bird
@@ -53,16 +95,50 @@ namespace API.Controllers.BirdsController
         [Route("updateBirdInfo/{updatedBirdId}")]
         public async Task<IActionResult> UpdateBird([FromBody] BirdDto updatedBird, Guid updatedBirdId)
         {
-            return Ok(await _mediator.Send(new UpdateBirdInfoByIdCommand(updatedBird, updatedBirdId)));
+            // Validate updatedCat, Guid updatedCatId
+            var validatedUpdatedBird = _birdValidator.Validate(updatedBird);
+            var validatedUpdatedBirdId = _guidValidator.Validate(updatedBirdId);
+            //Error Handling
+            if (!validatedUpdatedBird.IsValid)
+            {
+                return BadRequest(validatedUpdatedBird.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            if (!validatedUpdatedBirdId.IsValid)
+            {
+                return BadRequest(validatedUpdatedBirdId.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            //Try Catch
+            try
+            {
+                return Ok(await _mediator.Send(new UpdateBirdInfoByIdCommand(updatedBird, updatedBirdId)));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
-
 
         // Delete a specific bird
         [HttpDelete]
         [Route("deleteBird/{birdToDeleteId}"), Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteBird(Guid birdToDeleteId)
         {
-            return Ok(await _mediator.Send(new DeleteBirdByIdCommand(birdToDeleteId)));
+            // Validate Guid birdToDeleteId
+            var validateBirdToDeleteId = _guidValidator.Validate(birdToDeleteId);
+            //Error Handling
+            if (!validateBirdToDeleteId.IsValid)
+            {
+                return BadRequest(validateBirdToDeleteId.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            //Try Catch
+            try
+            {
+                return Ok(await _mediator.Send(new DeleteBirdByIdCommand(birdToDeleteId)));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
