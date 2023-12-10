@@ -16,8 +16,8 @@ namespace Application.Queries.Dogs.GetAllDogs
         {
             try
             {
-                List<Dog>? allDogsFromMockDB = _mockDatabase.Dogs;               
-                return Task.FromResult(allDogsFromMockDB);                               
+                List<Dog>? allDogsFromMockDB = _mockDatabase.Dogs;
+                return Task.FromResult(allDogsFromMockDB);
             }
             catch (Exception ex)
             {

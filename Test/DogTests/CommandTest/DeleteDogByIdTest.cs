@@ -31,7 +31,7 @@ namespace Test.DogTests.CommandTest
             Assert.That(result, Is.Not.Null);
         }
         [Test]
-        public async Task Handle_DeleteDogById_IncorrectId_ResultIsNull() 
+        public async Task Handle_DeleteDogById_IncorrectId_ResultIsNull()
         {
             //Arange
             var dogId = new Guid();

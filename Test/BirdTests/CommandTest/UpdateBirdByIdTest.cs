@@ -52,7 +52,7 @@ namespace Test.BirdTests.CommandTest
             var result = await _handler.Handle(query, CancellationToken.None);
             //Assert
             Assert.Null(result);
-            
+
         }
     }
 }

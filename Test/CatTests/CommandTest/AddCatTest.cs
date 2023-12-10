@@ -36,7 +36,7 @@ namespace Test.CatTests.CommandTest
             Assert.IsNotNull(result);
             Assert.That(newCat.Name, Is.EqualTo(result.Name));
             Assert.That(newCat.LikesToPlay, Is.EqualTo(result.LikesToPlay));
-           
+
         }
     }
 }

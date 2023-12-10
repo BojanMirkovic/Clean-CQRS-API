@@ -36,7 +36,7 @@ namespace Test.BirdTests.CommandTest
             // Assert
             Assert.IsNotNull(result);
             Assert.That(newBird.Name, Is.EqualTo(result.Name));
-            Assert.That(newBird.CanFly, Is.EqualTo(result.CanFly));            
+            Assert.That(newBird.CanFly, Is.EqualTo(result.CanFly));
         }
     }
 }

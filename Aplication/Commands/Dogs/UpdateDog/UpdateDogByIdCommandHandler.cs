@@ -15,7 +15,7 @@ namespace Application.Commands.Dogs.UpdateDog
 
 
         public Task<Dog> Handle(UpdateDogByIdCommand request, CancellationToken cancellationToken)
-        {   
+        {
             try
             {
                 // Find the dog to update

@@ -4,8 +4,7 @@ using FluentValidation;
 namespace Application.Validators.Dog
 {
     public class DogValidator : AbstractValidator<DogDto>
-    {
-        
+    {       
         public DogValidator()
         {
             RuleFor(dog => dog.Name)

@@ -25,7 +25,7 @@ namespace Application.Commands.Cats.DeleteCat
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
-            }           
+            }
         }
     }
 }

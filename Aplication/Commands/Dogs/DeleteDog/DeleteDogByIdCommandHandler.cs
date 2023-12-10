@@ -24,7 +24,7 @@ namespace Application.Commands.Dogs.DeleteDog
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
-            }            
+            }
         }
     }
 }
