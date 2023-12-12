@@ -1,4 +1,6 @@
 ﻿using Application.Dtos;
+using Azure.Identity;
+using Domain.Models.User;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Queries.Users
 {
-    public class LoginUserQuery : IRequest<string>
+    public class LoginUserQuery : IRequest<User>
     {
         public UserDto LoginUser { get; }
         public LoginUserQuery(UserDto loginUser)

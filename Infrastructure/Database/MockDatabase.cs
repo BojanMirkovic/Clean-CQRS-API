@@ -1,4 +1,6 @@
-﻿using Domain.Models.Animal;
+﻿using BCrypt.Net;
+using Domain.Models.Animal;
+using Domain.Models.User;
 
 namespace Infrastructure.Database
 {
@@ -46,6 +48,17 @@ namespace Infrastructure.Database
             new Bird { Id=Guid.NewGuid(), Name="Sova", CanFly=true},
             new Bird { Id = new Guid("12345678-1234-5678-1234-567812345682"), Name = "TestBirdForUnitTests", CanFly=false}
 
+        };
+        public List<User> Users
+        {
+            get { return allUsers; }
+            set { allUsers = value; }
+        }
+
+        private static List<User> allUsers = new()
+        {
+            new User { Id = new Guid("08260479-52a0-4c0e-a588-274101a2c3be"), Username = "Bojan", Password = BCrypt.Net.BCrypt.HashPassword("Bojan123"), Authorized = true, Role = "Admin" },
+            new User { Id = new Guid("047425eb-15a5-4310-9d25-e281ab036868"), Username = "NotAnAdmin", Password = BCrypt.Net.BCrypt.HashPassword("Bojan123"), Authorized = false, Role = "User"}
         };
     };
 }

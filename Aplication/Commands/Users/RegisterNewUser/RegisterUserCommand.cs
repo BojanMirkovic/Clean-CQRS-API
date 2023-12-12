@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.Users.RegisterNewUser
 {
-    internal class RegisterUserCommand : IRequest<User>
+    public class RegisterUserCommand : IRequest<User>
     {
         public UserDto NewUser { get; }
         public RegisterUserCommand(UserDto newUser)
