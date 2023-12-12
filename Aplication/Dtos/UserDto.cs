@@ -9,7 +9,7 @@ namespace Application.Dtos
     //we are using Dto to send data to API,password is simple string because we use it only to register/login
     public class UserDto
     {
-        public required string Username { get; set; }
+        public required string UserName { get; set; }
         public required string Password { get; set; }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using Application.Dtos;
-using Domain.Models.User;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using MediatR;
+using Application.Queries.Users;
+using Application.Commands.Users;
+using Application.Validators.User;
+using Application.Commands.Users.RegisterNewUser;
+using Azure.Core;
 using Nest;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace API.Controllers.AuthUserController
 {
@@ -14,72 +14,61 @@ namespace API.Controllers.AuthUserController
     [ApiController]
     public class AuthUserController : ControllerBase
     {
-        public static User user = new User();
+        // public static User user = new();
         private readonly IConfiguration _configuration;
+        internal readonly IMediator _mediator;
+        private readonly UserValidator _userValidator;
+
 
         //In order go gain access to Appsetings and inject configuration we have to create constructor
-        public AuthUserController(IConfiguration configuration)
+        public AuthUserController(IConfiguration configuration, IMediator mediator, UserValidator userValidator)
         {
             _configuration = configuration;
+            _mediator = mediator;
+            _userValidator = userValidator;
         }
 
         [HttpPost]
         [Route("register")]
-        public ActionResult<User> Register(UserDto request)
+        public async Task<IActionResult> RegisterUser([FromBody] UserDto newUser)
         {
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            user.UserName = request.Username;
-            user.UserPassword = passwordHash;
 
-            return Ok(user);
+            var userValidator = _userValidator.Validate(newUser);
+
+            if (!userValidator.IsValid)
+            {
+                return BadRequest(userValidator.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+
+            try
+            {
+                return Ok(await _mediator.Send(new RegisterUserCommand(newUser)));
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost]
         [Route("login")]
-        public ActionResult<User> Login(UserDto request)
+
+        public async Task<IActionResult> GetToken([FromBody] UserDto userLogin)
         {
-            if (user.UserName != request.Username)
+            var user = await _mediator.Send(new LoginUserQuery(userLogin));
+
+            if (user == null)
             {
                 return BadRequest("User not found");
-            }
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.UserPassword))
+            }
+            if (!BCrypt.Net.BCrypt.Verify(userLogin.Password, user.Password))
             {
                 return BadRequest("Wrong password");
             }
 
-            string token = CreateToken(user);
-
-            return Ok(token);
+            return Ok(user.token);
         }
-
-        //Private method that create JW token
-        private string CreateToken(User user)
-        {
-            List<Claim> claims = new List<Claim>
-            {
-             new(ClaimTypes.Name, user.UserName),
-             new(ClaimTypes.Role, "admin")
-            };
-            //this key is used to create and verify JWToken and to make sure that this token came from this application
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSetings:Token").Value!));
-
-            //Signing credentials
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
-            //generate token
-            var token = new JwtSecurityToken(
-                  claims: claims,
-                  expires: DateTime.Now.AddDays(1),
-                  signingCredentials: creds
-                );
-
-            //write the token
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return jwt;
-        }
-
     }
 }

@@ -1,6 +1,8 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -37,8 +39,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
          ValidateIssuer = false,
          ValidateAudience = false
      };
-
  });
+
+var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
+builder.Services.AddDbContext<RealDb>(option =>
+{
+    option.UseSqlServer(connectionString, b => b.MigrationsAssembly("API"));
+});
 
 var app = builder.Build();
 
