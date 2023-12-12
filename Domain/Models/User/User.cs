@@ -10,8 +10,7 @@ namespace Domain.Models.User
     {
         public Guid Id { get; set; }
 
-        public string Username { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-
+        public string UserName { get; set; } = string.Empty;
+        public string UserPassword { get; set; } = string.Empty;
     }
 }

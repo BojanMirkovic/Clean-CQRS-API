@@ -28,8 +28,8 @@ namespace API.Controllers.AuthUserController
         public ActionResult<User> Register(UserDto request)
         {
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            user.Username = request.Username;
-            user.PasswordHash = passwordHash;
+            user.UserName = request.Username;
+            user.UserPassword = passwordHash;
 
             return Ok(user);
         }
@@ -38,12 +38,12 @@ namespace API.Controllers.AuthUserController
         [Route("login")]
         public ActionResult<User> Login(UserDto request)
         {
-            if (user.Username != request.Username)
+            if (user.UserName != request.Username)
             {
                 return BadRequest("User not found");
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.UserPassword))
             {
                 return BadRequest("Wrong password");
             }
@@ -58,7 +58,7 @@ namespace API.Controllers.AuthUserController
         {
             List<Claim> claims = new List<Claim>
             {
-             new(ClaimTypes.Name, user.Username),
+             new(ClaimTypes.Name, user.UserName),
              new(ClaimTypes.Role, "admin")
             };
             //this key is used to create and verify JWToken and to make sure that this token came from this application
