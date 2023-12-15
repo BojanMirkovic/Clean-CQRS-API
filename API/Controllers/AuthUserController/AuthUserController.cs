@@ -1,12 +1,10 @@
 ﻿using Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Application.Queries.Users;
-using Application.Commands.Users;
 using Application.Validators.User;
 using Application.Commands.Users.RegisterNewUser;
-using Azure.Core;
-using Nest;
+using Application.Queries.Users.LoginUser;
+using Application.Exceptions;
 
 namespace API.Controllers.AuthUserController
 {
@@ -54,21 +52,39 @@ namespace API.Controllers.AuthUserController
         [HttpPost]
         [Route("login")]
 
-        public async Task<IActionResult> GetToken([FromBody] UserDto userLogin)
+        public async Task<IActionResult> GetToken([FromBody] UserDto userToLogin)
         {
-            var user = await _mediator.Send(new LoginUserQuery(userLogin));
+            //var user = await _mediator.Send(new LoginUserQuery(userLogin));
 
-            if (user == null)
+            //if (user == null)
+            //{
+            //    return BadRequest("User not found");
+
+            //}
+            //if (!BCrypt.Net.BCrypt.Verify(userLogin.Password,Password))
+            //{
+            //    return BadRequest("Wrong password");
+            //}
+
+            //return Ok(user.token);
+            var inputValidation = _userValidator.Validate(userToLogin);
+
+            if (!inputValidation.IsValid)
             {
-                return BadRequest("User not found");
-
+                return BadRequest(inputValidation.Errors.ConvertAll(errors => errors.ErrorMessage));
             }
-            if (!BCrypt.Net.BCrypt.Verify(userLogin.Password, user.Password))
+
+            try
             {
-                return BadRequest("Wrong password");
-            }
+                string token = await _mediator.Send(new LoginUserQuery(userToLogin));
 
-            return Ok(user.token);
+                //   return Ok(new TokenDto { TokenValue = token });
+                return Ok(token);
+            }
+            catch (UnAuthorizedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

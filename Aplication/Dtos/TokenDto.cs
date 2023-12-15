@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Dtos
 {
-    internal class TokenDto
+    public class TokenDto
     {
         public required string TokenValue { get; set; }
     }

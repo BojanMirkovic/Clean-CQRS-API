@@ -9,6 +9,6 @@ namespace Domain.Models.User
 {
     public class User : AccountModel
     {
-
+        public string? Role { get; set; }
     }
 }

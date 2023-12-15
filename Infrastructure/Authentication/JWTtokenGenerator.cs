@@ -9,7 +9,6 @@ namespace Infrastructure.Authentication
 {
     public class JWTtokenGenerator
     {
-        // public static User user = new User();
         private readonly IConfiguration _configuration;
 
         //In order go gain access to Appsetings and inject configuration we have to create constructor
@@ -44,6 +43,5 @@ namespace Infrastructure.Authentication
 
             return jwt;
         }
-
     }
 }
