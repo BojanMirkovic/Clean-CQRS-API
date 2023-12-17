@@ -21,6 +21,10 @@ namespace Application.Validators.User
                 .Matches("[0-9]").WithMessage("Password must contain at least one numeric digit.")
                 .NotEqual("password", StringComparer.OrdinalIgnoreCase)
                 .WithMessage("Password cannot be 'password'.");
+
+            //RuleFor(user => user.Role)
+            //    .NotEmpty().WithMessage("Role is required.")
+            //    .Must(role => role == "admin" || role == "user").WithMessage("Role must be either 'admin' or 'user'.");
         }
     }
 }

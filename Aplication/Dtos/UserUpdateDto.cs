@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.Dtos
 {
-    public class TokenDto
+    public class UserUpdateDto : UserDto
     {
-        public required string TokenValue { get; set; }
+        public string Role { get; set; } = string.Empty;
     }
 }

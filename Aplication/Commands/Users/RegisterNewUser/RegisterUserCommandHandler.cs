@@ -17,20 +17,33 @@ namespace Application.Commands.Users.RegisterNewUser
         {
             _mockDatabase = mockDatabase;
         }
-        Task<User> IRequestHandler<RegisterUserCommand, User>.Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+
+        public Task<User> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            User userToCreate = new()
+            if (request.NewUser == null || string.IsNullOrEmpty(request.NewUser.UserName) || string.IsNullOrEmpty(request.NewUser.Password))
             {
-                Id = Guid.NewGuid(),
-                Username = request.NewUser.UserName,
-                Password = BCrypt.Net.BCrypt.HashPassword(request.NewUser.Password),
-                Authorized = true,
-                Role = "admin"
-            };
+                throw new ArgumentNullException("Invalid user data. Username and password are required.");
+            }
 
-            _mockDatabase.Users.Add(userToCreate);
+            try
+            {
+                User userToCreate = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Username = request.NewUser.UserName,
+                    Password = BCrypt.Net.BCrypt.HashPassword(request.NewUser.Password),
+                    Role = "user"
+                };
 
-            return Task.FromResult(userToCreate);
+                _mockDatabase.Users.Add(userToCreate);
+
+                return Task.FromResult(userToCreate);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it according to your application's needs
+                throw new ApplicationException("User registration failed.", ex);
+            }
         }
     }
 }

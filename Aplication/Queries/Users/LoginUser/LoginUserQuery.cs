@@ -1,16 +1,10 @@
 ﻿using Application.Dtos;
-using Azure.Identity;
 using Domain.Models.User;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.Queries.Users
+namespace Application.Queries.Users.LoginUser
 {
-    public class LoginUserQuery : IRequest<User>
+    public class LoginUserQuery : IRequest<string>
     {
         public UserDto LoginUser { get; }
         public LoginUserQuery(UserDto loginUser)
