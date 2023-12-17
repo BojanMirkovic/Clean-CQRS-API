@@ -25,7 +25,6 @@ namespace Test.UserTests.CommandTest
             {
                 UserName = "NewUserToCreate",
                 Password = "Bojan123",
-                Role = "user"
             };
 
             var query = new RegisterUserCommand(userToRegister);
@@ -43,9 +42,9 @@ namespace Test.UserTests.CommandTest
         {
             // Arrange - missing username
             UserDto userToRegister = new()
-            {   UserName="",
-                Password = BCrypt.Net.BCrypt.HashPassword("Bojan123"),
-                Role = "user"
+            {
+                UserName = "",
+                Password = BCrypt.Net.BCrypt.HashPassword("Bojan123")
             };
 
             var query = new RegisterUserCommand(userToRegister);
@@ -64,7 +63,6 @@ namespace Test.UserTests.CommandTest
             {
                 UserName = "NewUserToCreate",
                 Password = null!,
-                Role = "user"
             };
 
             var query = new RegisterUserCommand(userToRegister);
@@ -82,8 +80,7 @@ namespace Test.UserTests.CommandTest
             UserDto userToRegister = new()
             {
                 UserName = "TestUser",
-                Password = BCrypt.Net.BCrypt.HashPassword("TestPassword"),
-                Role = "user"
+                Password = BCrypt.Net.BCrypt.HashPassword("TestPassword")
             };
 
             var query = new RegisterUserCommand(userToRegister);
@@ -94,7 +91,7 @@ namespace Test.UserTests.CommandTest
             // Assert: Check if the user is added to the database
             Assert.IsTrue(_mockDatabase.Users.Any(u => u.Id == result.Id));
         }
-       
+
 
 
     }

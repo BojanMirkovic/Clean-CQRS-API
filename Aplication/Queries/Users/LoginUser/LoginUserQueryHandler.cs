@@ -21,7 +21,7 @@ namespace Application.Queries.Users.LoginUser
         public Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
         {
             User? wantedUser = _mockDatabase.Users.FirstOrDefault(user => user.Username == request.LoginUser.UserName);
-            
+
 
 
 

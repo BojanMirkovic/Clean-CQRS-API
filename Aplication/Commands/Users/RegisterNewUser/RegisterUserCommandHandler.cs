@@ -32,7 +32,7 @@ namespace Application.Commands.Users.RegisterNewUser
                     Id = Guid.NewGuid(),
                     Username = request.NewUser.UserName,
                     Password = BCrypt.Net.BCrypt.HashPassword(request.NewUser.Password),
-                    Role = default
+                    Role = "user"
                 };
 
                 _mockDatabase.Users.Add(userToCreate);
