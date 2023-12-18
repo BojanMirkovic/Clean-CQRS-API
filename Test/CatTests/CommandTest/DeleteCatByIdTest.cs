@@ -1,6 +1,4 @@
 ﻿using Application.Commands.Cats.DeleteCat;
-using Application.Commands.Dogs.DeleteDog;
-using Domain.Models.Animal;
 using Infrastructure.Database;
 
 namespace Test.CatTests.CommandTest

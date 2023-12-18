@@ -1,4 +1,4 @@
-﻿using Domain.Models.Animal;
+﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
 using MediatR;
 
@@ -18,9 +18,10 @@ namespace Application.Commands.Birds.AddBird
             {
                 Bird birdToCreate = new()
                 {
-                    Id = new Guid(),
+                    AnimalId = new Guid(),
                     Name = request.NewBird.Name,
                     CanFly = request.NewBird.CanFly,
+                    Color = request.NewBird.Color
                 };
 
                 _mockDatabase.Birds.Add(birdToCreate);

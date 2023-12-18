@@ -24,7 +24,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.Animal.Bird", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AnimalId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -35,14 +35,14 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AnimalId");
 
                     b.ToTable("Birds");
                 });
 
             modelBuilder.Entity("Domain.Models.Animal.Cat", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AnimalId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -53,14 +53,14 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AnimalId");
 
                     b.ToTable("Cats");
                 });
 
             modelBuilder.Entity("Domain.Models.Animal.Dog", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AnimalId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -68,7 +68,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AnimalId");
 
                     b.ToTable("Dogs");
                 });

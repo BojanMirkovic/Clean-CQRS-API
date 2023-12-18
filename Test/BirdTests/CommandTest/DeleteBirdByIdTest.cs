@@ -1,6 +1,4 @@
 ﻿using Application.Commands.Birds.DeleteBird;
-using Application.Commands.Cats.DeleteCat;
-using Domain.Models.Animal;
 using Infrastructure.Database;
 
 namespace Test.BirdTests.CommandTest

@@ -1,5 +1,5 @@
 ﻿using Application.Dtos;
-using Domain.Models.Animal;
+using Domain.Models.AnimalModel;
 using MediatR;
 
 namespace Application.Commands.Birds.UpdateBird

@@ -1,6 +1,5 @@
 ﻿using Application.Commands.Birds.AddBird;
 using Application.Dtos;
-using Domain.Models.Animal;
 using Infrastructure.Database;
 
 namespace Test.BirdTests.CommandTest

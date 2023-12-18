@@ -1,4 +1,4 @@
-﻿using Domain.Models.Animal;
+﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
 using MediatR;
 
@@ -17,7 +17,7 @@ namespace Application.Queries.Birds.GetBirdById
         {
             try
             {
-                Bird wantedBird = _mockDatabase.Birds.Where(bird => bird.Id == request.Id).FirstOrDefault()!;
+                Bird wantedBird = _mockDatabase.Birds.Where(bird => bird.AnimalId == request.Id).FirstOrDefault()!;
                 if (wantedBird != null)
                 {
                     return Task.FromResult(wantedBird);

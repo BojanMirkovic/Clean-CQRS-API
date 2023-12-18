@@ -1,5 +1,4 @@
 ﻿using Application.Commands.Dogs.DeleteDog;
-using Domain.Models.Animal;
 using Infrastructure.Database;
 
 namespace Test.DogTests.CommandTest

@@ -1,4 +1,4 @@
-﻿using Domain.Models.Animal;
+﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
 using MediatR;
 
@@ -13,7 +13,7 @@ namespace Application.Commands.Birds.DeleteBird
         {
             try
             {
-                Bird? birdToDelete = _mockDatabase.Birds.FirstOrDefault(bird => bird.Id == request.Id)!;
+                Bird? birdToDelete = _mockDatabase.Birds.FirstOrDefault(bird => bird.AnimalId == request.Id)!;
                 if (birdToDelete != null)
                 {
                     _mockDatabase.Birds.Remove(birdToDelete);

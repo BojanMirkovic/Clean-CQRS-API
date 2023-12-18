@@ -1,5 +1,7 @@
 ﻿
-using Domain.Models.Animal;
+using Domain.Models.AnimalModel;
+using Domain.Models.UserAnimalModel;
+using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database
@@ -17,6 +19,10 @@ namespace Infrastructure.Database
         public DbSet<Dog> Dogs { get; set; }
         public DbSet<Cat> Cats { get; set; }
         public DbSet<Bird> Birds { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Animal> Animals { get; set; }
+
+        public DbSet<UserAnimal> AnimalsUsers {get; set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,6 +31,10 @@ namespace Infrastructure.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-        }
+
+            //  Configuring many-to - many relationship between User and Animal through UserAnimal
+           
+            modelBuilder.Entity<UserAnimal>().ToTable(nameof(UserAnimal));
+        } 
     }
 }

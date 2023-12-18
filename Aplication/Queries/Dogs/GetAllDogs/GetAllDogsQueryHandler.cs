@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Infrastructure.Database;
-using Domain.Models.Animal;
+using Domain.Models.AnimalModel;
 
 namespace Application.Queries.Dogs.GetAllDogs
 {

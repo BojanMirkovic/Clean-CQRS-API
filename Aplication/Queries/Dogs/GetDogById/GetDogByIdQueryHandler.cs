@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Infrastructure.Database;
-using Domain.Models.Animal;
+using Domain.Models.AnimalModel;
 
 namespace Application.Queries.Dogs.GetDogById
 {
@@ -16,7 +16,8 @@ namespace Application.Queries.Dogs.GetDogById
         {
             try
             {
-                Dog? wantedDog = _mockDatabase.Dogs.Where(Dog => Dog.Id == request.Id).FirstOrDefault()!;
+                Dog? wantedDog = _mockDatabase.Dogs.Where(Dog => Dog.AnimalId == request.Id).FirstOrDefault()!;
+
                 if (wantedDog != null)
                 {
                     return Task.FromResult(wantedDog);

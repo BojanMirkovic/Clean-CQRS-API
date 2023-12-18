@@ -89,7 +89,7 @@ namespace Test.UserTests.CommandTest
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert: Check if the user is added to the database
-            Assert.IsTrue(_mockDatabase.Users.Any(u => u.Id == result.Id));
+            Assert.IsTrue(_mockDatabase.Users.Any(u => u.UserId == result.UserId));
         }
 
 
