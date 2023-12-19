@@ -13,7 +13,7 @@ namespace Infrastructure.Repositories.Birds
         {
             _sqlDatabase = sqlDatabase;
         }
-       
+
         public async Task<Bird> AddBird(Bird newBird)
         {
             try

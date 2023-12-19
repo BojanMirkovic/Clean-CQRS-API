@@ -22,7 +22,7 @@ namespace Infrastructure.Database
         public DbSet<User> Users { get; set; }
         public DbSet<Animal> Animals { get; set; }
 
-        public DbSet<UserAnimal> AnimalsUsers {get; set;}
+        public DbSet<UserAnimal> AnimalsUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,8 +33,8 @@ namespace Infrastructure.Database
             base.OnModelCreating(modelBuilder);
 
             //  Configuring many-to - many relationship between User and Animal through UserAnimal
-           
+
             modelBuilder.Entity<UserAnimal>().ToTable(nameof(UserAnimal));
-        } 
+        }
     }
 }

@@ -14,7 +14,6 @@ namespace Application.Commands.Users.UpdateUser
         {
             try
             {
-                // User? userToUpdate = _mockDatabase.Users.FirstOrDefault(user => user.AnimalId == request.AnimalId)!;
                 User? userToUpdate = _mockDatabase.Users.Where(user => user.UserId == request.Id).FirstOrDefault()!;
                 if (userToUpdate != null)
                 {

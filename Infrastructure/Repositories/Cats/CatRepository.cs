@@ -97,7 +97,7 @@ namespace Infrastructure.Repositories.Cats
             //    .ToList();
         }
 
-        public  Task<Cat> UpdateCat(Cat updateCat)
+        public Task<Cat> UpdateCat(Cat updateCat)
         {
             try
             {

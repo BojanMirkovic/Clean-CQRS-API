@@ -1,5 +1,9 @@
 ﻿using Infrastructure.Authentication;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Birds;
+using Infrastructure.Repositories.Cats;
+using Infrastructure.Repositories.Dogs;
+using Infrastructure.Repositories.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +15,10 @@ namespace Infrastructure
         {
             services.AddSingleton<MockDatabase>();
             services.AddSingleton<JWTtokenGenerator>();
+            services.AddScoped<IDogRepository, DogRepository>();
+            services.AddScoped<IBirdRepository, BirdRepository>();
+            services.AddScoped<ICatRepository, CatRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddDbContext<RealDb>(options =>
             {
                 options.UseSqlServer("Server=LAPTOP-D4IQ7VEN\\SQLEXPRESS; Database=API_Animals; Trusted_Connection=true; TrustServerCertificate=true;");

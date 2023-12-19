@@ -132,7 +132,7 @@ namespace API.Controllers.AuthUserController
 
         [HttpDelete]
         [Route("deleteUser/{userToDeleteId}"), Authorize(Roles = "admin")]
-        public async Task<IActionResult> DeleteBird(Guid userToDeleteId)
+        public async Task<IActionResult> DeleteUser(Guid userToDeleteId)
         {
             // Validate Guid birdToDeleteId
             var validateUserToDeleteId = _guidValidator.Validate(userToDeleteId);
