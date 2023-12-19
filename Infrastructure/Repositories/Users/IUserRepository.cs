@@ -1,6 +1,6 @@
 ﻿using Domain.Models.UserModel;
 
-namespace Infrastructure.Interfaces
+namespace Infrastructure.Repositories.Users
 {
     public interface IUserRepository : IGenericRepository<User>
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Infrastructure.Interfaces
+namespace Infrastructure.Repositories
 {
     //generic interface where T is specific class
     public interface IGenericRepository<T> where T : class

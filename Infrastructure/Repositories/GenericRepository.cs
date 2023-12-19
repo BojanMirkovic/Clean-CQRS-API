@@ -1,5 +1,4 @@
-﻿using Infrastructure.Interfaces;
-using Infrastructure.Database;
+﻿using Infrastructure.Database;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories

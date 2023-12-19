@@ -1,8 +1,7 @@
 ﻿using Domain.Models.UserModel;
 using Infrastructure.Database;
-using Infrastructure.Interfaces;
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Repositories.Users
 {
     internal class UserRepository : GenericRepository<User>, IUserRepository
     {
