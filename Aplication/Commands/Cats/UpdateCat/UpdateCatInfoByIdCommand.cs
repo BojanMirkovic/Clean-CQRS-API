@@ -8,11 +8,11 @@ namespace Application.Commands.Cats.UpdateCat
     {
         public UpdateCatInfoByIdCommand(CatDto updatedCat, Guid id)
         {
-            UpdatedCat = updatedCat;
+            UpdatedDtoCat = updatedCat;
             Id = id;
         }
 
-        public CatDto UpdatedCat { get; }
+        public CatDto UpdatedDtoCat { get; }
         public Guid Id { get; }
     }
 }

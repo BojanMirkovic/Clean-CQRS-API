@@ -21,10 +21,9 @@ namespace Application.Commands.Birds.UpdateBird
                     return null!;
                 }
 
-                birdToUpdate.Name = request.UpdatedBird.Name;
-                birdToUpdate.CanFly = request.UpdatedBird.CanFly;
-                birdToUpdate.Color = request.UpdatedBird.Color;
-
+                birdToUpdate.Name = request.UpdatedDtoBird.Name;
+                birdToUpdate.CanFly = request.UpdatedDtoBird.CanFly;
+                birdToUpdate.Color = request.UpdatedDtoBird.Color;
 
                 var updatedBird = await _birdRepository.UpdateBird(birdToUpdate);
 

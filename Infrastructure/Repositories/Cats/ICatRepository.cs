@@ -9,6 +9,6 @@ namespace Infrastructure.Repositories.Cats
         Task<Cat> GetCatById(Guid id);
         Task<Cat> AddCat(Cat newBird);
         Task<Cat> UpdateCat(Cat updateBird);
-        Task<Cat> DeleteCat(Cat id);
+        Task<Cat> DeleteCat(Guid id);
     }
 }

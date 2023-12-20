@@ -1,18 +1,20 @@
 ﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Birds;
+using Infrastructure.Repositories.Cats;
 using MediatR;
 
 namespace Application.Commands.Cats.AddCat
 {
     public class AddCatCommandHandler : IRequestHandler<AddCatCommand, Cat>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly ICatRepository _catRepository;
 
-        public AddCatCommandHandler(MockDatabase mockDatabase)
+        public AddCatCommandHandler(ICatRepository catRepository)
         {
-            _mockDatabase = mockDatabase;
+            _catRepository = catRepository;
         }
-        public Task<Cat> Handle(AddCatCommand request, CancellationToken cancellationToken)
+        public async Task<Cat> Handle(AddCatCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -24,8 +26,8 @@ namespace Application.Commands.Cats.AddCat
                     Weight = request.NewCat.Weight,
                     LikesToPlay = request.NewCat.LikesToPlay,
                 };
-                _mockDatabase.Cats.Add(catToCreate);
-                return Task.FromResult(catToCreate);
+                var createdCat = await _catRepository.AddCat(catToCreate);
+                return createdCat;
             }
             catch (Exception ex)
             {

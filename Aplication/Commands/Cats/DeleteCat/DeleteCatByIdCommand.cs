@@ -9,7 +9,6 @@ namespace Application.Commands.Cats.DeleteCat
         {
             Id = id;
         }
-
         public Guid Id { get; }
     }
 }

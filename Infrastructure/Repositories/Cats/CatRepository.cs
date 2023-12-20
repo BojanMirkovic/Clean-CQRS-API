@@ -49,10 +49,6 @@ namespace Infrastructure.Repositories.Cats
             }
         }
 
-        public Task<Cat> DeleteCat(Cat id)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<List<Cat>> GetAllCats()
         {
