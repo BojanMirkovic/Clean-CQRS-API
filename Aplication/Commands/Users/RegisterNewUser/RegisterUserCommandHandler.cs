@@ -1,18 +1,19 @@
 ﻿using Domain.Models.UserModel;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Users;
 using MediatR;
 
 namespace Application.Commands.Users.RegisterNewUser
 {
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, User>
     {
-        private readonly MockDatabase _mockDatabase;
-        public RegisterUserCommandHandler(MockDatabase mockDatabase)
+        private readonly IUserRepository _userRepository;
+        public RegisterUserCommandHandler(IUserRepository userRepository)
         {
-            _mockDatabase = mockDatabase;
+            _userRepository = userRepository;
         }
 
-        public Task<User> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<User> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             if (request.NewUser == null || string.IsNullOrEmpty(request.NewUser.UserName) || string.IsNullOrEmpty(request.NewUser.Password))
             {
@@ -29,9 +30,9 @@ namespace Application.Commands.Users.RegisterNewUser
                     Role = "user"
                 };
 
-                _mockDatabase.Users.Add(userToCreate);
+                var createdUser = await _userRepository.RegisterUser(userToCreate);
 
-                return Task.FromResult(userToCreate);
+                return createdUser;
             }
             catch (Exception ex)
             {

@@ -6,7 +6,8 @@ namespace Infrastructure.Repositories.Users
     public interface IUserRepository
     {
         Task<List<User>> GetAllUsers();
-        Task<string> GetToken(User userToLogin);
+        Task<User?> GetTokenForUserByUsername(string username);
+        Task<User> GetUserById(Guid id);
         Task<User> RegisterUser(User newUser);
         Task<User> UpdateUser(User updateUser);
         Task<User> DeleteUser(Guid id);
