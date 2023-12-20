@@ -1,18 +1,19 @@
 ﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Birds;
 using MediatR;
 
 namespace Application.Commands.Birds.AddBird
 {
     public class AddBirdCommandHandler : IRequestHandler<AddBirdCommand, Bird>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly IBirdRepository _birdRepository;
 
-        public AddBirdCommandHandler(MockDatabase mockDatabase)
+        public AddBirdCommandHandler(IBirdRepository birdRepository)
         {
-            _mockDatabase = mockDatabase;
+            _birdRepository = birdRepository;
         }
-        public Task<Bird> Handle(AddBirdCommand request, CancellationToken cancellationToken)
+        public async Task<Bird> Handle(AddBirdCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -24,8 +25,10 @@ namespace Application.Commands.Birds.AddBird
                     Color = request.NewBird.Color
                 };
 
-                _mockDatabase.Birds.Add(birdToCreate);
-                return Task.FromResult(birdToCreate);
+                //_birdRepository.AddBird(birdToCreate);
+                //return Task.FromResult(birdToCreate);
+                var createdBird = await _birdRepository.AddBird(birdToCreate);
+                return createdBird;
             }
             catch (Exception ex)
             {

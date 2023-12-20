@@ -1,37 +1,34 @@
 ﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Birds;
 using MediatR;
 
 namespace Application.Commands.Birds.UpdateBird
 {
     public class UpdateBirdInfoByIdCommandHandler : IRequestHandler<UpdateBirdInfoByIdCommand, Bird>
     {
-        public readonly MockDatabase _mockDatabase;
-        public UpdateBirdInfoByIdCommandHandler(MockDatabase mockDatabase)
-        {
-            _mockDatabase = mockDatabase;
-        }
-        public Task<Bird> Handle(UpdateBirdInfoByIdCommand request, CancellationToken cancellationToken)
-        {
-            try
-            {
-                Bird? birdToUpdate = _mockDatabase.Birds.FirstOrDefault(bird => bird.AnimalId == request.Id)!;
-                if (birdToUpdate != null)
-                {
-                    birdToUpdate.Name = request.UpdatedBird.Name;
-                    birdToUpdate.CanFly = request.UpdatedBird.CanFly;
-                    birdToUpdate.Color = request.UpdatedBird.Color;
+        private readonly IBirdRepository _birdRepository;
 
-                    return Task.FromResult(birdToUpdate);
+        public UpdateBirdInfoByIdCommandHandler(IBirdRepository birdRepository)
+        {
+            _birdRepository = birdRepository;
+        }
+        public async Task<Bird> Handle(UpdateBirdInfoByIdCommand request, CancellationToken cancellationToken)
+        {
+                Bird birdToUpdate = await _birdRepository.GetBirdById(request.Id);
+                if (birdToUpdate == null)
+                {
+                    return null!;
                 }
 
-                return Task.FromResult<Bird>(null!);
-            }
-            catch (Exception ex)
-            {
+                birdToUpdate.Name = request.UpdatedBird.Name;
+                birdToUpdate.CanFly = request.UpdatedBird.CanFly;
+                birdToUpdate.Color = request.UpdatedBird.Color;
 
-                throw new Exception(ex.Message);
-            }
+
+                var updatedBird = await _birdRepository.UpdateBird(birdToUpdate);
+
+                return updatedBird;
         }
     }
 }
