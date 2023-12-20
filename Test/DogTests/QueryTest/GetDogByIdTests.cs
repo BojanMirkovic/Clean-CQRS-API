@@ -1,6 +1,4 @@
-﻿
-
-using Application.Queries.Dogs.GetDogById;
+﻿using Application.Queries.Dogs.GetDogById;
 using Infrastructure.Database;
 
 namespace Test.DogTests.QueryTest
@@ -32,7 +30,7 @@ namespace Test.DogTests.QueryTest
 
             // Assert
             Assert.NotNull(result);
-            Assert.That(result.Id, Is.EqualTo(dogId));
+            Assert.That(result.AnimalId, Is.EqualTo(dogId));
         }
 
         [Test]

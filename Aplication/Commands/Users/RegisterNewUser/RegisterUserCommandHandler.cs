@@ -1,12 +1,6 @@
-﻿using BCrypt.Net;
-using Domain.Models.User;
+﻿using Domain.Models.UserModel;
 using Infrastructure.Database;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Commands.Users.RegisterNewUser
 {
@@ -29,7 +23,7 @@ namespace Application.Commands.Users.RegisterNewUser
             {
                 User userToCreate = new User
                 {
-                    Id = Guid.NewGuid(),
+                    UserId = Guid.NewGuid(),
                     Username = request.NewUser.UserName,
                     Password = BCrypt.Net.BCrypt.HashPassword(request.NewUser.Password),
                     Role = "user"

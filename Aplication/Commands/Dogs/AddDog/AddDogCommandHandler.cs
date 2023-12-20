@@ -1,4 +1,4 @@
-﻿using Domain.Models.Animal;
+﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
 using MediatR;
 
@@ -18,8 +18,10 @@ namespace Application.Commands.Dogs.AddDog
             {
                 Dog dogToCreate = new()
                 {
-                    Id = Guid.NewGuid(),
-                    Name = request.NewDog.Name
+                    AnimalId = Guid.NewGuid(),
+                    Name = request.NewDog.Name,
+                    Breed = request.NewDog.Breed,
+                    Weight = request.NewDog.Weight,
                 };
 
                 _mockDatabase.Dogs.Add(dogToCreate);

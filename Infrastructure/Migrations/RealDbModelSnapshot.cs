@@ -22,55 +22,332 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Models.Animal.Bird", b =>
+            modelBuilder.Entity("AnimalUser", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AnimalsAnimalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsersUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AnimalsAnimalId", "UsersUserId");
+
+                    b.HasIndex("UsersUserId");
+
+                    b.ToTable("AnimalUser");
+                });
+
+            modelBuilder.Entity("Domain.Models.AnimalModel.Animal", b =>
+                {
+                    b.Property<Guid>("AnimalId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AnimalType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AnimalId");
+
+                    b.ToTable("Animals", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("Domain.Models.UserAnimalModel.UsersHaveAnimals", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("AnimalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UsersHaveAnimals", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            AnimalId = new Guid("12345678-1234-5678-1234-567812345682"),
+                            UserId = new Guid("08260479-52a0-4c0e-a588-274101a2c3be")
+                        },
+                        new
+                        {
+                            Id = -2,
+                            AnimalId = new Guid("12345680-1224-5878-1234-667812345690"),
+                            UserId = new Guid("08260479-52a0-4c0e-a588-274101a2c3be")
+                        },
+                        new
+                        {
+                            Id = -3,
+                            AnimalId = new Guid("12345678-1234-5678-1234-567812345682"),
+                            UserId = new Guid("047425eb-15a5-4310-9d25-e281ab036868")
+                        },
+                        new
+                        {
+                            Id = -4,
+                            AnimalId = new Guid("12345680-1224-5878-1234-667812345690"),
+                            UserId = new Guid("047425eb-15a5-4310-9d25-e281ab036868")
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Models.UserModel.User", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("08260479-52a0-4c0e-a588-274101a2c3be"),
+                            Password = "$2a$11$xnBzx/ygATSZerKyMiOJY.rmP7nQ2W.Kk2pR0UOcK4TSx8./cBUe2",
+                            Role = "admin",
+                            Username = "Bojan"
+                        },
+                        new
+                        {
+                            UserId = new Guid("047425eb-15a5-4310-9d25-e281ab036868"),
+                            Password = "$2a$11$Pi/8GysOPuSjjWtgAji.KOP6549LqYfBh4gqArxKJKc/t9zjXFiUW",
+                            Role = "user",
+                            Username = "NotAnAdmin"
+                        },
+                        new
+                        {
+                            UserId = new Guid("047425eb-15a5-4310-9d25-e281ab036869"),
+                            Password = "$2a$11$ZA1DbFEisNF4HhkiQvCBF./FHhQ9Nra.pCYhkiw3MfllL7aFdjuGe",
+                            Role = "user",
+                            Username = "TestUser"
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Models.AnimalModel.Bird", b =>
+                {
+                    b.HasBaseType("Domain.Models.AnimalModel.Animal");
 
                     b.Property<bool>("CanFly")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.ToTable("Birds", (string)null);
 
-                    b.ToTable("Birds");
+                    b.HasData(
+                        new
+                        {
+                            AnimalId = new Guid("71cf39e7-1b71-44c1-ae15-d28be38cf1aa"),
+                            AnimalType = "",
+                            Name = "Ara",
+                            CanFly = false,
+                            Color = "Red"
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("7275d8f0-d002-42ce-9d4f-fe26b3f0d146"),
+                            AnimalType = "",
+                            Name = "Vrana",
+                            CanFly = true,
+                            Color = "Black"
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("87432a85-57fc-46a8-864f-af62572b993d"),
+                            AnimalType = "",
+                            Name = "Sova",
+                            CanFly = true,
+                            Color = "Grey"
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("12345678-1234-5678-1234-567812345682"),
+                            AnimalType = "",
+                            Name = "TestBirdForUnitTestBird1",
+                            CanFly = false,
+                            Color = "blue"
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("12345680-1224-5878-1234-667812345690"),
+                            AnimalType = "",
+                            Name = "TestBirdForUnitTestBird2",
+                            CanFly = false,
+                            Color = "blue"
+                        });
                 });
 
-            modelBuilder.Entity("Domain.Models.Animal.Cat", b =>
+            modelBuilder.Entity("Domain.Models.AnimalModel.Cat", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.HasBaseType("Domain.Models.AnimalModel.Animal");
+
+                    b.Property<string>("Breed")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LikesToPlay")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.ToTable("Cats", (string)null);
 
-                    b.ToTable("Cats");
+                    b.HasData(
+                        new
+                        {
+                            AnimalId = new Guid("5b9f99c8-da69-4741-8a0b-17a619a78e2f"),
+                            AnimalType = "",
+                            Name = "Kity",
+                            Breed = "Persian Cat",
+                            LikesToPlay = true,
+                            Weight = 4
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("b3358c43-be74-4c89-a141-b02a44b610bf"),
+                            AnimalType = "",
+                            Name = "Micko",
+                            Breed = "Domestic Cat",
+                            LikesToPlay = true,
+                            Weight = 6
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("f3e3805c-b9c3-4f0e-88ef-3aa0f6781e0b"),
+                            AnimalType = "",
+                            Name = "Azrael",
+                            Breed = "Siamese Cat",
+                            LikesToPlay = false,
+                            Weight = 6
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("12345678-1234-5678-1234-567812345680"),
+                            AnimalType = "",
+                            Name = "TestCatForUnitTests",
+                            Breed = "Domestic Cat",
+                            LikesToPlay = false,
+                            Weight = 6
+                        });
                 });
 
-            modelBuilder.Entity("Domain.Models.Animal.Dog", b =>
+            modelBuilder.Entity("Domain.Models.AnimalModel.Dog", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.HasBaseType("Domain.Models.AnimalModel.Animal");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Breed")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
 
-                    b.ToTable("Dogs");
+                    b.ToTable("Dogs", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            AnimalId = new Guid("b61c6bd1-0aa9-4bb7-af46-cf43cbcd5bca"),
+                            AnimalType = "",
+                            Name = "Astor",
+                            Breed = "English Pointer",
+                            Weight = 28
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("ab41472c-c29d-4767-8b3c-62e471be5936"),
+                            AnimalType = "",
+                            Name = "Ari",
+                            Breed = "English Pointer",
+                            Weight = 31
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("6eb4810a-3c3d-456c-a9af-12a9c9ac4d4a"),
+                            AnimalType = "",
+                            Name = "Max",
+                            Breed = "German Shepherd",
+                            Weight = 37
+                        },
+                        new
+                        {
+                            AnimalId = new Guid("12345678-1234-5678-1234-567812345678"),
+                            AnimalType = "",
+                            Name = "TestDogForUnitTests",
+                            Breed = "German Terrire",
+                            Weight = 9
+                        });
+                });
+
+            modelBuilder.Entity("AnimalUser", b =>
+                {
+                    b.HasOne("Domain.Models.AnimalModel.Animal", null)
+                        .WithMany()
+                        .HasForeignKey("AnimalsAnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.UserModel.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.AnimalModel.Bird", b =>
+                {
+                    b.HasOne("Domain.Models.AnimalModel.Animal", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Models.AnimalModel.Bird", "AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.AnimalModel.Cat", b =>
+                {
+                    b.HasOne("Domain.Models.AnimalModel.Animal", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Models.AnimalModel.Cat", "AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.AnimalModel.Dog", b =>
+                {
+                    b.HasOne("Domain.Models.AnimalModel.Animal", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Models.AnimalModel.Dog", "AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,4 @@
-﻿using Domain.Models.Animal;
+﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
 using MediatR;
 
@@ -15,11 +15,12 @@ namespace Application.Commands.Birds.UpdateBird
         {
             try
             {
-                Bird? birdToUpdate = _mockDatabase.Birds.FirstOrDefault(bird => bird.Id == request.Id)!;
+                Bird? birdToUpdate = _mockDatabase.Birds.FirstOrDefault(bird => bird.AnimalId == request.Id)!;
                 if (birdToUpdate != null)
                 {
                     birdToUpdate.Name = request.UpdatedBird.Name;
                     birdToUpdate.CanFly = request.UpdatedBird.CanFly;
+                    birdToUpdate.Color = request.UpdatedBird.Color;
 
                     return Task.FromResult(birdToUpdate);
                 }

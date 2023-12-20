@@ -1,5 +1,4 @@
-﻿using Domain.Models.Animal;
-using Domain.Models.User;
+﻿using Domain.Models.UserModel;
 using Infrastructure.Database;
 using MediatR;
 
@@ -14,7 +13,7 @@ namespace Application.Commands.Users.DeleteUser
         {
             try
             {
-                User? userToDelete = _mockDatabase.Users.FirstOrDefault(cat => cat.Id == request.Id)!;
+                User? userToDelete = _mockDatabase.Users.FirstOrDefault(user => user.UserId == request.Id)!;
                 if (userToDelete != null)
                 {
                     _mockDatabase.Users.Remove(userToDelete);

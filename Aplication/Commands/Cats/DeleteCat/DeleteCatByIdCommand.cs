@@ -1,4 +1,4 @@
-﻿using Domain.Models.Animal;
+﻿using Domain.Models.AnimalModel;
 using MediatR;
 
 namespace Application.Commands.Cats.DeleteCat

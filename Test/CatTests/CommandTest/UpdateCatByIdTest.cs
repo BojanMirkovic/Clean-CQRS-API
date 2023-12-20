@@ -1,5 +1,4 @@
-﻿using Application.Commands.Birds.UpdateBird;
-using Application.Commands.Cats.UpdateCat;
+﻿using Application.Commands.Cats.UpdateCat;
 using Application.Dtos;
 using Infrastructure.Database;
 
@@ -27,6 +26,8 @@ namespace Test.CatTests.CommandTest
             CatDto updatedCat = new CatDto();
             updatedCat.Name = "MikaMacor";
             updatedCat.LikesToPlay = true;
+            updatedCat.Breed = "Domestic Cat";
+            updatedCat.Weight = 2;
             var query = new UpdateCatInfoByIdCommand(updatedCat, catId);
 
             // Act
@@ -34,7 +35,7 @@ namespace Test.CatTests.CommandTest
 
             // Assert
             Assert.NotNull(result);
-            Assert.That(result.Id, Is.EqualTo(catId));
+            Assert.That(result.AnimalId, Is.EqualTo(catId));
             Assert.That(result.LikesToPlay, Is.True); // check if behavior is updated
             Assert.That(result.Name, Is.EqualTo(updatedCat.Name)); // Check if the name has been updated 
             Assert.That(result.LikesToPlay, Is.EqualTo(updatedCat.LikesToPlay)); // Check if the behavior has been updated 

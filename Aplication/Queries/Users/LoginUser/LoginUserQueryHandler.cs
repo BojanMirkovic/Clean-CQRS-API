@@ -1,5 +1,5 @@
 ﻿using Application.Exceptions;
-using Domain.Models.User;
+using Domain.Models.UserModel;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
 using MediatR;

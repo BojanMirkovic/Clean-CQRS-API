@@ -39,7 +39,7 @@ namespace Test.UserTests.CommandTest
 
             // Assert
             Assert.NotNull(result);
-            Assert.That(result.Id, Is.EqualTo(userId));
+            Assert.That(result.UserId, Is.EqualTo(userId));
             Assert.That(result.Username, Is.EqualTo(updatedUser.UserName)); // Check if the name has been updated 
             Assert.That(result.Role, Is.EqualTo(updatedUser.Role)); // Check if role has been updated 
         }

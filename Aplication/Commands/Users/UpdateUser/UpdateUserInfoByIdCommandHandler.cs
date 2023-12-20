@@ -1,5 +1,4 @@
-﻿using Domain.Models.Animal;
-using Domain.Models.User;
+﻿using Domain.Models.UserModel;
 using Infrastructure.Database;
 using MediatR;
 
@@ -15,8 +14,7 @@ namespace Application.Commands.Users.UpdateUser
         {
             try
             {
-                // User? userToUpdate = _mockDatabase.Users.FirstOrDefault(user => user.Id == request.Id)!;
-                User? userToUpdate = _mockDatabase.Users.Where(user => user.Id == request.Id).FirstOrDefault()!;
+                User? userToUpdate = _mockDatabase.Users.Where(user => user.UserId == request.Id).FirstOrDefault()!;
                 if (userToUpdate != null)
                 {
                     userToUpdate.Username = request.UpdatedUser.UserName;

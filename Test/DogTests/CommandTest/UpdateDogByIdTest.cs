@@ -1,5 +1,4 @@
-﻿using Application.Commands.Birds.UpdateBird;
-using Application.Commands.Dogs.UpdateDog;
+﻿using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
 using Infrastructure.Database;
 
@@ -26,6 +25,8 @@ namespace Test.DogTests.CommandTest
 
             DogDto updatedDog = new DogDto();
             updatedDog.Name = "Jhony";
+            updatedDog.Breed = "Dodz";
+            updatedDog.Weight = 35;
             var query = new UpdateDogByIdCommand(updatedDog, dogId);
 
             // Act
@@ -33,7 +34,7 @@ namespace Test.DogTests.CommandTest
 
             // Assert
             Assert.NotNull(result);
-            Assert.That(result.Id, Is.EqualTo(dogId));
+            Assert.That(result.AnimalId, Is.EqualTo(dogId));
             Assert.That(result.Name, Is.EqualTo(updatedDog.Name)); // Check if the name has been updated 
         }
         [Test]

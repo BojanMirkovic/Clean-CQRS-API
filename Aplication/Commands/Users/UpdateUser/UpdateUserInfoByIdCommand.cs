@@ -1,5 +1,5 @@
 ﻿using Application.Dtos;
-using Domain.Models.User;
+using Domain.Models.UserModel;
 using MediatR;
 
 
