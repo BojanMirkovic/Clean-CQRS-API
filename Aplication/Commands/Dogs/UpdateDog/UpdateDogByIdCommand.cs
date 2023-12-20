@@ -8,11 +8,11 @@ namespace Application.Commands.Dogs.UpdateDog
     {
         public UpdateDogByIdCommand(DogDto updatedDog, Guid id)
         {
-            UpdatedDog = updatedDog;
+            UpdatedDtoDog = updatedDog;
             Id = id;
         }
 
-        public DogDto UpdatedDog { get; }
+        public DogDto UpdatedDtoDog { get; }
         public Guid Id { get; }
     }
 }

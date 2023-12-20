@@ -1,5 +1,6 @@
 ﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Dogs;
 using MediatR;
 
 
@@ -7,32 +8,28 @@ namespace Application.Commands.Dogs.UpdateDog
 {
     public class UpdateDogByIdCommandHandler : IRequestHandler<UpdateDogByIdCommand, Dog>
     {
-        private readonly MockDatabase _mockDatabase;
-
-        public UpdateDogByIdCommandHandler(MockDatabase mockDatabase)
-        { _mockDatabase = mockDatabase; }
-
-
-        public Task<Dog> Handle(UpdateDogByIdCommand request, CancellationToken cancellationToken)
+        private readonly IDogRepository _dogRepository;
+        public UpdateDogByIdCommandHandler(IDogRepository dogRepository) 
         {
-            try
-            {
+            _dogRepository = dogRepository;
+        }
+
+        public async Task<Dog> Handle(UpdateDogByIdCommand request, CancellationToken cancellationToken)
+        {
                 // Find the dog to update
-                Dog? dogToUpdate = _mockDatabase.Dogs.FirstOrDefault(dog => dog.AnimalId == request.Id);
-                if (dogToUpdate != null)
+                Dog dogToUpdate = await _dogRepository.GetDogById(request.Id);
+                if (dogToUpdate == null)
                 {
-                    dogToUpdate.Name = request.UpdatedDog.Name;
-                    dogToUpdate.Breed = request.UpdatedDog.Breed;
-                    dogToUpdate.Weight = request.UpdatedDog.Weight;
-                    return Task.FromResult(dogToUpdate);
+                    return null!;
                 }
 
-                return Task.FromResult<Dog>(null!);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+                dogToUpdate.Name = request.UpdatedDtoDog.Name;
+                dogToUpdate.Breed = request.UpdatedDtoDog.Breed;
+                dogToUpdate.Weight = request.UpdatedDtoDog.Weight;
+
+                var updatedDog = await _dogRepository.UpdateDog(dogToUpdate);
+
+                return updatedDog;          
         }
     }
 }
