@@ -14,10 +14,10 @@ namespace Application.Queries.Birds.GetAllBirds
             _birdRepository = birdRepository;
         }
         public async Task<List<Bird>> Handle(GetAllBirdsQuery request, CancellationToken cancellationToken)
-        {           
-                List<Bird> allBirdsFromDB = await _birdRepository.GetAllBirds();
+        {
+            List<Bird> allBirdsFromDB = await _birdRepository.GetAllBirds();
 
-                return allBirdsFromDB;          
+            return allBirdsFromDB;
         }
     }
 }

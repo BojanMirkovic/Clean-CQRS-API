@@ -14,14 +14,14 @@ namespace Application.Queries.Dogs.GetDogById
         }
         public async Task<Dog> Handle(GetDogByIdQuery request, CancellationToken cancellationToken)
         {
-                Dog wantedDog = await _dogRepository.GetDogById(request.Id);
+            Dog wantedDog = await _dogRepository.GetDogById(request.Id);
 
-                if (wantedDog == null)
-                {
-                    return null!;
-                }
+            if (wantedDog == null)
+            {
+                return null!;
+            }
 
-                return wantedDog;
+            return wantedDog;
         }
     }
 }

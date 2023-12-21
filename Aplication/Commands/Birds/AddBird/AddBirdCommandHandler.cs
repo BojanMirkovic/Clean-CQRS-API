@@ -27,8 +27,8 @@ namespace Application.Commands.Birds.AddBird
 
                 //_birdRepository.AddBird(birdToCreate);
                 //return Task.FromResult(birdToCreate);
-                var createdBird = await _birdRepository.AddBird(birdToCreate);
-                return createdBird;
+                await _birdRepository.AddBird(birdToCreate);
+                return birdToCreate;
             }
             catch (Exception ex)
             {

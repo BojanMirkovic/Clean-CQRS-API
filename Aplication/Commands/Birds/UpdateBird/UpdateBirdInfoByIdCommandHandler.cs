@@ -15,19 +15,19 @@ namespace Application.Commands.Birds.UpdateBird
         }
         public async Task<Bird> Handle(UpdateBirdInfoByIdCommand request, CancellationToken cancellationToken)
         {
-                Bird birdToUpdate = await _birdRepository.GetBirdById(request.Id);
-                if (birdToUpdate == null)
-                {
-                    return null!;
-                }
+            Bird birdToUpdate = await _birdRepository.GetBirdById(request.Id);
+            if (birdToUpdate == null)
+            {
+                return null!;
+            }
 
-                birdToUpdate.Name = request.UpdatedDtoBird.Name;
-                birdToUpdate.CanFly = request.UpdatedDtoBird.CanFly;
-                birdToUpdate.Color = request.UpdatedDtoBird.Color;
+            birdToUpdate.Name = request.UpdatedDtoBird.Name;
+            birdToUpdate.CanFly = request.UpdatedDtoBird.CanFly;
+            birdToUpdate.Color = request.UpdatedDtoBird.Color;
 
-                var updatedBird = await _birdRepository.UpdateBird(birdToUpdate);
+            var updatedBird = await _birdRepository.UpdateBird(birdToUpdate);
 
-                return updatedBird;
+            return updatedBird;
         }
     }
 }

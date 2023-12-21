@@ -14,7 +14,7 @@ namespace Application.Commands.Cats.DeleteCat
             _catRepository = catRepository;
         }
 
-        public  async Task<Cat> Handle(DeleteCatByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Cat> Handle(DeleteCatByIdCommand request, CancellationToken cancellationToken)
         {
             try
             {

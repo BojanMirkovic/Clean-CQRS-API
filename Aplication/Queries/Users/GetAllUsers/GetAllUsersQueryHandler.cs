@@ -7,8 +7,8 @@ namespace Application.Queries.Users.GetAllUsers
 {
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<User>>
     {
-       private readonly IUserRepository _userRepository;
-        public GetAllUsersQueryHandler(IUserRepository userRepository) 
+        private readonly IUserRepository _userRepository;
+        public GetAllUsersQueryHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
@@ -16,9 +16,9 @@ namespace Application.Queries.Users.GetAllUsers
         public async Task<List<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
 
-                List<User> allUsersFromDB = await _userRepository.GetAllUsers();
-                return allUsersFromDB;
-          
+            List<User> allUsersFromDB = await _userRepository.GetAllUsers();
+            return allUsersFromDB;
+
         }
     }
 }

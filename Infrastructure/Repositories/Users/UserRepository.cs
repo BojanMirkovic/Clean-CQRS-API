@@ -1,16 +1,20 @@
-﻿using Domain.Models.UserModel;
+﻿using Azure.Core;
+using Domain.Models.UserModel;
+using Infrastructure.Authentication;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Authentication;
 
 namespace Infrastructure.Repositories.Users
 {
     internal class UserRepository : IUserRepository
     {
         private readonly RealDb _sqlDatabase;
-
-        public UserRepository(RealDb sqlDatabase)
+        private readonly JWTtokenGenerator _jwtGenerator;
+        public UserRepository(RealDb sqlDatabase, JWTtokenGenerator jwtGenerator)
         {
             _sqlDatabase = sqlDatabase;
+            _jwtGenerator = jwtGenerator;
         }
 
         public async Task<User> DeleteUser(Guid id)
@@ -47,14 +51,46 @@ namespace Infrastructure.Repositories.Users
         public async Task<User?> GetTokenForUserByUsername(string username)
         {
             var userFromDB = await _sqlDatabase.Users.FirstOrDefaultAsync(user => user.Username == username);
-            if (userFromDB == null) 
+            if (userFromDB == null)
             {
                 throw new Exception($"There was no user with name {username} in the database");
             }
             return userFromDB;
 
-           
+
         }
+        /**********************************************************************************************************************/
+        public async Task<string> GetsTokenToLogin(string username, string password)
+        {
+
+            var userFromDB = await _sqlDatabase.Users.FirstOrDefaultAsync(user => user.Username == username);
+            if (userFromDB == null)
+            {
+                throw new Exception($"There was no user with name {username} in the database");
+            }
+
+
+            if (userFromDB == null || !BCrypt.Net.BCrypt.Verify(password, userFromDB.Password))
+            {
+                throw new UnauthorizedAccessException("Invalid username or password");
+            }
+
+            try
+            {
+                var token = _jwtGenerator.CreateJWTtoken(userFromDB);
+                return token;
+            }
+            catch (AuthenticationException ex)
+            {
+                throw new AuthenticationException("Invalid user data. Username and password are required.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to generate token.", ex);
+            }
+
+        }
+        /***********************************************************************************************************************/
 
         public async Task<User> GetUserById(Guid id)
         {

@@ -1,52 +1,39 @@
-﻿using Application.Queries.Cats.GetCatById;
+﻿using Application.Queries.Birds.GetBirdById;
+using Application.Queries.Cats.GetCatById;
+using Domain.Models.AnimalModel;
+using FakeItEasy;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Birds;
+using Infrastructure.Repositories.Cats;
 
 namespace Test.CatTests.QueryTest
 {
     [TestFixture]
     public class GetCatByIdTests
     {
-        private GetCatByIdQueryHandler _handler;
-        private MockDatabase _mockDatabase;
-
-        [SetUp]
-        public void SetUp()
-        {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new GetCatByIdQueryHandler(_mockDatabase);
-        }
-
         [Test]
-        public async Task Handle_ValidId_ReturnsCorrectCat()
+        public async Task Handle_ValidId_ReturnCorrectCat()
         {
-            // Arrange
-            var catId = new Guid("12345678-1234-5678-1234-567812345680");
+            var guid = Guid.NewGuid();
 
-            var query = new GetCatByIdQuery(catId);
+            var cat = new Cat { Name = "Hans", Breed = "Domestic Cat" };
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var catRepository = A.Fake<ICatRepository>();
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.That(result.AnimalId, Is.EqualTo(catId));
+            var handler = new GetCatByIdQueryHandler(catRepository);
+
+            A.CallTo(() => catRepository.GetCatById(guid)).Returns(cat);
+
+            var command = new GetCatByIdQuery(guid);
+
+            //Act
+
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.That(result, Is.TypeOf<Cat>());
+            Assert.That(result.Name.Equals("Hans"));
         }
-
-        [Test]
-        public async Task Handle_InvalidId_ReturnsNull()
-        {
-            // Arrange
-            var invalidCatId = Guid.NewGuid();
-
-            var query = new GetCatByIdQuery(invalidCatId);
-
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            Assert.IsNull(result);
-        }
-
     }
 }

@@ -1,99 +1,65 @@
-﻿using Application.Commands.Users.RegisterNewUser;
+﻿using Application.Commands.Dogs.AddDog;
+using Application.Commands.Users.RegisterNewUser;
 using Application.Dtos;
+using Domain.Models.AnimalModel;
+using Domain.Models.UserModel;
+using FakeItEasy;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Dogs;
+using Infrastructure.Repositories.Users;
 
 namespace Test.UserTests.CommandTest
 {
     [TestFixture]
     public class RegisterUserTest
     {
-        private MockDatabase _mockDatabase;
-        private RegisterUserCommandHandler _handler;
-
-        [SetUp]
-        public void SetUp()
-        {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new RegisterUserCommandHandler(_mockDatabase);
-        }
         [Test]
-        public async Task Handle_RegisterUser_Success()
+        public async Task Handle_ValidUser_ReturnsCreatedUser()
         {
-            //Arange
-            UserDto userToRegister = new()
+            // Arrange
+            var userRepository = A.Fake<IUserRepository>();
+            var newUser = new UserDto { UserName = "testUser", Password = "testPassword" };
+            var registerCommand = new RegisterUserCommand(newUser);
+
+            var expectedUser = new User
             {
-                UserName = "NewUserToCreate",
-                Password = "Bojan123",
+                UserId = Guid.NewGuid(),
+                Username = newUser.UserName,
+                Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password),
+                Role = "user"
             };
 
-            var query = new RegisterUserCommand(userToRegister);
+            A.CallTo(() => userRepository.RegisterUser(A<User>._))
+                .WithAnyArguments()
+                .Returns(Task.FromResult(expectedUser));
+
+            var handler = new RegisterUserCommandHandler(userRepository);
 
             // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var result = await handler.Handle(registerCommand, CancellationToken.None);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.That(result.Username, Is.EqualTo(userToRegister.UserName));
-            Assert.IsTrue(BCrypt.Net.BCrypt.Verify(userToRegister.Password, result.Password));//Check if the hashed password in User object matches the original hash
+            Assert.That(result.UserId, Is.EqualTo(expectedUser.UserId));
+            Assert.That(result.Username, Is.EqualTo(expectedUser.Username));
+            Assert.That(result.Password, Is.EqualTo(expectedUser.Password));
+            Assert.That(result.Role, Is.EqualTo(expectedUser.Role));
         }
+
         [Test]
-        public async Task Handle_RegisterUser_MissingUsername_ThrowsException()
+        public void Handle_NullUser_ThrowsArgumentNullException()
         {
-            // Arrange - missing username
-            UserDto userToRegister = new()
-            {
-                UserName = "",
-                Password = BCrypt.Net.BCrypt.HashPassword("Bojan123")
-            };
+            // Arrange
+            var userRepository = A.Fake<IUserRepository>();
+            var registerCommand = new RegisterUserCommand(null!); // Passing null user
 
-            var query = new RegisterUserCommand(userToRegister);
+            var handler = new RegisterUserCommandHandler(userRepository);
 
-            // Act & Assert: Ensure an exception is thrown when handling the command
+            // Act & Assert
             Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
-                await _handler.Handle(query, CancellationToken.None);
+                await handler.Handle(registerCommand, CancellationToken.None);
             });
         }
-        [Test]
-        public async Task Handle_RegisterUser_MissingPassword_ThrowsException()
-        {
-            // Arrange: Creating a UserDto with missing password
-            UserDto userToRegister = new()
-            {
-                UserName = "NewUserToCreate",
-                Password = null!,
-            };
-
-            var query = new RegisterUserCommand(userToRegister);
-
-            // Act & Assert: Ensure an exception is thrown when handling the command
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-            {
-                await _handler.Handle(query, CancellationToken.None);
-            });
-        }
-        [Test]
-        public async Task Handle_RegisterUser_AddsUserToDatabase()
-        {
-            // Arrange: Create a UserDto for registration
-            UserDto userToRegister = new()
-            {
-                UserName = "TestUser",
-                Password = BCrypt.Net.BCrypt.HashPassword("TestPassword")
-            };
-
-            var query = new RegisterUserCommand(userToRegister);
-
-            // Act: Register the user
-            var result = await _handler.Handle(query, CancellationToken.None);
-
-            // Assert: Check if the user is added to the database
-            Assert.IsTrue(_mockDatabase.Users.Any(u => u.UserId == result.UserId));
-        }
-
-
-
     }
 }
 

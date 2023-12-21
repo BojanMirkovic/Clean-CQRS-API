@@ -26,8 +26,9 @@ namespace Application.Commands.Cats.AddCat
                     Weight = request.NewCat.Weight,
                     LikesToPlay = request.NewCat.LikesToPlay,
                 };
-                var createdCat = await _catRepository.AddCat(catToCreate);
-                return createdCat;
+
+                await _catRepository.AddCat(catToCreate);
+                return catToCreate;
             }
             catch (Exception ex)
             {

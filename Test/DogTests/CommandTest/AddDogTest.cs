@@ -1,39 +1,45 @@
 ﻿using Infrastructure.Database;
 using Application.Commands.Dogs.AddDog;
 using Application.Dtos;
+using Application.Commands.Cats.AddCat;
+using Domain.Models.AnimalModel;
+using FakeItEasy;
+using Infrastructure.Repositories.Cats;
+using Infrastructure.Repositories.Dogs;
 
 namespace Test.DogTests.CommandTest
 {
     [TestFixture]
     public class AddDogTest
     {
-        private AddDogCommandHandler _handler;
-        private MockDatabase _mockDatabase;
-
-        [SetUp]
-        public void SetUp()
-        {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new AddDogCommandHandler(_mockDatabase);
-        }
         [Test]
-        public async Task Handle_AddNewDogToDB_ResultDB_HasNewElement()
+        public async Task Handle_Add_Dog_To_DB()
         {
-            // Arrange
-            DogDto newDog = new()
-            {
-                Name = "testDog"
-            };
+            //Arrange
+            var dog = new Dog { Name = "Boby", Breed = "Bulldog" };
 
-            var query = new AddDogCommand(newDog);
+            var dogRepository = A.Fake<IDogRepository>();
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var handler = new AddDogCommandHandler(dogRepository);
 
-            // Assert
-            Assert.That(newDog.Name, Is.EqualTo(result.Name));
+            A.CallTo(() => dogRepository.AddDog(dog)).Returns(dog);
+
+            var dto = new DogDto();
+
+            dto.Name = "Boby";
+            dto.Breed = "Bulldog";
+            dto.Weight = 25;
+
+            var command = new AddDogCommand(dto);
+
+            //Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            //Assert
             Assert.IsNotNull(result);
+            Assert.That(result.Name.Equals("Boby"));
+            Assert.That(result, Is.TypeOf<Dog>());
         }
     }
 }
+

@@ -8,7 +8,7 @@ namespace Application.Commands.Dogs.AddDog
     public class AddDogCommandHandler : IRequestHandler<AddDogCommand, Dog>
     {
         private readonly IDogRepository _dogRepository;
-        public AddDogCommandHandler(IDogRepository dogRepository) 
+        public AddDogCommandHandler(IDogRepository dogRepository)
         {
             _dogRepository = dogRepository;
         }
@@ -24,8 +24,8 @@ namespace Application.Commands.Dogs.AddDog
                     Weight = request.NewDog.Weight,
                 };
 
-                var createdDog = await _dogRepository.AddDog(dogToCreate);
-                return createdDog;
+                await _dogRepository.AddDog(dogToCreate);
+                return dogToCreate;
             }
             catch (Exception ex)
             {

@@ -7,9 +7,9 @@ namespace Application.Queries.Cats.GetCatById
 {
     public class GetCatByIdQueryHandler : IRequestHandler<GetCatByIdQuery, Cat>
     {
-        private readonly ICatRepository _catRepository;    
-        public GetCatByIdQueryHandler(ICatRepository catRepository) 
-        { 
+        private readonly ICatRepository _catRepository;
+        public GetCatByIdQueryHandler(ICatRepository catRepository)
+        {
             _catRepository = catRepository;
         }
         public async Task<Cat> Handle(GetCatByIdQuery request, CancellationToken cancellationToken)

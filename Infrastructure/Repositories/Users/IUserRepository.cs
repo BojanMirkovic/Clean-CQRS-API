@@ -11,5 +11,6 @@ namespace Infrastructure.Repositories.Users
         Task<User> RegisterUser(User newUser);
         Task<User> UpdateUser(User updateUser);
         Task<User> DeleteUser(Guid id);
+        Task<string> GetsTokenToLogin(string userName, string password);
     }
 }

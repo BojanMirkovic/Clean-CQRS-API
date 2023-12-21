@@ -7,8 +7,8 @@ namespace Infrastructure.Repositories.Cats
         Task<List<Cat>> GetAllCats();
         Task<List<Cat>> GetCatsOfSameBreedAndCertainWeight(int weight, string breed);
         Task<Cat> GetCatById(Guid id);
-        Task<Cat> AddCat(Cat newBird);
-        Task<Cat> UpdateCat(Cat updateBird);
+        Task<Cat> AddCat(Cat newCat);
+        Task<Cat> UpdateCat(Cat updateCat);
         Task<Cat> DeleteCat(Guid id);
     }
 }

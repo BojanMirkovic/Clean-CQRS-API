@@ -17,13 +17,13 @@ namespace Application.Queries.Birds.GetBirdById
         public async Task<Bird> Handle(GetBirdByIdQuery request, CancellationToken cancellationToken)
         {
 
-                Bird wantedBird = await _birdRepository.GetBirdById(request.Id);
-                if (wantedBird == null)
-                {
-                    return null!;
-                }
+            Bird wantedBird = await _birdRepository.GetBirdById(request.Id);
+            if (wantedBird == null)
+            {
+                return null!;
+            }
 
-                return wantedBird;         
+            return wantedBird;
         }
     }
 }
