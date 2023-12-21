@@ -1,50 +1,53 @@
-﻿//using Application.Commands.Cats.DeleteCat;
-//using Application.Commands.Users.DeleteUser;
-//using Infrastructure.Database;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using Application.Commands.Birds.DeleteBird;
+using Application.Commands.Cats.DeleteCat;
+using Application.Commands.Users.DeleteUser;
+using Azure.Identity;
+using Domain.Models.AnimalModel;
+using Domain.Models.UserModel;
+using FakeItEasy;
+using Infrastructure.Database;
+using Infrastructure.Repositories.Birds;
+using Infrastructure.Repositories.Users;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace Test.UserTests.CommandTest
-//{
-//    public class DeleteUserByIdTest
-//    {
-//        private DeleteUserByIdCommandHandler _handler;
-//        private MockDatabase _mockDatabase;
+namespace Test.UserTests.CommandTest
+{
+    public class DeleteUserByIdTest
+    {
 
-//        [SetUp]
-//        public void SetUp()
-//        {
-//            // Initialize the handler and mock database before each test
-//            _mockDatabase = new MockDatabase();
-//            _handler = new DeleteUserByIdCommandHandler(_mockDatabase);
-//        }
-//        [Test]
-//        public async Task Handle_DeleteUserFromDB_CorrectId_ResultIsNotNull()
-//        {
-//            // Arrange
-//            var userId = new Guid("047425eb-15a5-4310-9d25-e281ab036869");
-//            var query = new DeleteUserByIdCommand(userId);
+        [Test]
+        public async Task Handle_DeleteUser_Corect_Id()
+        {
+            //Arrange
+            var user = new User
+            {
+                UserId = Guid.NewGuid(),
+                Username = "Test",
+                Password = "Test12345"
+            };
 
-//            // Act
-//            var result = await _handler.Handle(query, CancellationToken.None);
+            var userRepository = A.Fake<IUserRepository>();
 
-//            // Assert
-//            Assert.That(result, Is.Not.Null);
-//        }
-//        [Test]
-//        public async Task Handle_DeleteUserById_IncorrectId_ResultIsNull()
-//        {
-//            //Arange
-//            var catId = new Guid();
+            var handler = new DeleteUserByIdCommandHandler(userRepository);
 
-//            var query = new DeleteUserByIdCommand(catId);
-//            //Act
-//            var result = await _handler.Handle(query, CancellationToken.None);
-//            //Assert
-//            Assert.That(result, Is.Null);
-//        }
-//    }
-//}
+            A.CallTo(() => userRepository.DeleteUser(user.UserId)).Returns(user);
+
+            var command = new DeleteUserByIdCommand(user.UserId);
+
+            //Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.That(result.Username.Equals("Test"));
+            Assert.That(result, Is.TypeOf<User>());
+            Assert.That(result.UserId.Equals(user.UserId));
+            A.CallTo(() => userRepository.DeleteUser(user.UserId)).MustHaveHappened(); // Verify that DeleteUser method was called with the correct ID
+        }
+
+    }
+}

@@ -100,7 +100,7 @@ namespace API.Controllers.AuthUserController
 
         [HttpPut]
         [Route("updateUserInfo/{updatedUserId}"), Authorize(Roles = "admin")]
-        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDto updatedUser, Guid updatedUserId)
+        public async Task<IActionResult> UpdateUser([FromBody] UpdatingUserDto updatedUser, Guid updatedUserId)
         {
             // Validate updatedUser, Guid updatedUserId
             var validatedUpdatedUser = _userValidator.Validate(updatedUser);

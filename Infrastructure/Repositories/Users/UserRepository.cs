@@ -127,7 +127,7 @@ namespace Infrastructure.Repositories.Users
             }
         }
 
-        public Task<User> UpdateUser(User updateUser)
+        public  Task<User> UpdateUser(User updateUser)
         {
             try
             {
@@ -142,6 +142,18 @@ namespace Infrastructure.Repositories.Users
 
                 throw new Exception($"An error occured while updating a user by Id {updateUser.UserId} from database", ex);
             }
+            //try
+            //{
+            //    _sqlDatabase.Users.Update(updateUser);
+
+            //    await _sqlDatabase.SaveChangesAsync();
+
+            //    return updateUser; // Return the updated user entity
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception($"An error occurred while updating a user by Id {updateUser.UserId} from the database", ex);
+            //}
         }
     }
 }

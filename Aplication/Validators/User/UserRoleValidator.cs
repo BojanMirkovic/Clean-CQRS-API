@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Validators.User
 {
-    public class UserRoleValidator : AbstractValidator<UserUpdateDto>
+    public class UserRoleValidator : AbstractValidator<UpdatingUserDto>
     {
         public UserRoleValidator()
         {

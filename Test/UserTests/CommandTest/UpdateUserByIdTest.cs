@@ -1,61 +1,66 @@
-﻿//using Application.Commands.Users.UpdateUser;
-//using Application.Dtos;
-//using Infrastructure.Database;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using Application.Commands.Users.UpdateUser;
+using Application.Dtos;
+using Domain.Models.AnimalModel;
+using Domain.Models.UserModel;
+using FakeItEasy;
+using Infrastructure.Repositories.Users;
 
-//namespace Test.UserTests.CommandTest
-//{
-//    public class UpdateUserByIdTest
-//    {
-//        private UpdateUserInfoByIdCommandHandler _handler;
-//        private MockDatabase _mockDatabase;
+namespace Test.UserTests.CommandTest
+{
+    public class UpdateUserByIdTest
+    {
+        [Test]
+        public async Task Handle_Update_Correct_User_By_Id()
+        {
+            //Arrange
+            var guid = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230");
 
-//        [SetUp]
-//        public void SetUp()
-//        {
-//            // Initialize the handler and mock database before each test
-//            _mockDatabase = new MockDatabase();
-//            _handler = new UpdateUserInfoByIdCommandHandler(_mockDatabase);
-//        }
-//        [Test]
-//        public async Task Handle_UpdateUserInfoById_ResultDB_ElementHasNewName_Password_Role()
-//        {
-//            // Arrange
-//            var userId = new Guid("047425eb-15a5-4310-9d25-e281ab036868");
+            var user = new User
+            {
+                UserId = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230"),
+                Username = "TestUser",
+                Password = BCrypt.Net.BCrypt.HashPassword("TestUser123"),
+                Role = "user"
+            };
 
-//            UserUpdateDto updatedUser = new UserUpdateDto();
-//            updatedUser.UserName = "MikaTheUser";
-//            updatedUser.Password = BCrypt.Net.BCrypt.HashPassword("Bojan123");
-//            updatedUser.Role = "admin";
+            var userForUpdatingDto = new UpdatingUserDto { UserName = "NewName" , Password = BCrypt.Net.BCrypt.HashPassword("NoviPassword"), Role ="admin"};
 
-//            var query = new UpdateUserInfoByIdCommand(updatedUser, userId);
+            var userRepository = A.Fake<IUserRepository>();
 
-//            // Act
-//            var result = await _handler.Handle(query, CancellationToken.None);
+            var handler = new UpdateUserInfoByIdCommandHandler(userRepository);
 
-//            // Assert
-//            Assert.NotNull(result);
-//            Assert.That(result.UserId, Is.EqualTo(userId));
-//            Assert.That(result.Username, Is.EqualTo(updatedUser.UserName)); // Check if the name has been updated 
-//            Assert.That(result.Role, Is.EqualTo(updatedUser.Role)); // Check if role has been updated 
-//        }
-//        [Test]
-//        public async Task Handle_UpdateUserById_IncorrectId_ResultIsNull()
-//        {
-//            //Arange
-//            UserUpdateDto updatedUser = new UserUpdateDto();
-//            var nonExistingUserId = new Guid();
+            var expectedUser = new User
+            {
+                UserId = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230"),
+                Username = userForUpdatingDto.UserName,
+                Password = BCrypt.Net.BCrypt.HashPassword(userForUpdatingDto.Password),
+                Role = userForUpdatingDto.Role
+            };
 
-//            var query = new UpdateUserInfoByIdCommand(updatedUser, nonExistingUserId);
-//            //Act
-//            var result = await _handler.Handle(query, CancellationToken.None);
-//            //Assert
-//            Assert.Null(result);
-//        }
-//    }
-//}
+            A.CallTo(() => userRepository.UpdateUser(A<User>.That.Matches(u => u.UserId == guid))).Returns(expectedUser);
+
+            var command = new UpdateUserInfoByIdCommand(userForUpdatingDto, guid);
+
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.IsNotNull(result);
+            //Assert.That(result.UserId, Is.EqualTo(expectedUser.UserId));
+            //Assert.That(result.Username, Is.EqualTo(expectedUser.Username));
+            //Assert.That(result.Role, Is.EqualTo(expectedUser.Role));
+           
+            Assert.That(result.Username.Equals("NewName"));
+            Assert.That(result.Password.Equals("NoviPasword"));
+            Assert.That(result.Role.Equals("admin"));
+            Assert.That(result, Is.TypeOf<Dog>());
+
+            // Verify password hashing
+            Assert.IsTrue(BCrypt.Net.BCrypt.Verify(userForUpdatingDto.Password, result.Password));
+
+            Assert.That(result, Is.TypeOf<User>());
+        }
+
+    }
+}
 
