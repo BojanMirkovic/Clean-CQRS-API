@@ -1,10 +1,7 @@
-﻿using Infrastructure.Database;
-using Application.Commands.Dogs.AddDog;
+﻿using Application.Commands.Dogs.AddDog;
 using Application.Dtos;
-using Application.Commands.Cats.AddCat;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
-using Infrastructure.Repositories.Cats;
 using Infrastructure.Repositories.Dogs;
 
 namespace Test.DogTests.CommandTest

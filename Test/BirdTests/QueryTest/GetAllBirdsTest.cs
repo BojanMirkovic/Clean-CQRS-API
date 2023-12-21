@@ -1,10 +1,7 @@
 ﻿using Application.Queries.Birds.GetAllBirds;
-using Application.Queries.Dogs.GetDogById;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
-using Infrastructure.Database;
 using Infrastructure.Repositories.Birds;
-using Infrastructure.Repositories.Dogs;
 
 namespace Test.BirdTests.QueryTest
 {

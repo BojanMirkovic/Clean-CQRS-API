@@ -1,11 +1,7 @@
-﻿using Application.Commands.Dogs.AddDog;
-using Application.Commands.Users.RegisterNewUser;
+﻿using Application.Commands.Users.RegisterNewUser;
 using Application.Dtos;
-using Domain.Models.AnimalModel;
 using Domain.Models.UserModel;
 using FakeItEasy;
-using Infrastructure.Database;
-using Infrastructure.Repositories.Dogs;
 using Infrastructure.Repositories.Users;
 
 namespace Test.UserTests.CommandTest

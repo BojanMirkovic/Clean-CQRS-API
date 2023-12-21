@@ -1,49 +1,38 @@
-﻿//using Application.Queries.Dogs.GetAllDogs;
-//using Infrastructure.Database;
+﻿using Application.Queries.Dogs.GetAllDogs;
+using Domain.Models.AnimalModel;
+using FakeItEasy;
+using Infrastructure.Repositories.Dogs;
 
-//namespace Test.DogTests.QueryTest
-//{
-//    [TestFixture]
-//    public class GetAllDogsTest
-//    {
-//        private GetAllDogsQueryHandler _handler;
-//        private MockDatabase _mockDatabase;
+namespace Test.DogTests.QueryTest
+{
+    [TestFixture]
+    public class GetAllDogsTest
+    {
+        [Test]
+        public async Task Handle_Get_All_Dogs_ReturnListAvDogs()
+        {
+            List<Dog> dogs = new List<Dog>
+            {
+                new Dog { Name = "Ari", Breed = "English Pointer" , Weight = 27 },
+                new Dog { Name = "Kity", Breed = "English Pointer" , Weight = 22 }
+            };
 
-//        [SetUp]
-//        public void SetUp()
-//        {
-//            // Initialize the handler and mock database before each test
-//            _mockDatabase = new MockDatabase();
-//            _handler = new GetAllDogsQueryHandler(_mockDatabase);
-//        }
-//        [Test]
-//        public async Task Handle_GetAllDogsFromDB_ReturnsResultIsEqualToDB()
-//        {
-//            // Arrange
-//            var allDogsFromMockDB = _mockDatabase.Dogs;
-//            var query = new GetAllDogsQuery();
+            var dogRepository = A.Fake<IDogRepository>();
 
-//            // Act
-//            var result = await _handler.Handle(query, CancellationToken.None);
+            var handler = new GetAllDogsQueryHandler(dogRepository);
 
-//            // Assert
-//            Assert.That(result, Is.EqualTo(allDogsFromMockDB));
-//        }
+            A.CallTo(() => dogRepository.GetAllDogs()).Returns(dogs);
 
-//        [Test]
-//        public async Task Handle_EmptyDB_ReturnsNull()
-//        {
-//            // Arrange
-//            _mockDatabase.Dogs = null!;
+            var command = new GetAllDogsQuery();
 
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
 
-//            var query = new GetAllDogsQuery();
-
-//            // Act
-//            var result = await _handler.Handle(query, CancellationToken.None);
-
-//            // Assert
-//            Assert.IsNull(result);
-//        }
-//    }
-//}
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.That(result, Is.InstanceOf<List<Dog>>()); // result is a list of Dog objects
+            Assert.That(result.Count, Is.EqualTo(dogs.Count));
+            CollectionAssert.AreEqual(dogs, result);//compare both lists directly for equality
+        }
+    }
+}

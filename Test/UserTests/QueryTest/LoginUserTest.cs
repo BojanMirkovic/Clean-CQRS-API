@@ -1,11 +1,6 @@
-﻿
-using Application.Dtos;
-using Application.Queries.Cats.GetCatById;
+﻿using Application.Dtos;
 using Application.Queries.Users.LoginUser;
-using Domain.Models.AnimalModel;
-using Domain.Models.UserModel;
 using FakeItEasy;
-using Infrastructure.Repositories.Cats;
 using Infrastructure.Repositories.Users;
 
 namespace Test.UserTests.QueryTest

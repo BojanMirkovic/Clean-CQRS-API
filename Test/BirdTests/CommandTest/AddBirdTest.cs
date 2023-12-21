@@ -1,11 +1,8 @@
 ﻿using Application.Commands.Birds.AddBird;
-using Application.Commands.Cats.AddCat;
 using Application.Dtos;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
-using Infrastructure.Database;
 using Infrastructure.Repositories.Birds;
-using Infrastructure.Repositories.Cats;
 
 namespace Test.BirdTests.CommandTest
 {

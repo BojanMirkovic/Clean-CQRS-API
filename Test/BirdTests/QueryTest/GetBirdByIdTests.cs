@@ -3,8 +3,6 @@ using Domain.Models.AnimalModel;
 using FakeItEasy;
 using Infrastructure.Repositories.Birds;
 
-
-
 namespace Test.BirdTests.QueryTest
 {
     [TestFixture]
@@ -27,7 +25,6 @@ namespace Test.BirdTests.QueryTest
             var command = new GetBirdByIdQuery(guid);
 
             //Act
-
             var result = await handler.Handle(command, CancellationToken.None);
 
             //Assert

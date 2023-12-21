@@ -2,7 +2,6 @@
 using Application.Dtos;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
-using Infrastructure.Database;
 using Infrastructure.Repositories.Cats;
 
 namespace Test.CatTests.CommandTest

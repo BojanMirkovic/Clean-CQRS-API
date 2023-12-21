@@ -1,9 +1,6 @@
-﻿using Application.Queries.Birds.GetBirdById;
-using Application.Queries.Cats.GetCatById;
+﻿using Application.Queries.Cats.GetCatById;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
-using Infrastructure.Database;
-using Infrastructure.Repositories.Birds;
 using Infrastructure.Repositories.Cats;
 
 namespace Test.CatTests.QueryTest
