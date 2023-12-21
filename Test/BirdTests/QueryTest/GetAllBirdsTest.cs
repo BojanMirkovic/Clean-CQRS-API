@@ -34,7 +34,7 @@ namespace Test.BirdTests.QueryTest
             // Assert
             Assert.IsNotNull(result);
             Assert.That(result, Is.InstanceOf<List<Bird>>()); // result is a list of Bird objects
-            Assert.That(result.Count, Is.EqualTo(birds.Count)); 
+            Assert.That(result.Count, Is.EqualTo(birds.Count));
             CollectionAssert.AreEqual(birds, result);//compare both lists directly for equality
         }
     }
