@@ -42,6 +42,7 @@ namespace Test.DogTests.CommandTest
 
             //Assert
             Assert.IsNotNull(result);
+            Assert.That(result.AnimalId, Is.EqualTo(guid));
             Assert.That(result.Name.Equals("Max"));
             Assert.That(result.Breed.Equals("Dzukela"));
             Assert.That(result.Weight.Equals(25));

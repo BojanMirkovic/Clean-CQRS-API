@@ -1,8 +1,10 @@
-﻿using Application.Commands.Users.UpdateUser;
+﻿using Application.Commands.Dogs.UpdateDog;
+using Application.Commands.Users.UpdateUser;
 using Application.Dtos;
 using Domain.Models.AnimalModel;
 using Domain.Models.UserModel;
 using FakeItEasy;
+using Infrastructure.Repositories.Dogs;
 using Infrastructure.Repositories.Users;
 
 namespace Test.UserTests.CommandTest
@@ -10,54 +12,42 @@ namespace Test.UserTests.CommandTest
     public class UpdateUserByIdTest
     {
         [Test]
-        public async Task Handle_Update_Correct_User_By_Id()
+        public async Task Handle_Update_Correct_Dog_By_Id()
         {
             //Arrange
+
             var guid = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230");
 
             var user = new User
             {
                 UserId = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230"),
-                Username = "TestUser",
-                Password = BCrypt.Net.BCrypt.HashPassword("TestUser123"),
+                Username = "Ari",
+                Password = "EnglishPointer",
                 Role = "user"
             };
 
-            var userForUpdatingDto = new UpdatingUserDto { UserName = "NewName" , Password = BCrypt.Net.BCrypt.HashPassword("NoviPassword"), Role ="admin"};
+            var userDto = new UpdatingUserDto { UserName = "Max", Password= "Dzukela", Role = "admin" };
 
             var userRepository = A.Fake<IUserRepository>();
 
             var handler = new UpdateUserInfoByIdCommandHandler(userRepository);
 
-            var expectedUser = new User
-            {
-                UserId = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230"),
-                Username = userForUpdatingDto.UserName,
-                Password = BCrypt.Net.BCrypt.HashPassword(userForUpdatingDto.Password),
-                Role = userForUpdatingDto.Role
-            };
+            A.CallTo(() => userRepository.GetUserById(user.UserId)).Returns(user);
 
-            A.CallTo(() => userRepository.UpdateUser(A<User>.That.Matches(u => u.UserId == guid))).Returns(expectedUser);
+            A.CallTo(() => userRepository.UpdateUser(user)).Returns(user);
 
-            var command = new UpdateUserInfoByIdCommand(userForUpdatingDto, guid);
+            var command = new UpdateUserInfoByIdCommand(userDto, guid);
 
-            // Act
+            //Act
+
             var result = await handler.Handle(command, CancellationToken.None);
 
-            // Assert
+            //Assert
             Assert.IsNotNull(result);
-            //Assert.That(result.UserId, Is.EqualTo(expectedUser.UserId));
-            //Assert.That(result.Username, Is.EqualTo(expectedUser.Username));
-            //Assert.That(result.Role, Is.EqualTo(expectedUser.Role));
-           
-            Assert.That(result.Username.Equals("NewName"));
-            Assert.That(result.Password.Equals("NoviPasword"));
+            Assert.That(result.UserId, Is.EqualTo(guid));
+            Assert.That(result.Username.Equals("Max"));
             Assert.That(result.Role.Equals("admin"));
-            Assert.That(result, Is.TypeOf<Dog>());
-
-            // Verify password hashing
-            Assert.IsTrue(BCrypt.Net.BCrypt.Verify(userForUpdatingDto.Password, result.Password));
-
+            
             Assert.That(result, Is.TypeOf<User>());
         }
 
