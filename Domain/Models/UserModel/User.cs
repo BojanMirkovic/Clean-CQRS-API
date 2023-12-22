@@ -7,7 +7,5 @@ namespace Domain.Models.UserModel
     {
         public string Role { get; set; } = "user";
 
-        public List<Animal> Animals { get; set; } = new List<Animal>();
-
     }
 }

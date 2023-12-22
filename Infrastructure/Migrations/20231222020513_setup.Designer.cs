@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(RealDb))]
-    [Migration("20231220002955_addNewData")]
-    partial class addNewData
+    [Migration("20231222020513_setup")]
+    partial class setup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,26 +25,12 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AnimalUser", b =>
-                {
-                    b.Property<Guid>("AnimalsAnimalId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsersUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("AnimalsAnimalId", "UsersUserId");
-
-                    b.HasIndex("UsersUserId");
-
-                    b.ToTable("AnimalUser");
-                });
-
             modelBuilder.Entity("Domain.Models.AnimalModel.Animal", b =>
                 {
                     b.Property<Guid>("AnimalId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("AnimalId");
 
                     b.Property<string>("AnimalType")
                         .IsRequired()
@@ -56,7 +42,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("AnimalId");
 
-                    b.ToTable("Animals", (string)null);
+                    b.ToTable("Animal");
 
                     b.UseTptMappingStrategy();
                 });
@@ -112,6 +98,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("AnimalId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -126,27 +115,29 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("AnimalId");
+
                     b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
                         {
                             UserId = new Guid("08260479-52a0-4c0e-a588-274101a2c3be"),
-                            Password = "$2a$11$xnBzx/ygATSZerKyMiOJY.rmP7nQ2W.Kk2pR0UOcK4TSx8./cBUe2",
+                            Password = "$2a$11$WyqaeU.YeLlrYqo7sDlDIOty0sIzpkG3l.W1rxX..Ho9g882nR4RO",
                             Role = "admin",
                             Username = "Bojan"
                         },
                         new
                         {
                             UserId = new Guid("047425eb-15a5-4310-9d25-e281ab036868"),
-                            Password = "$2a$11$Pi/8GysOPuSjjWtgAji.KOP6549LqYfBh4gqArxKJKc/t9zjXFiUW",
+                            Password = "$2a$11$3zu0cm.HElaHpTsdEOrP.Ob3Ev9ggpkMfY6OFdpnTZy/F.sYXWNTa",
                             Role = "user",
                             Username = "NotAnAdmin"
                         },
                         new
                         {
                             UserId = new Guid("047425eb-15a5-4310-9d25-e281ab036869"),
-                            Password = "$2a$11$ZA1DbFEisNF4HhkiQvCBF./FHhQ9Nra.pCYhkiw3MfllL7aFdjuGe",
+                            Password = "$2a$11$qWEsMalco3HiM.tEQst5We3mGrReV/7V0S/0QAI0xjLjAkWfLF/su",
                             Role = "user",
                             Username = "TestUser"
                         });
@@ -168,7 +159,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            AnimalId = new Guid("71cf39e7-1b71-44c1-ae15-d28be38cf1aa"),
+                            AnimalId = new Guid("10c9e943-49e7-44cb-bd06-c809185438dd"),
                             AnimalType = "",
                             Name = "Ara",
                             CanFly = false,
@@ -176,7 +167,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            AnimalId = new Guid("7275d8f0-d002-42ce-9d4f-fe26b3f0d146"),
+                            AnimalId = new Guid("c4feb719-e1a4-47c5-a278-c2e94fcc54be"),
                             AnimalType = "",
                             Name = "Vrana",
                             CanFly = true,
@@ -184,7 +175,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            AnimalId = new Guid("87432a85-57fc-46a8-864f-af62572b993d"),
+                            AnimalId = new Guid("2d4e07c0-4277-4779-bee7-8ac4a6fa331e"),
                             AnimalType = "",
                             Name = "Sova",
                             CanFly = true,
@@ -227,7 +218,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            AnimalId = new Guid("5b9f99c8-da69-4741-8a0b-17a619a78e2f"),
+                            AnimalId = new Guid("5a0eaeb0-7dd3-4100-aa79-f0add7c49d67"),
                             AnimalType = "",
                             Name = "Kity",
                             Breed = "Persian Cat",
@@ -236,7 +227,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            AnimalId = new Guid("b3358c43-be74-4c89-a141-b02a44b610bf"),
+                            AnimalId = new Guid("968dea87-60e2-4093-a191-d77e6a41e033"),
                             AnimalType = "",
                             Name = "Micko",
                             Breed = "Domestic Cat",
@@ -245,7 +236,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            AnimalId = new Guid("f3e3805c-b9c3-4f0e-88ef-3aa0f6781e0b"),
+                            AnimalId = new Guid("f9d68585-a161-4087-8373-fe70a7b59eb0"),
                             AnimalType = "",
                             Name = "Azrael",
                             Breed = "Siamese Cat",
@@ -279,7 +270,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            AnimalId = new Guid("b61c6bd1-0aa9-4bb7-af46-cf43cbcd5bca"),
+                            AnimalId = new Guid("93a5f790-f162-4e19-9fd8-8018e1cbc259"),
                             AnimalType = "",
                             Name = "Astor",
                             Breed = "English Pointer",
@@ -287,7 +278,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            AnimalId = new Guid("ab41472c-c29d-4767-8b3c-62e471be5936"),
+                            AnimalId = new Guid("d54d24c3-975a-413e-b2b5-55e57cc0a878"),
                             AnimalType = "",
                             Name = "Ari",
                             Breed = "English Pointer",
@@ -295,7 +286,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            AnimalId = new Guid("6eb4810a-3c3d-456c-a9af-12a9c9ac4d4a"),
+                            AnimalId = new Guid("5e2efcf6-072b-4838-914c-a4c39cf10ded"),
                             AnimalType = "",
                             Name = "Max",
                             Breed = "German Shepherd",
@@ -311,19 +302,11 @@ namespace Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("AnimalUser", b =>
+            modelBuilder.Entity("Domain.Models.UserModel.User", b =>
                 {
                     b.HasOne("Domain.Models.AnimalModel.Animal", null)
-                        .WithMany()
-                        .HasForeignKey("AnimalsAnimalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.UserModel.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Users")
+                        .HasForeignKey("AnimalId");
                 });
 
             modelBuilder.Entity("Domain.Models.AnimalModel.Bird", b =>
@@ -351,6 +334,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("Domain.Models.AnimalModel.Dog", "AnimalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.AnimalModel.Animal", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
