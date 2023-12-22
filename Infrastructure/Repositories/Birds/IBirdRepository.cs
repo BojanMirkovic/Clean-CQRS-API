@@ -9,6 +9,6 @@ namespace Infrastructure.Repositories.Birds
         Task<Bird> GetBirdById(Guid id);
         Task<Bird> AddBird(Bird newBird);
         Task<Bird> UpdateBird(Bird updateBird);
-        Task<Bird> DeleteBird(Guid id);
+        Task<Bird> DeleteBird(Guid id);     
     }
 }
