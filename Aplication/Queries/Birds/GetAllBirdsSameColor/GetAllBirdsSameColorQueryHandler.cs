@@ -20,7 +20,7 @@ namespace Application.Queries.Birds.GetAllBirdsSameColor
         }
         public async Task<List<Bird>> Handle(GetAllBirdsSameColorQuery request, CancellationToken cancellationToken)
         {
-            List<Bird> allBirdsOfSameColorFromDB = await _birdRepository.GetAllBirdsOfSameColor(request.BirdColor.Color);
+            List<Bird> allBirdsOfSameColorFromDB = await _birdRepository.GetAllBirdsOfSameColor(request.BirdColor);
 
             return allBirdsOfSameColorFromDB; 
         }

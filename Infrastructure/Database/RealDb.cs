@@ -11,11 +11,9 @@ namespace Infrastructure.Database
     {
         public RealDb()
         {
-
         }
         public RealDb(DbContextOptions<RealDb> options) : base(options)
         {
-
         }
         public DbSet<Dog> Dogs { get; set; }
         public DbSet<Cat> Cats { get; set; }

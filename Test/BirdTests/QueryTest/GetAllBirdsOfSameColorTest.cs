@@ -35,7 +35,7 @@ namespace Test.BirdTests.QueryTest
                 fakeBirdsData.Where(b => b.Color == color).ToList()
             );
 
-            var query = new GetAllBirdsSameColorQuery(new BirdDto { Color = color });
+            var query = new GetAllBirdsSameColorQuery(color);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
