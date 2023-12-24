@@ -3,8 +3,10 @@ using Application.Commands.Birds.DeleteBird;
 using Application.Commands.Birds.UpdateBird;
 using Application.Dtos;
 using Application.Queries.Birds.GetAllBirds;
+using Application.Queries.Birds.GetAllBirdsSameColor;
 using Application.Queries.Birds.GetBirdById;
 using Application.Validators.Bird;
+using Application.Validators.ColorValidator;
 using Application.Validators.GuidValidator;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -21,12 +23,14 @@ namespace API.Controllers.BirdsController
         private readonly IMediator _mediator;
         private readonly BirdValidator _birdValidator;
         private readonly GuidValidator _guidValidator;
+        private readonly ColorValidator _colorValidator;
 
-        public BirdsController(IMediator mediator, BirdValidator birdValidator, GuidValidator guidValidator)
+        public BirdsController(IMediator mediator, BirdValidator birdValidator, GuidValidator guidValidator, ColorValidator colorValidator)
         {
             _mediator = mediator;
             _birdValidator = birdValidator;
             _guidValidator = guidValidator;
+            _colorValidator = colorValidator;
         }
 
         [HttpGet]
@@ -60,6 +64,28 @@ namespace API.Controllers.BirdsController
             try
             {
                 return Ok(await _mediator.Send(new GetBirdByIdQuery(birdId)));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("getBirdsByColor/{color}")]
+        public async Task<IActionResult> GetAllBirdsOfSameColor(String color)
+        {
+            // Validate Color
+            var validatedBirdColor = _colorValidator.Validate(color);
+            //Error Handling
+            if (!validatedBirdColor.IsValid)
+            {
+                return BadRequest(validatedBirdColor.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }         
+            //Try Catch
+            try
+            {
+                return Ok(await _mediator.Send(new GetAllBirdsSameColorQuery(new BirdDto { Color = color })));
             }
             catch (Exception ex)
             {

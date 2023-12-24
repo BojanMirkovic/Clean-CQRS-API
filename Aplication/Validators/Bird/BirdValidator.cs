@@ -25,6 +25,12 @@ namespace Application.Validators.Bird
                .NotEmpty().WithMessage("Bird name can not be empty")
                .NotNull().WithMessage("Bird name can not be Null")
                .Must(BeValidBoolean).WithMessage("CanFly must be a valid boolean");
+            RuleFor(bird => bird.Color)
+               .NotEmpty().WithMessage("Color is required.")
+               .MinimumLength(3).WithMessage("Bird name must be at least 3 characters")
+               .MaximumLength(20).WithMessage("Color must not exceed 20 characters.")
+               .Matches("^[a-zA-Z]+$").WithMessage("Color should contain only letters."); 
+
         }
         private bool BeValidBoolean(bool canFly)
         {
