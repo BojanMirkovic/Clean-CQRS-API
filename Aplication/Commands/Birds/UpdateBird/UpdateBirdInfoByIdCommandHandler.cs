@@ -1,37 +1,33 @@
 ﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Birds;
 using MediatR;
 
 namespace Application.Commands.Birds.UpdateBird
 {
     public class UpdateBirdInfoByIdCommandHandler : IRequestHandler<UpdateBirdInfoByIdCommand, Bird>
     {
-        public readonly MockDatabase _mockDatabase;
-        public UpdateBirdInfoByIdCommandHandler(MockDatabase mockDatabase)
+        private readonly IBirdRepository _birdRepository;
+
+        public UpdateBirdInfoByIdCommandHandler(IBirdRepository birdRepository)
         {
-            _mockDatabase = mockDatabase;
+            _birdRepository = birdRepository;
         }
-        public Task<Bird> Handle(UpdateBirdInfoByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Bird> Handle(UpdateBirdInfoByIdCommand request, CancellationToken cancellationToken)
         {
-            try
+            Bird birdToUpdate = await _birdRepository.GetBirdById(request.Id);
+            if (birdToUpdate == null)
             {
-                Bird? birdToUpdate = _mockDatabase.Birds.FirstOrDefault(bird => bird.AnimalId == request.Id)!;
-                if (birdToUpdate != null)
-                {
-                    birdToUpdate.Name = request.UpdatedBird.Name;
-                    birdToUpdate.CanFly = request.UpdatedBird.CanFly;
-                    birdToUpdate.Color = request.UpdatedBird.Color;
-
-                    return Task.FromResult(birdToUpdate);
-                }
-
-                return Task.FromResult<Bird>(null!);
+                return null!;
             }
-            catch (Exception ex)
-            {
 
-                throw new Exception(ex.Message);
-            }
+            birdToUpdate.Name = request.UpdatedDtoBird.Name;
+            birdToUpdate.CanFly = request.UpdatedDtoBird.CanFly;
+            birdToUpdate.Color = request.UpdatedDtoBird.Color;
+
+            var updatedBird = await _birdRepository.UpdateBird(birdToUpdate);
+
+            return updatedBird;
         }
     }
 }

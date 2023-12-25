@@ -49,10 +49,6 @@ namespace Infrastructure.Repositories.Cats
             }
         }
 
-        public Task<Cat> DeleteCat(Cat id)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<List<Cat>> GetAllCats()
         {
@@ -87,14 +83,31 @@ namespace Infrastructure.Repositories.Cats
             }
         }
 
-        public Task<List<Cat>> GetCatsOfSameBreedAndCertainWeight(int weight, string breed)
+        public async Task<List<Cat>> GetCatsByBreedAndWeight(string breed, int? weight)
         {
-            throw new NotImplementedException();
-            //return _context.Cats
-            //    .Where(d => d.Breed == breed)
-            //    .Where(d => d.Weight == weight)
-            //    .OrderByDescending(d => d.Weight)
-            //    .ToList();
+            try
+            {
+                var catsQuery = _sqlDatabase.Cats.AsQueryable();
+
+                if (!string.IsNullOrEmpty(breed))
+                {
+                    catsQuery = catsQuery.Where(cat => cat.Breed == breed);
+                }
+
+                if (weight.HasValue)
+                {
+                    catsQuery = catsQuery.Where(cat => cat.Weight >= weight);
+                }
+
+                var cats = await catsQuery.OrderByDescending(cat => cat.Weight).ToListAsync();
+
+                return cats;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"An error occurred while getting cats of {breed} breed and weight from the database", ex);
+            }
         }
 
         public Task<Cat> UpdateCat(Cat updateCat)

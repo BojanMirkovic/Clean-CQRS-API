@@ -1,51 +1,63 @@
-﻿using Application.Queries.Cats.GetCatById;
-using Infrastructure.Database;
+﻿using Application.Commands.Cats.DeleteCat;
+using Application.Queries.Cats.GetCatById;
+using Domain.Models.AnimalModel;
+using FakeItEasy;
+using Infrastructure.Repositories.Cats;
+using Nest;
+using System;
 
 namespace Test.CatTests.QueryTest
 {
     [TestFixture]
     public class GetCatByIdTests
     {
-        private GetCatByIdQueryHandler _handler;
-        private MockDatabase _mockDatabase;
-
-        [SetUp]
-        public void SetUp()
+        [Test]
+        public async Task Handle_ValidId_ReturnCorrectCat()
         {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new GetCatByIdQueryHandler(_mockDatabase);
+            var guid = Guid.NewGuid();
+
+            var cat = new Cat { Name = "Hans", Breed = "Domestic Cat" };
+
+            var catRepository = A.Fake<ICatRepository>();
+
+            var handler = new GetCatByIdQueryHandler(catRepository);
+
+            A.CallTo(() => catRepository.GetCatById(guid)).Returns(cat);
+
+            var command = new GetCatByIdQuery(guid);
+
+            //Act
+
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.That(result, Is.TypeOf<Cat>());
+            Assert.That(result.Name.Equals("Hans"));
         }
 
         [Test]
-        public async Task Handle_ValidId_ReturnsCorrectCat()
+        public async Task Handle_InvalidId_ReturnsNullCat()
         {
             // Arrange
-            var catId = new Guid("12345678-1234-5678-1234-567812345680");
+            var incorrectCatId = Guid.NewGuid(); // An incorrect ID that doesn't exist in the repository
 
-            var query = new GetCatByIdQuery(catId);
+            var cat = new Cat { Name = "Hans", Breed = "Domestic Cat" };
+            cat = null;
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var catRepository = A.Fake<ICatRepository>();
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.That(result.AnimalId, Is.EqualTo(catId));
-        }
+            var handler = new GetCatByIdQueryHandler(catRepository);
 
-        [Test]
-        public async Task Handle_InvalidId_ReturnsNull()
-        {
-            // Arrange
-            var invalidCatId = Guid.NewGuid();
+            A.CallTo(() => catRepository.GetCatById(incorrectCatId)).Returns(cat!); // Simulate repository returning null for an incorrect ID
 
-            var query = new GetCatByIdQuery(invalidCatId);
+            var command = new GetCatByIdQuery(incorrectCatId);
 
             // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.IsNull(result);
+            Assert.IsNull(result); // Ensure that the result is null for an incorrect ID
         }
 
     }

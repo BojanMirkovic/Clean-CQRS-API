@@ -61,15 +61,28 @@ namespace Infrastructure.Repositories.Birds
             }
         }
 
-        public Task<List<Bird>> GetAllBirdsOfSameColor(string color)
+        public async Task<List<Bird>> GetAllBirdsOfSameColor(string color)
         {
-            throw new NotImplementedException();
-            //    return _context.Birds
-            //    .Where(b => b.Color == color) // Filtering by color
-            //    .OrderByDescending(b => b.Color)
-            //    .Take(count)
-            //    .ToList();
+            try
+            {
+                var birdsOfSameColor = await _sqlDatabase.Birds
+               .Where(b => b.Color == color)
+               .ToListAsync();
+
+                if (birdsOfSameColor == null)
+                {
+                    throw new Exception($"There was no bird with {color} color in the database");
+                }
+
+                return birdsOfSameColor;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"An error occured while getting a bird with Id {color} color from database", ex);
+            }
         }
+
 
         public async Task<Bird> GetBirdById(Guid id)
         {

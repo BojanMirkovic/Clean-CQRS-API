@@ -1,41 +1,43 @@
 ﻿using Application.Commands.Birds.AddBird;
 using Application.Dtos;
-using Infrastructure.Database;
+using Domain.Models.AnimalModel;
+using FakeItEasy;
+using Infrastructure.Repositories.Birds;
 
 namespace Test.BirdTests.CommandTest
 {
     [TestFixture]
     public class AddBirdTest
     {
-        private AddBirdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
 
-        [SetUp]
-        public void SetUp()
-        {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new AddBirdCommandHandler(_mockDatabase);
-        }
         [Test]
         public async Task Handle_AddNewBirdToDB_ResultDB_HasNewElement()
         {
-            // Arrange
-            BirdDto newBird = new()
-            {
-                Name = "testBird",
-                CanFly = true
-            };
+            //Arrange
+            var bird = new Bird { Name = "Micko", Color = "blue", CanFly = true };
 
-            var query = new AddBirdCommand(newBird);
+            var birdRepository = A.Fake<IBirdRepository>();
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var handler = new AddBirdCommandHandler(birdRepository);
 
-            // Assert
+            A.CallTo(() => birdRepository.AddBird(bird)).Returns(bird);
+
+            var dto = new BirdDto();
+
+            dto.Name = "Micko";
+            dto.Color = "Blue";
+            dto.CanFly = true;
+
+
+            var command = new AddBirdCommand(dto);
+
+            //Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            //Assert
             Assert.IsNotNull(result);
-            Assert.That(newBird.Name, Is.EqualTo(result.Name));
-            Assert.That(newBird.CanFly, Is.EqualTo(result.CanFly));
+            Assert.That(result.Name.Equals("Micko"));
+            Assert.That(result, Is.TypeOf<Bird>());
         }
     }
 }

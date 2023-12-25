@@ -1,54 +1,53 @@
 ﻿using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
-using Infrastructure.Database;
+using Domain.Models.AnimalModel;
+using FakeItEasy;
+using Infrastructure.Repositories.Dogs;
 
 namespace Test.DogTests.CommandTest
 {
     [TestFixture]
     public class UpdateDogByIdTest
     {
-        private UpdateDogByIdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
-
-        [SetUp]
-        public void SetUp()
-        {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new UpdateDogByIdCommandHandler(_mockDatabase);
-        }
         [Test]
-        public async Task Handle_UpdateDogById_ResultDB_ElementHasNewName()
+        public async Task Handle_Update_Correct_Dog_By_Id()
         {
-            // Arrange
-            var dogId = new Guid("12345678-1234-5678-1234-567812345678");
+            //Arrange
 
-            DogDto updatedDog = new DogDto();
-            updatedDog.Name = "Jhony";
-            updatedDog.Breed = "Dodz";
-            updatedDog.Weight = 35;
-            var query = new UpdateDogByIdCommand(updatedDog, dogId);
+            var guid = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230");
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var dog = new Dog
+            {
+                AnimalId = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230"),
+                Name = "Ari",
+                Breed = "English Pointer",
+                Weight = 25
+            };
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.That(result.AnimalId, Is.EqualTo(dogId));
-            Assert.That(result.Name, Is.EqualTo(updatedDog.Name)); // Check if the name has been updated 
-        }
-        [Test]
-        public async Task Handle_UpdateDogById_IncorrectId_ResultIsNull()
-        {
-            //Arange
-            DogDto updatedDog = new DogDto();
-            var nonExistingDogId = new Guid();
+            var dogDto = new DogDto { Name = "Max", Breed = "Dzukela", Weight = 25 };
 
-            var query = new UpdateDogByIdCommand(updatedDog, nonExistingDogId);
+            var dogRepository = A.Fake<IDogRepository>();
+
+            var handler = new UpdateDogByIdCommandHandler(dogRepository);
+
+            A.CallTo(() => dogRepository.GetDogById(dog.AnimalId)).Returns(dog);
+
+            A.CallTo(() => dogRepository.UpdateDog(dog)).Returns(dog);
+
+            var command = new UpdateDogByIdCommand(dogDto, guid);
+
             //Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+
+            var result = await handler.Handle(command, CancellationToken.None);
+
             //Assert
-            //Assert.Null(result);
+            Assert.IsNotNull(result);
+            Assert.That(result.AnimalId, Is.EqualTo(guid));
+            Assert.That(result.Name.Equals("Max"));
+            Assert.That(result.Breed.Equals("Dzukela"));
+            Assert.That(result.Weight.Equals(25));
+            Assert.That(result, Is.TypeOf<Dog>());
         }
+
     }
 }

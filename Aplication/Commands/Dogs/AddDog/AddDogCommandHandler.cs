@@ -1,18 +1,18 @@
 ﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Dogs;
 using MediatR;
 
 namespace Application.Commands.Dogs.AddDog
 {
     public class AddDogCommandHandler : IRequestHandler<AddDogCommand, Dog>
     {
-        private readonly MockDatabase _mockDatabase;
-
-        public AddDogCommandHandler(MockDatabase mockDatabase)
+        private readonly IDogRepository _dogRepository;
+        public AddDogCommandHandler(IDogRepository dogRepository)
         {
-            _mockDatabase = mockDatabase;
+            _dogRepository = dogRepository;
         }
-        public Task<Dog> Handle(AddDogCommand request, CancellationToken cancellationToken)
+        public async Task<Dog> Handle(AddDogCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -24,8 +24,8 @@ namespace Application.Commands.Dogs.AddDog
                     Weight = request.NewDog.Weight,
                 };
 
-                _mockDatabase.Dogs.Add(dogToCreate);
-                return Task.FromResult(dogToCreate);
+                await _dogRepository.AddDog(dogToCreate);
+                return dogToCreate;
             }
             catch (Exception ex)
             {

@@ -1,61 +1,56 @@
-﻿using Application.Commands.Users.UpdateUser;
+﻿using Application.Commands.Dogs.UpdateDog;
+using Application.Commands.Users.UpdateUser;
 using Application.Dtos;
-using Infrastructure.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Models.AnimalModel;
+using Domain.Models.UserModel;
+using FakeItEasy;
+using Infrastructure.Repositories.Dogs;
+using Infrastructure.Repositories.Users;
 
 namespace Test.UserTests.CommandTest
 {
     public class UpdateUserByIdTest
     {
-        private UpdateUserInfoByIdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
-
-        [SetUp]
-        public void SetUp()
-        {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new UpdateUserInfoByIdCommandHandler(_mockDatabase);
-        }
         [Test]
-        public async Task Handle_UpdateUserInfoById_ResultDB_ElementHasNewName_Password_Role()
+        public async Task Handle_Update_Correct_Dog_By_Id()
         {
-            // Arrange
-            var userId = new Guid("047425eb-15a5-4310-9d25-e281ab036868");
+            //Arrange
 
-            UserUpdateDto updatedUser = new UserUpdateDto();
-            updatedUser.UserName = "MikaTheUser";
-            updatedUser.Password = BCrypt.Net.BCrypt.HashPassword("Bojan123");
-            updatedUser.Role = "admin";
+            var guid = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230");
 
-            var query = new UpdateUserInfoByIdCommand(updatedUser, userId);
+            var user = new User
+            {
+                UserId = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec623230"),
+                Username = "Ari",
+                Password = "EnglishPointer",
+                Role = "user"
+            };
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var userDto = new UpdatingUserDto { UserName = "Max", Password = "Dzukela", Role = "admin" };
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.That(result.UserId, Is.EqualTo(userId));
-            Assert.That(result.Username, Is.EqualTo(updatedUser.UserName)); // Check if the name has been updated 
-            Assert.That(result.Role, Is.EqualTo(updatedUser.Role)); // Check if role has been updated 
-        }
-        [Test]
-        public async Task Handle_UpdateUserById_IncorrectId_ResultIsNull()
-        {
-            //Arange
-            UserUpdateDto updatedUser = new UserUpdateDto();
-            var nonExistingUserId = new Guid();
+            var userRepository = A.Fake<IUserRepository>();
 
-            var query = new UpdateUserInfoByIdCommand(updatedUser, nonExistingUserId);
+            var handler = new UpdateUserInfoByIdCommandHandler(userRepository);
+
+            A.CallTo(() => userRepository.GetUserById(user.UserId)).Returns(user);
+
+            A.CallTo(() => userRepository.UpdateUser(user)).Returns(user);
+
+            var command = new UpdateUserInfoByIdCommand(userDto, guid);
+
             //Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+
+            var result = await handler.Handle(command, CancellationToken.None);
+
             //Assert
-            Assert.Null(result);
+            Assert.IsNotNull(result);
+            Assert.That(result.UserId, Is.EqualTo(guid));
+            Assert.That(result.Username.Equals("Max"));
+            Assert.That(result.Role.Equals("admin"));
+
+            Assert.That(result, Is.TypeOf<User>());
         }
+
     }
 }
 

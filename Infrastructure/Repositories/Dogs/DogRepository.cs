@@ -79,15 +79,33 @@ namespace Infrastructure.Repositories.Dogs
             }
         }
 
-        public Task<List<Dog>> GetDogsOfSameBreedAndCertainWeight(int weight, string breed)
+        public async Task<List<Dog>> GetDogsByBreedAndWeight(string breed, int? weight)
         {
-            throw new NotImplementedException();
-            //return _context.Dogs
-            //    .Where(d => d.Breed == breed)
-            //    .Where(d => d.Weight == weight)
-            //    .OrderByDescending(d => d.Weight)
-            //    .ToList();
+            try
+            {
+                var dogsQuery = _sqlDatabase.Dogs.AsQueryable();
+
+                if (!string.IsNullOrEmpty(breed))
+                {
+                    dogsQuery = dogsQuery.Where(dog => dog.Breed == breed);
+                }
+
+                if (weight.HasValue)
+                {
+                    dogsQuery = dogsQuery.Where(dog => dog.Weight >= weight);
+                }
+
+                var dogs = await dogsQuery.OrderByDescending(dog => dog.Weight).ToListAsync();
+
+                return dogs;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"An error occurred while getting cats of {breed} breed and weight from the database", ex);
+            }
         }
+
 
         public Task<Dog> UpdateDog(Dog updateDog)
         {

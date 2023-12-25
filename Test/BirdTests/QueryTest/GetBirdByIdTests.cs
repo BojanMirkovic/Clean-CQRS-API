@@ -1,52 +1,37 @@
 ﻿using Application.Queries.Birds.GetBirdById;
-using Infrastructure.Database;
-
+using Domain.Models.AnimalModel;
+using FakeItEasy;
+using Infrastructure.Repositories.Birds;
 
 namespace Test.BirdTests.QueryTest
 {
     [TestFixture]
     public class GetBirdByIdTests
     {
-        private GetBirdByIdQueryHandler _handler;
-        private MockDatabase _mockDatabase;
-
-        [SetUp]
-        public void SetUp()
-        {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new GetBirdByIdQueryHandler(_mockDatabase);
-        }
 
         [Test]
-        public async Task Handle_ValidId_ReturnsCorrectCat()
+        public async Task Handle_ValidId_ReturnCorrectBird()
         {
-            // Arrange
-            var birdId = new Guid("12345678-1234-5678-1234-567812345682");
+            var guid = Guid.NewGuid();
 
-            var query = new GetBirdByIdQuery(birdId);
+            var bird = new Bird { Name = "Vrabac", Color = "Sivi" };
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var birdRepository = A.Fake<IBirdRepository>();
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.That(result.AnimalId, Is.EqualTo(birdId));
-        }
+            var handler = new GetBirdByIdQueryHandler(birdRepository);
 
-        [Test]
-        public async Task Handle_InvalidId_ReturnsNull()
-        {
-            // Arrange
-            var invalidBirdId = Guid.NewGuid();
+            A.CallTo(() => birdRepository.GetBirdById(guid)).Returns(bird);
 
-            var query = new GetBirdByIdQuery(invalidBirdId);
+            var command = new GetBirdByIdQuery(guid);
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            //Act
+            var result = await handler.Handle(command, CancellationToken.None);
 
-            // Assert
-            Assert.IsNull(result);
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.That(result, Is.TypeOf<Bird>());
+            Assert.That(result.Name.Equals("Vrabac"));
+
         }
 
     }

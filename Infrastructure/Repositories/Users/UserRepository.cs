@@ -1,5 +1,4 @@
 ﻿using Azure.Core;
-using Domain.Models.AnimalModel;
 using Domain.Models.UserModel;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
@@ -11,12 +10,11 @@ namespace Infrastructure.Repositories.Users
     internal class UserRepository : IUserRepository
     {
         private readonly RealDb _sqlDatabase;
-        private readonly JWTtokenGenerator _jwtTokenGenerator;
-
-        public UserRepository(RealDb sqlDatabase, JWTtokenGenerator jwtTokenGenerator)
+        private readonly JWTtokenGenerator _jwtGenerator;
+        public UserRepository(RealDb sqlDatabase, JWTtokenGenerator jwtGenerator)
         {
             _sqlDatabase = sqlDatabase;
-            _jwtTokenGenerator = jwtTokenGenerator;
+            _jwtGenerator = jwtGenerator;
         }
 
         public async Task<User> DeleteUser(Guid id)
@@ -37,6 +35,62 @@ namespace Infrastructure.Repositories.Users
                 throw new Exception($"An error occured while deleting a user with Id {id} from the database", ex);
             }
         }
+        public async Task<List<User>> GetAllUsers()
+        {
+            try
+            {
+                return await _sqlDatabase.Users.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("An error occured while getting all users from the database", ex);
+            }
+        }
+
+        public async Task<User?> GetTokenForUserByUsername(string username)
+        {
+            var userFromDB = await _sqlDatabase.Users.FirstOrDefaultAsync(user => user.Username == username);
+            if (userFromDB == null)
+            {
+                throw new Exception($"There was no user with name {username} in the database");
+            }
+            return userFromDB;
+
+
+        }
+        /**********************************************************************************************************************/
+        public async Task<string> GetsTokenToLogin(string username, string password)
+        {
+
+            var userFromDB = await _sqlDatabase.Users.FirstOrDefaultAsync(user => user.Username == username);
+            if (userFromDB == null)
+            {
+                throw new Exception($"There was no user with name {username} in the database");
+            }
+
+
+            if (userFromDB == null || !BCrypt.Net.BCrypt.Verify(password, userFromDB.Password))
+            {
+                throw new UnauthorizedAccessException("Invalid username or password");
+            }
+
+            try
+            {
+                var token = _jwtGenerator.CreateJWTtoken(userFromDB);
+                return token;
+            }
+            catch (AuthenticationException ex)
+            {
+                throw new AuthenticationException("Invalid user data. Username and password are required.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to generate token.", ex);
+            }
+
+        }
+        /***********************************************************************************************************************/
 
         public async Task<User> GetUserById(Guid id)
         {
@@ -54,50 +108,10 @@ namespace Infrastructure.Repositories.Users
             catch (Exception ex)
             {
 
-                throw new Exception($"An error occured while getting a dog with Id {id} from database", ex);
+                throw new Exception($"An error occured while getting a user with Id {id} from database", ex);
             }
         }
 
-        public async Task<List<User>> GetAllUsers()
-        {
-            try
-            {
-                return await _sqlDatabase.Users.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception("An error occured while getting all users from the database", ex);
-            }
-        }
-
-        public async Task<string> GetToken(User userToLogin)
-        {
-            User? wantedUser = _sqlDatabase.Users.FirstOrDefault(user => user.Username == userToLogin.Username);
-
-
-
-
-            if (wantedUser == null || !BCrypt.Net.BCrypt.Verify(userToLogin.Password, wantedUser.Password))
-            {
-                throw new UnauthorizedAccessException("Invalid username or password");
-            }
-
-            try
-            {
-                var token = _jwtTokenGenerator.CreateJWTtoken(wantedUser);
-                return token;
-
-            }
-            catch (AuthenticationException ex)
-            {
-                throw new AuthenticationException("Invalid user data. Username and password are required.", ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Failed to generate token.", ex);
-            }
-        }
         public async Task<User> RegisterUser(User newUser)
         {
             try
@@ -128,6 +142,18 @@ namespace Infrastructure.Repositories.Users
 
                 throw new Exception($"An error occured while updating a user by Id {updateUser.UserId} from database", ex);
             }
+            //try
+            //{
+            //    _sqlDatabase.Users.Update(updateUser);
+
+            //    await _sqlDatabase.SaveChangesAsync();
+
+            //    return updateUser; // Return the updated user entity
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception($"An error occurred while updating a user by Id {updateUser.UserId} from the database", ex);
+            //}
         }
     }
 }

@@ -7,13 +7,13 @@ namespace Application.Commands.Users.UpdateUser
 {
     public class UpdateUserInfoByIdCommand : IRequest<User>
     {
-        public UpdateUserInfoByIdCommand(UserUpdateDto updatedUser, Guid id)
+        public UpdateUserInfoByIdCommand(UpdatingUserDto updatedUser, Guid id)
         {
             UpdatedUser = updatedUser;
             Id = id;
         }
 
-        public UserUpdateDto UpdatedUser { get; }
+        public UpdatingUserDto UpdatedUser { get; }
         public Guid Id { get; }
     }
 }

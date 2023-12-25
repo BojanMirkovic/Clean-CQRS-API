@@ -1,77 +1,59 @@
-﻿//using Infrastructure.Database;
-//using Infrastructure.Authentication;
-//using Application.Dtos;
-//using Moq;
-//using Application.Queries.Users.LoginUser;
-//using Microsoft.Extensions.Configuration;
-//using Nest;
-//using Domain.Models.User;
-//using System.Linq;
+﻿using Application.Dtos;
+using Application.Queries.Users.LoginUser;
+using FakeItEasy;
+using Infrastructure.Repositories.Users;
 
-//namespace Test.UserTests.QueryTest
-//{
-//    namespace Test.UserTests.QueryTest
-//    {
-//        [TestFixture]
-//        public class LoginUserTest
-//        {
-//            private MockDatabase _mockDatabase;
-//            private LoginUserQueryHandler _handler;
-//            private JWTtokenGenerator _jwtGenerator;
+namespace Test.UserTests.QueryTest
+{
+    namespace Test.UserTests.QueryTest
+    {
+        [TestFixture]
+        public class LoginUserTest
+        {
+            [Test]
+            public async Task Handle_ValidUser_ReturnsToken()
+            {
+                // Arrange
+                var fakeUserRepository = A.Fake<IUserRepository>();
+                var loginQuery = new LoginUserQuery(new UserDto { UserName = "username", Password = "password" });
+                var expectedToken = "fakeToken";
 
-//            [SetUp]
-//            public void SetUp()
-//            {
-//                // Initialize the mock database and other dependencies
-//                _mockDatabase = new MockDatabase();
-//                //mock IConfiguration
-//                var mockConfiguration = new Mock<IConfiguration>();
-//                mockConfiguration.Setup(x => x.GetSection("AppSetings").GetSection("Token").Value)
-//                .Returns("mojTajniKljucZaJWTjeVelikoSranjeIliJaNeZnamDaKoristimJWT111111111111111111");
+                // Mock the behavior of the repository method to return a token
+                A.CallTo(() => fakeUserRepository.GetsTokenToLogin(A<string>._, A<string>._))
+                    .WithAnyArguments()
+                    .Returns(expectedToken);
 
-//                // Create a mock JWTtokenGenerator
-//                _jwtGenerator = new JWTtokenGenerator(mockConfiguration.Object);
+                var handler = new LoginUserQueryHandler(fakeUserRepository);
 
-//                // Initialize the handler with the mock JWTtokenGenerator
-//                _handler = new LoginUserQueryHandler(_mockDatabase, _jwtGenerator);
+                // Act
+                var result = await handler.Handle(loginQuery, CancellationToken.None);
 
-//            }
-//            [Test]
-//            public async Task Handle_WhenUserExists_ReturnsUserWithToken()
-//            {
-//                // Arrange
-//                UserDto user = new()
-//                {
-//                    UserName = "Bojan",
-//                    Password = "Bojan123",
-//                };
+                // Assert
+                Assert.That(result, Is.EqualTo(expectedToken));
+            }
 
-//                var query = new LoginUserQuery(user);
+            [Test]
+            public async Task Handle_InvalidUser_ReturnsNull()
+            {
+                // Arrange
+                var fakeUserRepository = A.Fake<IUserRepository>();
+                var loginQuery = new LoginUserQuery(new UserDto { UserName = "invalid_username", Password = "invalid_password" });
 
-//                // Act
-//                var result = await _handler.Handle(query, CancellationToken.None);
+                // Mock the behavior of the repository method to return null for invalid user
+                A.CallTo(() => fakeUserRepository.GetsTokenToLogin(A<string>._, A<string>._))
+                    .WithAnyArguments()
+                    .Returns(await Task.FromResult<string>(result: null!)); // Return null for an invalid user
 
-//                // Assert
-//                Assert.NotNull(result);
+                var handler = new LoginUserQueryHandler(fakeUserRepository); // Replace with your actual class name
 
-//            }
-//            [Test]
-//            public async Task Handle_WhenUserDoesNotExist_ThrowUnauthorizedAccessException()
-//            {
+                // Act
+                var result = await handler.Handle(loginQuery, CancellationToken.None);
 
-//                UserDto userNotExist = new()
-//                {
-//                    UserName = "DontExist",
-//                    Password = BCrypt.Net.BCrypt.HashPassword("Bojan123")
-//                };
-
-//                var query = new LoginUserQuery(userNotExist);
-
-//                // Act and Assert
-//                Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(query, CancellationToken.None));
-//            }
-//        }
-//    }
-//}
+                // Assert
+                Assert.IsNull(result);
+            }
+        }
+    }
+}
 
 

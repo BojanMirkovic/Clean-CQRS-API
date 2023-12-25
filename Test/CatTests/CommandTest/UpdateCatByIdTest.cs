@@ -1,59 +1,53 @@
 ﻿using Application.Commands.Cats.UpdateCat;
 using Application.Dtos;
+using Domain.Models.AnimalModel;
+using FakeItEasy;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Cats;
 
 namespace Test.CatTests.CommandTest
 {
     [TestFixture]
     internal class UpdateCatByIdTest
     {
-        private UpdateCatInfoByIdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
 
-        [SetUp]
-        public void SetUp()
-        {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new UpdateCatInfoByIdCommandHandler(_mockDatabase);
-        }
         [Test]
-        public async Task Handle_UpdateCatInfoById_ResultDB_ElementHasNewNameNewBehavior()
+        public async Task Handle_Update_Correct_Cat_By_Id()
         {
-            // Arrange
-            var catId = new Guid("12345678-1234-5678-1234-567812345680");
+            //Arrange
 
-            CatDto updatedCat = new CatDto();
-            updatedCat.Name = "MikaMacor";
-            updatedCat.LikesToPlay = true;
-            updatedCat.Breed = "Domestic Cat";
-            updatedCat.Weight = 2;
-            var query = new UpdateCatInfoByIdCommand(updatedCat, catId);
+            var guid = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec622220");
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var cat = new Cat
+            {
+                AnimalId = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec622220"),
+                Name = "Tom",
+                Breed = "Domestic Cat",
+                LikesToPlay = true
+            };
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.That(result.AnimalId, Is.EqualTo(catId));
-            Assert.That(result.LikesToPlay, Is.True); // check if behavior is updated
-            Assert.That(result.Name, Is.EqualTo(updatedCat.Name)); // Check if the name has been updated 
-            Assert.That(result.LikesToPlay, Is.EqualTo(updatedCat.LikesToPlay)); // Check if the behavior has been updated 
-        }
-        [Test]
-        public async Task Handle_UpdateCatById_IncorrectId_ResultIsNull()
-        {
-            //Arange
-            CatDto updatedCat = new CatDto();
-            var nonExistingCatId = new Guid();
+            var catDto = new CatDto { Name = "Mika", LikesToPlay = true };
 
-            var query = new UpdateCatInfoByIdCommand(updatedCat, nonExistingCatId);
+            var catRepository = A.Fake<ICatRepository>();
+
+            var handler = new UpdateCatInfoByIdCommandHandler(catRepository);
+
+            A.CallTo(() => catRepository.GetCatById(cat.AnimalId)).Returns(cat);
+
+            A.CallTo(() => catRepository.UpdateCat(cat)).Returns(cat);
+
+            var command = new UpdateCatInfoByIdCommand(catDto, guid);
+
             //Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+
+            var result = await handler.Handle(command, CancellationToken.None);
+
             //Assert
-            Assert.Null(result);
+            Assert.IsNotNull(result);
+            Assert.That(result.Name.Equals("Mika"));
+            Assert.That(result.LikesToPlay.Equals(true));
+            Assert.That(result, Is.TypeOf<Cat>());
         }
     }
-
 }
 

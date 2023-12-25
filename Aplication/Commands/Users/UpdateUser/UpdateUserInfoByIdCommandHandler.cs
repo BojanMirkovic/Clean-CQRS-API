@@ -1,35 +1,32 @@
 ﻿using Domain.Models.UserModel;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Users;
 using MediatR;
 
 namespace Application.Commands.Users.UpdateUser
 {
     public class UpdateUserInfoByIdCommandHandler : IRequestHandler<UpdateUserInfoByIdCommand, User>
     {
-        private readonly MockDatabase _mockDatabase;
-        public UpdateUserInfoByIdCommandHandler(MockDatabase mockDatabase)
-        { _mockDatabase = mockDatabase; }
-
-        public Task<User> Handle(UpdateUserInfoByIdCommand request, CancellationToken cancellationToken)
+        private readonly IUserRepository _userRepository;
+        public UpdateUserInfoByIdCommandHandler(IUserRepository userRepository)
         {
-            try
+            _userRepository = userRepository;
+        }
+        public async Task<User> Handle(UpdateUserInfoByIdCommand request, CancellationToken cancellationToken)
+        {
+            User userToUpdate = await _userRepository.GetUserById(request.Id);
+            if (userToUpdate == null)
             {
-                User? userToUpdate = _mockDatabase.Users.Where(user => user.UserId == request.Id).FirstOrDefault()!;
-                if (userToUpdate != null)
-                {
-                    userToUpdate.Username = request.UpdatedUser.UserName;
-                    userToUpdate.Password = BCrypt.Net.BCrypt.HashPassword(request.UpdatedUser.Password);
-                    userToUpdate.Role = request.UpdatedUser.Role;
-
-                    return Task.FromResult(userToUpdate);
-                }
-
-                return Task.FromResult<User>(null!);
+                return null!;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            userToUpdate.Username = request.UpdatedUser.UserName;
+            userToUpdate.Password = BCrypt.Net.BCrypt.HashPassword(request.UpdatedUser.Password);
+            userToUpdate.Role = request.UpdatedUser.Role;
+
+            var updatedUser = await _userRepository.UpdateUser(userToUpdate);
+
+            return updatedUser;
         }
     }
 }

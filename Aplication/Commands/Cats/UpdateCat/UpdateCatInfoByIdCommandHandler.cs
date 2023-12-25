@@ -1,31 +1,34 @@
 ﻿using Domain.Models.AnimalModel;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Cats;
 using MediatR;
 
 namespace Application.Commands.Cats.UpdateCat
 {
     public class UpdateCatInfoByIdCommandHandler : IRequestHandler<UpdateCatInfoByIdCommand, Cat>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly ICatRepository _catRepository;
 
-        public UpdateCatInfoByIdCommandHandler(MockDatabase mockDatabase)
-        { _mockDatabase = mockDatabase; }
-        public Task<Cat> Handle(UpdateCatInfoByIdCommand request, CancellationToken cancellationToken)
+        public UpdateCatInfoByIdCommandHandler(ICatRepository catRepository)
+        {
+            _catRepository = catRepository;
+        }
+        public async Task<Cat> Handle(UpdateCatInfoByIdCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                Cat? catToUpdate = _mockDatabase.Cats.FirstOrDefault(cat => cat.AnimalId == request.Id)!;
-                if (catToUpdate != null)
+                Cat catToUpdate = await _catRepository.GetCatById(request.Id);
+                if (catToUpdate == null)
                 {
-                    catToUpdate.Name = request.UpdatedCat.Name;
-                    catToUpdate.LikesToPlay = request.UpdatedCat.LikesToPlay;
-                    catToUpdate.Breed = request.UpdatedCat.Breed;
-                    catToUpdate.Weight = request.UpdatedCat.Weight;
-
-                    return Task.FromResult(catToUpdate);
+                    return null!;
                 }
+                catToUpdate.Name = request.UpdatedDtoCat.Name;
+                catToUpdate.LikesToPlay = request.UpdatedDtoCat.LikesToPlay;
+                catToUpdate.Breed = request.UpdatedDtoCat.Breed;
+                catToUpdate.Weight = request.UpdatedDtoCat.Weight;
 
-                return Task.FromResult<Cat>(null!);
+                var updatedCat = await _catRepository.UpdateCat(catToUpdate);
+                return updatedCat;
             }
             catch (Exception ex)
             {

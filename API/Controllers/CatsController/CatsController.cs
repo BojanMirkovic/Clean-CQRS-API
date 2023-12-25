@@ -2,10 +2,14 @@
 using Application.Commands.Cats.DeleteCat;
 using Application.Commands.Cats.UpdateCat;
 using Application.Dtos;
+using Application.Queries.Birds.GetAllBirdsSameColor;
 using Application.Queries.Cats.GetAllCats;
+using Application.Queries.Cats.GetAllCatsByBreedAndWeight;
 using Application.Queries.Cats.GetCatById;
 using Application.Validators.Cat;
 using Application.Validators.GuidValidator;
+using Application.Validators.InputIntValidator;
+using Application.Validators.StringInputValidator;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,12 +25,16 @@ namespace API.Controllers.CatsController
         private readonly IMediator _mediator;
         private readonly CatValidator _catValidator;
         private readonly GuidValidator _guidValidator;
+        private readonly StringInputValidator _stringBreedValidator;
+        private readonly IntInputValidator _intWeightValidator;
 
-        public CatsController(IMediator mediator, CatValidator catValidator, GuidValidator guidValidator)
+        public CatsController(IMediator mediator, CatValidator catValidator, GuidValidator guidValidator, StringInputValidator stringBreedValidator, IntInputValidator intWeightValidator)
         {
             _mediator = mediator;
             _catValidator = catValidator;
             _guidValidator = guidValidator;
+            _stringBreedValidator = stringBreedValidator;
+            _intWeightValidator = intWeightValidator;
         }
 
         [HttpGet]
@@ -60,6 +68,33 @@ namespace API.Controllers.CatsController
             try
             {
                 return Ok(await _mediator.Send(new GetCatByIdQuery(catId)));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("getCatsByBreedAndWeight/{weight}, {breed}"), AllowAnonymous]
+        public async Task<IActionResult> GetCatsByBreedAndWeight(string inputBreed, int inputWeight)
+        {
+            // Validate Color
+            var validatedCatWeight = _intWeightValidator.Validate(inputWeight);
+            var validatedCatBreed = _stringBreedValidator.Validate(inputBreed);
+            //Error Handling
+            if (!validatedCatBreed.IsValid)
+            {
+                return BadRequest(validatedCatBreed.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            if (!validatedCatWeight.IsValid)
+            {
+                return BadRequest(validatedCatWeight.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            //Try Catch
+            try
+            {
+                return Ok(await _mediator.Send(new GetCatsByBreedAndWeightQuery(inputWeight, inputBreed)));
             }
             catch (Exception ex)
             {

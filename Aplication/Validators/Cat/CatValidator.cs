@@ -20,6 +20,17 @@ namespace Application.Validators.Cat
              .NotEmpty().WithMessage("Cat name can not be empty")
              .NotNull().WithMessage("Cat name can not be Null")
              .Must(BeValidBoolean).WithMessage("LikesToPlay must be a valid boolean");
+            RuleFor(cat => cat.Breed)
+                .NotEmpty().WithMessage("Breed is required.")
+                .MinimumLength(3).WithMessage("Breed name must be at least 3 characters")
+                .MaximumLength(20).WithMessage("Breed name must not exceed 20 characters.")
+                .Matches("^[a-zA-Z]+$").WithMessage("Breed name should contain only letters.");
+            RuleFor(cat => cat.Weight)
+                .NotEmpty().WithMessage("Weight is required.")
+                .GreaterThanOrEqualTo(1).WithMessage("Weight should be non-negative.")
+                .LessThanOrEqualTo(450).WithMessage("Weight should not exceed 450.");
+
+
         }
         private bool BeValidBoolean(bool LikesToPlay)
         {

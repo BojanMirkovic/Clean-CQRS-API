@@ -1,45 +1,44 @@
 ﻿using Application.Commands.Cats.DeleteCat;
-using Infrastructure.Database;
+using Domain.Models.AnimalModel;
+using FakeItEasy;
+using Infrastructure.Repositories.Cats;
 
 namespace Test.CatTests.CommandTest
 {
     [TestFixture]
     public class DeleteCatByIdTest
     {
-        private DeleteCatByIdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
-
-        [SetUp]
-        public void SetUp()
-        {
-            // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new DeleteCatByIdCommandHandler(_mockDatabase);
-        }
         [Test]
-        public async Task Handle_DeleteCatFromDB_CorrectId_ResultIsNotNull()
+        public async Task Handle_DeleteCat_Corect_Id()
         {
-            // Arrange
-            var catId = new Guid("12345678-1234-5678-1234-567812345680");
-            var query = new DeleteCatByIdCommand(catId);
+            //Arrange
+            var cat = new Cat
+            {
+                AnimalId = Guid.NewGuid(),
+                Name = "Tom",
+                Breed = "Domestic Cat",
+                Weight = 4,
+                LikesToPlay = true
+            };
 
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var catRepository = A.Fake<ICatRepository>();
 
-            // Assert
-            Assert.That(result, Is.Not.Null);
-        }
-        [Test]
-        public async Task Handle_DeleteCatById_IncorrectId_ResultIsNull()
-        {
-            //Arange
-            var catId = new Guid();
+            var handler = new DeleteCatByIdCommandHandler(catRepository);
 
-            var query = new DeleteCatByIdCommand(catId);
+            A.CallTo(() => catRepository.DeleteCat(cat.AnimalId)).Returns(cat);
+
+
+            var command = new DeleteCatByIdCommand(cat.AnimalId);
+
             //Act
-            var result = await _handler.Handle(query, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None);
+
             //Assert
-            Assert.That(result, Is.Null);
+            Assert.IsNotNull(result);
+            Assert.That(result.Name.Equals("Tom"));
+            Assert.That(result, Is.TypeOf<Cat>());
+            Assert.That(result.AnimalId.Equals(cat.AnimalId));
+            A.CallTo(() => catRepository.DeleteCat(cat.AnimalId)).MustHaveHappened(); // Verify that DeleteCat method was called with the correct ID
         }
     }
 }
