@@ -109,7 +109,7 @@ namespace Infrastructure.Repositories.Cats
                 throw new Exception($"An error occurred while getting cats of {breed} breed and weight from the database", ex);
             }
         }
-       
+
         public Task<Cat> UpdateCat(Cat updateCat)
         {
             try

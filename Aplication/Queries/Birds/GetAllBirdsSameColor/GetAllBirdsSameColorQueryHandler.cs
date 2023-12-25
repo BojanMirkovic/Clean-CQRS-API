@@ -22,7 +22,7 @@ namespace Application.Queries.Birds.GetAllBirdsSameColor
         {
             List<Bird> allBirdsOfSameColorFromDB = await _birdRepository.GetAllBirdsOfSameColor(request.BirdColor);
 
-            return allBirdsOfSameColorFromDB; 
+            return allBirdsOfSameColorFromDB;
         }
     }
 }

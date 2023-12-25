@@ -18,7 +18,7 @@ namespace Test.CatTests.CommandTest
                 Name = "Tom",
                 Breed = "Domestic Cat",
                 Weight = 4,
-                LikesToPlay = true           
+                LikesToPlay = true
             };
 
             var catRepository = A.Fake<ICatRepository>();
@@ -39,7 +39,7 @@ namespace Test.CatTests.CommandTest
             Assert.That(result, Is.TypeOf<Cat>());
             Assert.That(result.AnimalId.Equals(cat.AnimalId));
             A.CallTo(() => catRepository.DeleteCat(cat.AnimalId)).MustHaveHappened(); // Verify that DeleteCat method was called with the correct ID
-        }      
+        }
     }
 }
 

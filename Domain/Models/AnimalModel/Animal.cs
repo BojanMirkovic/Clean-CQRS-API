@@ -8,6 +8,6 @@ namespace Domain.Models.AnimalModel
         [Key]
         public Guid AnimalId { get; set; }
         public string Name { get; set; } = string.Empty;//umesto da pisemo =null, stirng.Empty
-
+ 
     };
 }

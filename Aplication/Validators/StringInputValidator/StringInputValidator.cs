@@ -9,7 +9,7 @@ namespace Application.Validators.StringInputValidator
 {
     public class StringInputValidator : AbstractValidator<string>
     {
-        public StringInputValidator() 
+        public StringInputValidator()
         {
             RuleFor(input => input)
                 .NotEmpty().WithMessage("Data input is required.")

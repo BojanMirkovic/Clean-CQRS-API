@@ -42,15 +42,15 @@ namespace Test.CatTests.QueryTest
             // Arrange
             var incorrectCatId = Guid.NewGuid(); // An incorrect ID that doesn't exist in the repository
 
-              var cat = new Cat { Name = "Hans", Breed = "Domestic Cat" };
-              cat = null;
+            var cat = new Cat { Name = "Hans", Breed = "Domestic Cat" };
+            cat = null;
 
             var catRepository = A.Fake<ICatRepository>();
 
             var handler = new GetCatByIdQueryHandler(catRepository);
 
-            A.CallTo(() =>  catRepository.GetCatById(incorrectCatId)).Returns(cat!); // Simulate repository returning null for an incorrect ID
-                                                                                                                                                                     
+            A.CallTo(() => catRepository.GetCatById(incorrectCatId)).Returns(cat!); // Simulate repository returning null for an incorrect ID
+
             var command = new GetCatByIdQuery(incorrectCatId);
 
             // Act

@@ -24,7 +24,7 @@ namespace Test.BirdTests.CommandTest
                 CanFly = false,
             };
 
-            var birdDto = new BirdDto { Name = "Ara", Color="Red", CanFly=true  };
+            var birdDto = new BirdDto { Name = "Ara", Color = "Red", CanFly = true };
 
             var birdRepository = A.Fake<IBirdRepository>();
 

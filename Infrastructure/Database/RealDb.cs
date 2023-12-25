@@ -19,8 +19,8 @@ namespace Infrastructure.Database
         public DbSet<Cat> Cats { get; set; }
         public DbSet<Bird> Birds { get; set; }
         public DbSet<User> Users { get; set; }
-        
-      /*  public DbSet<Animal> Animals { get; set; } */
+
+        /*  public DbSet<Animal> Animals { get; set; } */
 
         public DbSet<UsersHaveAnimals> UsersHaveAnimals { get; set; } //joint tableUsersAnimals
 

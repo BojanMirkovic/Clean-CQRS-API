@@ -81,7 +81,7 @@ namespace API.Controllers.BirdsController
             if (!validatedBirdColor.IsValid)
             {
                 return BadRequest(validatedBirdColor.Errors.ConvertAll(errors => errors.ErrorMessage));
-            }         
+            }
             //Try Catch
             try
             {

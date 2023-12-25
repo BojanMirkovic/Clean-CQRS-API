@@ -127,7 +127,7 @@ namespace Infrastructure.Repositories.Users
             }
         }
 
-        public  Task<User> UpdateUser(User updateUser)
+        public Task<User> UpdateUser(User updateUser)
         {
             try
             {

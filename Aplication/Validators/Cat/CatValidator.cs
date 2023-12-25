@@ -29,8 +29,8 @@ namespace Application.Validators.Cat
                 .NotEmpty().WithMessage("Weight is required.")
                 .GreaterThanOrEqualTo(1).WithMessage("Weight should be non-negative.")
                 .LessThanOrEqualTo(450).WithMessage("Weight should not exceed 450.");
-               
-            
+
+
         }
         private bool BeValidBoolean(bool LikesToPlay)
         {

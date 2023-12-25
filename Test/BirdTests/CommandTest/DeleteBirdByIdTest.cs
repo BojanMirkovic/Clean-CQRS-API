@@ -17,8 +17,8 @@ namespace Test.BirdTests.CommandTest
             {
                 AnimalId = Guid.NewGuid(),
                 Name = "Hawk",
-                Color ="Red",
-                CanFly = true,    
+                Color = "Red",
+                CanFly = true,
             };
 
             var birdRepository = A.Fake<IBirdRepository>();
@@ -31,7 +31,7 @@ namespace Test.BirdTests.CommandTest
 
             //Act
             var result = await handler.Handle(command, CancellationToken.None);
-           
+
             //Assert
             Assert.IsNotNull(result);
             Assert.That(result.Name.Equals("Hawk"));

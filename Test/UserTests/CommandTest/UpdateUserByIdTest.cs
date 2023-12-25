@@ -26,7 +26,7 @@ namespace Test.UserTests.CommandTest
                 Role = "user"
             };
 
-            var userDto = new UpdatingUserDto { UserName = "Max", Password= "Dzukela", Role = "admin" };
+            var userDto = new UpdatingUserDto { UserName = "Max", Password = "Dzukela", Role = "admin" };
 
             var userRepository = A.Fake<IUserRepository>();
 
@@ -47,7 +47,7 @@ namespace Test.UserTests.CommandTest
             Assert.That(result.UserId, Is.EqualTo(guid));
             Assert.That(result.Username.Equals("Max"));
             Assert.That(result.Role.Equals("admin"));
-            
+
             Assert.That(result, Is.TypeOf<User>());
         }
 

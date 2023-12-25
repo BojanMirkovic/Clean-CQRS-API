@@ -31,7 +31,7 @@ namespace Test.CatTests.QueryTest
 
             var catRepository = A.Fake<ICatRepository>();
             var handler = new GetCatsByBreedAndWeightQueryHandler(catRepository);
-            var request = new GetCatsByBreedAndWeightQuery(5,"Persian");
+            var request = new GetCatsByBreedAndWeightQuery(5, "Persian");
 
             var catsToReturn = new List<Cat>
             {
@@ -42,7 +42,7 @@ namespace Test.CatTests.QueryTest
             //A.CallTo(() => catRepository.GetCatsByBreedAndWeight(A<string>._, A<int?>._))
             //.Returns(catsToReturn);
             A.CallTo(() => catRepository.GetCatsByBreedAndWeight(A<string>._, A<int?>._)).Returns(
-               fakeCatsData.Where(b => b.Weight >= 5).Where(c=> c.Breed=="Persian").ToList()
+               fakeCatsData.Where(b => b.Weight >= 5).Where(c => c.Breed == "Persian").ToList()
            );
 
             // Act

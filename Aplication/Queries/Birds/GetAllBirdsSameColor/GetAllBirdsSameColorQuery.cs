@@ -11,8 +11,8 @@ namespace Application.Queries.Birds.GetAllBirdsSameColor
 {
     public class GetAllBirdsSameColorQuery : IRequest<List<Bird>>
     {
-        public string BirdColor { get;}
-        public GetAllBirdsSameColorQuery(string color) 
+        public string BirdColor { get; }
+        public GetAllBirdsSameColorQuery(string color)
         {
             BirdColor = color;
         }

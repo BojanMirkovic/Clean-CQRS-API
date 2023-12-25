@@ -18,12 +18,12 @@ namespace Test.CatTests.CommandTest
 
             var guid = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec622220");
 
-            var cat = new Cat 
-            { 
-                AnimalId = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec622220"), 
-                Name = "Tom", 
+            var cat = new Cat
+            {
+                AnimalId = new Guid("ce9b91e4-08d1-4628-82c1-8ef6ec622220"),
+                Name = "Tom",
                 Breed = "Domestic Cat",
-                LikesToPlay = true 
+                LikesToPlay = true
             };
 
             var catDto = new CatDto { Name = "Mika", LikesToPlay = true };

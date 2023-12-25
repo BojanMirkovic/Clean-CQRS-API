@@ -77,7 +77,7 @@ namespace API.Controllers.CatsController
 
         [HttpGet]
         [Route("getCatsByBreedAndWeight/{weight}, {breed}"), AllowAnonymous]
-        public async Task<IActionResult> GetCatsByBreedAndWeight(string inputBreed, int inputWeight) 
+        public async Task<IActionResult> GetCatsByBreedAndWeight(string inputBreed, int inputWeight)
         {
             // Validate Color
             var validatedCatWeight = _intWeightValidator.Validate(inputWeight);
@@ -94,7 +94,7 @@ namespace API.Controllers.CatsController
             //Try Catch
             try
             {
-                return Ok(await _mediator.Send(new GetCatsByBreedAndWeightQuery(inputWeight,inputBreed)));
+                return Ok(await _mediator.Send(new GetCatsByBreedAndWeightQuery(inputWeight, inputBreed)));
             }
             catch (Exception ex)
             {
