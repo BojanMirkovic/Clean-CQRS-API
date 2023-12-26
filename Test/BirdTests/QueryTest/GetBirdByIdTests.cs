@@ -33,7 +33,6 @@ namespace Test.BirdTests.QueryTest
             Assert.That(result.Name.Equals("Vrabac"));
 
         }
-
     }
 }
 

@@ -20,6 +20,7 @@ namespace Application.Commands.Birds.AddBird
                 Bird birdToCreate = new()
                 {
                     AnimalId = new Guid(),
+                    AnimalType = request.NewBird.AnimalType,
                     Name = request.NewBird.Name,
                     CanFly = request.NewBird.CanFly,
                     Color = request.NewBird.Color
