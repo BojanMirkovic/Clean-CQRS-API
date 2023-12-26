@@ -29,6 +29,7 @@ namespace Test.BirdTests.CommandTest
             dto.CanFly = true;
 
 
+
             var command = new AddBirdCommand(dto);
 
             //Act
