@@ -2,7 +2,6 @@
 using Application.Commands.Cats.DeleteCat;
 using Application.Commands.Cats.UpdateCat;
 using Application.Dtos;
-using Application.Queries.Birds.GetAllBirdsSameColor;
 using Application.Queries.Cats.GetAllCats;
 using Application.Queries.Cats.GetAllCatsByBreedAndWeight;
 using Application.Queries.Cats.GetCatById;
@@ -36,8 +35,7 @@ namespace API.Controllers.CatsController
             _stringBreedValidator = stringBreedValidator;
             _intWeightValidator = intWeightValidator;
         }
-
-        [HttpGet]
+[HttpGet]
         [Route("getAllCats"), AllowAnonymous]
         public async Task<IActionResult> GetAllCats()
         {
@@ -51,6 +49,7 @@ namespace API.Controllers.CatsController
                 throw new Exception(ex.Message);
             }
         }
+        
 
         // GET api
         [HttpGet]

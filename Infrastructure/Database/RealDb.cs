@@ -30,30 +30,34 @@ namespace Infrastructure.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Animal>()
-                .HasKey(a => a.AnimalId);
+          .HasKey(a => a.AnimalId);
 
-            modelBuilder.Entity<Bird>().ToTable("Birds")
-                .HasBaseType<Animal>()
-                .Property(b => b.AnimalId)
-                .HasColumnName("AnimalId");
-            modelBuilder.Entity<Dog>().ToTable("Dogs")
-                .HasBaseType<Animal>()
-                .Property(d => d.AnimalId)
-                .HasColumnName("AnimalId"); ;
-            modelBuilder.Entity<Cat>().ToTable("Cats")
-                .HasBaseType<Animal>()
-                .Property(c => c.AnimalId)
-                .HasColumnName("AnimalId"); ;
-            modelBuilder.Entity<User>().ToTable("Users");
-            //  modelBuilder.Entity<Animal>().ToTable("Animals");
-            //  Configuring many-to - many relationship between User and Animal through UserAnimal
-            modelBuilder.Entity<UsersHaveAnimals>().ToTable("UsersHaveAnimals");
+            modelBuilder.Entity<Animal>()
+                .ToTable("Animals"); // Separate table for Animal entity
 
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Bird>()
+                .ToTable("Birds")
+                .HasBaseType<Animal>();
+
+            modelBuilder.Entity<Dog>()
+                .ToTable("Dogs")
+                .HasBaseType<Animal>();
+
+            modelBuilder.Entity<Cat>()
+                .ToTable("Cats")
+                .HasBaseType<Animal>();
+
+            modelBuilder.Entity<User>()
+                .ToTable("Users");
+
+            modelBuilder.Entity<UsersHaveAnimals>()
+                .ToTable("UsersHaveAnimals");
 
             // Call the SeedData method from the external class
             DatabaseSeedHelper.SeedData(modelBuilder);
-        }
 
+            base.OnModelCreating(modelBuilder);
+
+        }
     }
 }
