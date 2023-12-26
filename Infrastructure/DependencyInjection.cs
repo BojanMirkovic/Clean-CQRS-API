@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Authentication;
 using Infrastructure.Database;
+using Infrastructure.Repositories.Animals;
 using Infrastructure.Repositories.Birds;
 using Infrastructure.Repositories.Cats;
 using Infrastructure.Repositories.Dogs;
@@ -19,6 +20,7 @@ namespace Infrastructure
             services.AddScoped<IBirdRepository, BirdRepository>();
             services.AddScoped<ICatRepository, CatRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAnimalRepository, AnimalRepository>();
             services.AddDbContext<RealDb>(options =>
             {
                 options.UseSqlServer("Server=LAPTOP-D4IQ7VEN\\SQLEXPRESS; Database=API_Animals; Trusted_Connection=true; TrustServerCertificate=true;");
