@@ -74,7 +74,6 @@ namespace API.Controllers.AuthUserController
             {
                 string token = await _mediator.Send(new LoginUserQuery(userToLogin));
 
-                //   return Ok(new TokenDto { TokenValue = token });
                 return Ok(token);
             }
             catch (UnAuthorizedException ex)

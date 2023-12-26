@@ -2,15 +2,8 @@
 using Application.Queries.Animals.GetAllAnimalsOfSameUserById;
 using Domain.Models.AnimalModel;
 using Domain.Models.UserAnimalModel;
-using Domain.Models.UserModel;
 using FakeItEasy;
 using Infrastructure.Repositories.Animals;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test.AnimalTests.QueryTest
 {
