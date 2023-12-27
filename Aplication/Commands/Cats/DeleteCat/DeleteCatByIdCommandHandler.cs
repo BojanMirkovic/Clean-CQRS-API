@@ -20,15 +20,8 @@ namespace Application.Commands.Cats.DeleteCat
         public async Task<Cat> Handle(DeleteCatByIdCommand request, CancellationToken cancellationToken)
         {
             try
-            {
-                Cat catToDelete = await _catRepository.GetCatById(request.Id);
-                if (catToDelete == null)
-                {
-                    _logger.LogWarning("Cat not found for deletion: {CatId}", request.Id);
-                    throw new KeyNotFoundException($"Cat with ID {request.Id} was not found.");
-                }
-
-                 await _catRepository.DeleteCat(request.Id);
+            {               
+                Cat catToDelete = await _catRepository.DeleteCat(request.Id);
 
                 _logger.LogInformation("Cat deleted: {CatId}", request.Id);
                 return catToDelete;
