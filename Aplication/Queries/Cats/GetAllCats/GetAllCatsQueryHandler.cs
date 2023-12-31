@@ -1,16 +1,18 @@
 ﻿using Domain.Models.AnimalModel;
-using Infrastructure.Database;
 using Infrastructure.Repositories.Cats;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Queries.Cats.GetAllCats
 {
     public class GetAllCatsQueryHandler : IRequestHandler<GetAllCatsQuery, List<Cat>>
     {
         private readonly ICatRepository _catRepository;
-        public GetAllCatsQueryHandler(ICatRepository catRepository)
+        private readonly ILogger<GetAllCatsQueryHandler> _logger;
+        public GetAllCatsQueryHandler(ICatRepository catRepository, ILogger<GetAllCatsQueryHandler> logger)
         {
             _catRepository = catRepository;
+            _logger = logger;
         }
         public async Task<List<Cat>> Handle(GetAllCatsQuery request, CancellationToken cancellationToken)
         {
@@ -21,8 +23,8 @@ namespace Application.Queries.Cats.GetAllCats
             }
             catch (Exception ex)
             {
-
-                throw new Exception(ex.Message);
+                _logger.LogError(ex, "Error occurred while retrieving all cats");
+                throw;
             }
         }
     }

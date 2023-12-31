@@ -3,6 +3,7 @@ using Application.Queries.Cats.GetCatById;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
 using Infrastructure.Repositories.Cats;
+using Microsoft.Extensions.Logging.Abstractions;
 using Nest;
 using System;
 
@@ -19,8 +20,8 @@ namespace Test.CatTests.QueryTest
             var cat = new Cat { Name = "Hans", Breed = "Domestic Cat" };
 
             var catRepository = A.Fake<ICatRepository>();
-
-            var handler = new GetCatByIdQueryHandler(catRepository);
+            var logger = new NullLogger<GetCatByIdQueryHandler>();
+            var handler = new GetCatByIdQueryHandler(catRepository, logger);
 
             A.CallTo(() => catRepository.GetCatById(guid)).Returns(cat);
 
@@ -37,28 +38,28 @@ namespace Test.CatTests.QueryTest
         }
 
         [Test]
-        public async Task Handle_InvalidId_ReturnsNullCat()
+        public void Handle_InvalidId_ThrowsKeyNotFoundException()
         {
             // Arrange
             var incorrectCatId = Guid.NewGuid(); // An incorrect ID that doesn't exist in the repository
 
-            var cat = new Cat { Name = "Hans", Breed = "Domestic Cat" };
-            cat = null;
+            Cat cat = null; // Set cat as null to simulate not found scenario
 
             var catRepository = A.Fake<ICatRepository>();
 
-            var handler = new GetCatByIdQueryHandler(catRepository);
+            var logger = new NullLogger<GetCatByIdQueryHandler>();
+            var handler = new GetCatByIdQueryHandler(catRepository, logger);
 
             A.CallTo(() => catRepository.GetCatById(incorrectCatId)).Returns(cat!); // Simulate repository returning null for an incorrect ID
 
-            var command = new GetCatByIdQuery(incorrectCatId);
-
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            var command = new GetCatByIdQuery(incorrectCatId);
+            var exception = Assert.ThrowsAsync<KeyNotFoundException>(async () => await handler.Handle(command, CancellationToken.None));
+            var expectedMessage = $"Cat with ID {incorrectCatId} was not found."; // Ensure the exact expected message
 
             // Assert
-            Assert.IsNull(result); // Ensure that the result is null for an incorrect ID
+            Assert.That(exception.Message, Is.EqualTo(expectedMessage));
         }
-
     }
 }
+

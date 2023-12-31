@@ -48,8 +48,6 @@ namespace Infrastructure.Repositories.Cats
                 throw new Exception($"An error occured while deleting a cat with Id {id} from the database", ex);
             }
         }
-
-
         public async Task<List<Cat>> GetAllCats()
         {
             try

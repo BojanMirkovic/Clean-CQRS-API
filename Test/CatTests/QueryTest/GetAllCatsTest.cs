@@ -1,7 +1,9 @@
-﻿using Application.Queries.Cats.GetAllCats;
+﻿using Application.Commands.Cats.DeleteCat;
+using Application.Queries.Cats.GetAllCats;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
 using Infrastructure.Repositories.Cats;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Test.CatTests.QueryTest
 {
@@ -19,7 +21,8 @@ namespace Test.CatTests.QueryTest
 
             var catRepository = A.Fake<ICatRepository>();
 
-            var handler = new GetAllCatsQueryHandler(catRepository);
+            var logger = new NullLogger<GetAllCatsQueryHandler>();
+            var handler = new GetAllCatsQueryHandler(catRepository, logger);
 
             A.CallTo(() => catRepository.GetAllCats()).Returns(cats);
 

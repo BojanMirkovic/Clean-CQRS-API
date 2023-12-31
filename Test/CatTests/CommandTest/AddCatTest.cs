@@ -3,6 +3,7 @@ using Application.Dtos;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
 using Infrastructure.Repositories.Cats;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Test.CatTests.CommandTest
 {
@@ -12,30 +13,30 @@ namespace Test.CatTests.CommandTest
         [Test]
         public async Task Handle_Add_Cat_To_Database()
         {
-            //Arrange
-            var cat = new Cat { AnimalId = new Guid(), Name = "Herman", Breed = "Domestic Cat", Weight = 4, LikesToPlay = true };
-            var requestGuid = Guid.NewGuid();
+            // Arrange
+            var cat = new Cat { AnimalId = Guid.NewGuid(), Name = "Herman", Breed = "Domestic Cat", Weight = 4, LikesToPlay = true };
 
             var catRepository = A.Fake<ICatRepository>();
+            A.CallTo(() => catRepository.AddCat(A<Cat>._)).Returns(cat);
 
-            var handler = new AddCatCommandHandler(catRepository);
+            var logger = new NullLogger<AddCatCommandHandler>(); // Using NullLogger from Microsoft.Extensions.Logging.Abstractions
 
-            A.CallTo(() => catRepository.AddCat(cat)).Returns(cat);
+            var handler = new AddCatCommandHandler(catRepository, logger);
 
-            var dto = new CatDto();
-
-            dto.Name = "Herman";
-            dto.Breed = "Huskatt";
-            dto.Weight = 4;
-            dto.LikesToPlay = true;
+            var dto = new CatDto
+            {
+                Name = "Herman",
+                Breed = "Huskatt",
+                Weight = 4,
+                LikesToPlay = true
+            };
 
             var command = new AddCatCommand(dto);
 
-            //Act
-
+            // Act
             var result = await handler.Handle(command, CancellationToken.None);
 
-            //Assert
+            // Assert
             Assert.IsNotNull(result);
             Assert.That(result.Name.Equals("Herman"));
             Assert.That(result, Is.TypeOf<Cat>());

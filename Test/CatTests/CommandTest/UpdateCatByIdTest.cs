@@ -1,9 +1,11 @@
-﻿using Application.Commands.Cats.UpdateCat;
+﻿using Application.Commands.Cats.DeleteCat;
+using Application.Commands.Cats.UpdateCat;
 using Application.Dtos;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
 using Infrastructure.Database;
 using Infrastructure.Repositories.Cats;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Test.CatTests.CommandTest
 {
@@ -30,7 +32,8 @@ namespace Test.CatTests.CommandTest
 
             var catRepository = A.Fake<ICatRepository>();
 
-            var handler = new UpdateCatInfoByIdCommandHandler(catRepository);
+            var logger = new NullLogger<UpdateCatInfoByIdCommandHandler>();
+            var handler = new UpdateCatInfoByIdCommandHandler(catRepository, logger);
 
             A.CallTo(() => catRepository.GetCatById(cat.AnimalId)).Returns(cat);
 

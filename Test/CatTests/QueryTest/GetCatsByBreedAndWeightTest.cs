@@ -1,8 +1,10 @@
-﻿using Application.Queries.Cats.GetAllCatsByBreedAndWeight;
+﻿using Application.Commands.Cats.DeleteCat;
+using Application.Queries.Cats.GetAllCatsByBreedAndWeight;
 using Domain.Models.AnimalModel;
 using FakeItEasy;
 using Infrastructure.Repositories.Birds;
 using Infrastructure.Repositories.Cats;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,7 +32,9 @@ namespace Test.CatTests.QueryTest
             };
 
             var catRepository = A.Fake<ICatRepository>();
-            var handler = new GetCatsByBreedAndWeightQueryHandler(catRepository);
+
+            var logger = new NullLogger<GetCatsByBreedAndWeightQueryHandler>();
+            var handler = new GetCatsByBreedAndWeightQueryHandler(catRepository, logger);
             var request = new GetCatsByBreedAndWeightQuery(5, "Persian");
 
             var catsToReturn = new List<Cat>
@@ -60,7 +64,9 @@ namespace Test.CatTests.QueryTest
         {
             // Arrange
             var fakeCatRepository = A.Fake<ICatRepository>();
-            var handler = new GetCatsByBreedAndWeightQueryHandler(fakeCatRepository);
+
+            var logger = new NullLogger<GetCatsByBreedAndWeightQueryHandler>();
+            var handler = new GetCatsByBreedAndWeightQueryHandler(fakeCatRepository, logger);
             var request = new GetCatsByBreedAndWeightQuery(5, "Persian");
 
             A.CallTo(() => fakeCatRepository.GetCatsByBreedAndWeight(A<string>._, A<int?>._))
