@@ -59,7 +59,7 @@ namespace Test.CatTests.QueryTest
 
             // Assert
             Assert.That(exception.Message, Is.EqualTo(expectedMessage));
-        }    
+        }
     }
 }
 

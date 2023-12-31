@@ -20,7 +20,7 @@ namespace Application.Commands.Cats.DeleteCat
         public async Task<Cat> Handle(DeleteCatByIdCommand request, CancellationToken cancellationToken)
         {
             try
-            {               
+            {
                 Cat catToDelete = await _catRepository.DeleteCat(request.Id);
 
                 _logger.LogInformation("Cat deleted: {CatId}", request.Id);

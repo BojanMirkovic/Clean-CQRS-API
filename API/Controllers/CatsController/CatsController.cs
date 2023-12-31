@@ -35,7 +35,7 @@ namespace API.Controllers.CatsController
             _stringBreedValidator = stringBreedValidator;
             _intWeightValidator = intWeightValidator;
         }
-[HttpGet]
+        [HttpGet]
         [Route("getAllCats"), AllowAnonymous]
         public async Task<IActionResult> GetAllCats()
         {
@@ -49,7 +49,7 @@ namespace API.Controllers.CatsController
                 throw new Exception(ex.Message);
             }
         }
-        
+
 
         // GET api
         [HttpGet]
