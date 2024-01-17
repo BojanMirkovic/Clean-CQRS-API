@@ -1,5 +1,4 @@
 ﻿using Domain.Models.UserModel;
-using Infrastructure.Database;
 using Infrastructure.Repositories.Users;
 using MediatR;
 

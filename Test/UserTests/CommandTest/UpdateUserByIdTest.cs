@@ -12,7 +12,7 @@ namespace Test.UserTests.CommandTest
     public class UpdateUserByIdTest
     {
         [Test]
-        public async Task Handle_Update_Correct_Dog_By_Id()
+        public async Task Handle_Update_Correct_User_By_Id()
         {
             //Arrange
 
