@@ -1,18 +1,7 @@
-﻿using Application.Commands.Birds.DeleteBird;
-using Application.Commands.Cats.DeleteCat;
-using Application.Commands.Users.DeleteUser;
-using Azure.Identity;
-using Domain.Models.AnimalModel;
+﻿using Application.Commands.Users.DeleteUser;
 using Domain.Models.UserModel;
 using FakeItEasy;
-using Infrastructure.Database;
-using Infrastructure.Repositories.Birds;
 using Infrastructure.Repositories.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test.UserTests.CommandTest
 {
